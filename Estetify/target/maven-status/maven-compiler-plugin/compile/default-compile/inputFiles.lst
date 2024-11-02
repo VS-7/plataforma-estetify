@@ -1,8 +1,11 @@
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/Estetify.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/CustomScrollPane.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTable.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTextArea.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTextAreaScrollPane.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTextField.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/PrimaryCustomButton.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/RatingStars.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/SecondaryCustomButton.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/components/SidebarCustomButton.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/controller/ConsultaController.java
@@ -41,5 +44,6 @@
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/model/valid/ValidateRecepcionista.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/model/valid/ValidateRelatorio.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/utils/Colors.java
-/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrCadastroMedico.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrFeedback.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrGerenciaMedico.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrLogin.java

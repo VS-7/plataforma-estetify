@@ -67,7 +67,7 @@ public class SecondaryCustomButton extends JButton implements Serializable {
         }
         
         // Desenhar borda
-        g2.setColor(Colors.GRAY_400);
+        g2.setColor(Colors.GRAY_300);
         g2.setStroke(new BasicStroke(1));
         g2.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, BORDER_RADIUS, BORDER_RADIUS));
         
