@@ -8,12 +8,12 @@ package com.ifcolab.estetify.view;
  *
  * @author vitorsrgio
  */
-public class FrGerenciaEnfermeira extends javax.swing.JFrame {
+public class FrGerenciaRecepcionista extends javax.swing.JFrame {
 
     /**
      * Creates new form FrLogin
      */
-    public FrGerenciaEnfermeira() {
+    public FrGerenciaRecepcionista() {
         initComponents();
     }
 
@@ -40,7 +40,7 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
         txtCpf = new com.ifcolab.estetify.components.CustomTextField();
         lblEndereco = new javax.swing.JLabel();
         txtEndereco = new com.ifcolab.estetify.components.CustomTextField();
-        lblEspecialidade = new javax.swing.JLabel();
+        lblDataContratacao = new javax.swing.JLabel();
         lblCpf = new javax.swing.JLabel();
         lblCrm = new javax.swing.JLabel();
         txtCrm = new com.ifcolab.estetify.components.CustomTextField();
@@ -154,10 +154,10 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
         getContentPane().add(txtEndereco);
         txtEndereco.setBounds(840, 190, 220, 38);
 
-        lblEspecialidade.setForeground(new java.awt.Color(51, 51, 51));
-        lblEspecialidade.setText("COREN");
-        getContentPane().add(lblEspecialidade);
-        lblEspecialidade.setBounds(900, 240, 160, 17);
+        lblDataContratacao.setForeground(new java.awt.Color(51, 51, 51));
+        lblDataContratacao.setText("Data Contratação");
+        getContentPane().add(lblDataContratacao);
+        lblDataContratacao.setBounds(900, 240, 160, 17);
 
         lblCpf.setForeground(new java.awt.Color(51, 51, 51));
         lblCpf.setText("CPF");
@@ -169,7 +169,7 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
         getContentPane().add(lblCrm);
         lblCrm.setBounds(850, 170, 160, 17);
 
-        txtCrm.setText("COREN");
+        txtCrm.setText("Data Contratação");
         txtCrm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCrmActionPerformed(evt);
@@ -222,7 +222,7 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Fira Sans Medium", 0, 18)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
-        lblTitulo.setText("Gerenciar enfermeiras");
+        lblTitulo.setText("Gerenciar recepcionistas");
         getContentPane().add(lblTitulo);
         lblTitulo.setBounds(330, 40, 250, 20);
 
@@ -300,14 +300,38 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaEnfermeira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaEnfermeira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaEnfermeira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaEnfermeira.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -320,7 +344,7 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrGerenciaEnfermeira().setVisible(true);
+                new FrGerenciaRecepcionista().setVisible(true);
             }
         });
     }
@@ -339,8 +363,8 @@ public class FrGerenciaEnfermeira extends javax.swing.JFrame {
     private javax.swing.JLabel lblBackgroundCadastroTable;
     private javax.swing.JLabel lblCpf;
     private javax.swing.JLabel lblCrm;
+    private javax.swing.JLabel lblDataContratacao;
     private javax.swing.JLabel lblEndereco;
-    private javax.swing.JLabel lblEspecialidade;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblLogoText;
     private javax.swing.JLabel lblNome;

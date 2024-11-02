@@ -222,7 +222,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Fira Sans Medium", 0, 18)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
-        lblTitulo.setText("Gerenciar enfermeira");
+        lblTitulo.setText("Gerenciar pacientes");
         getContentPane().add(lblTitulo);
         lblTitulo.setBounds(330, 40, 250, 20);
 

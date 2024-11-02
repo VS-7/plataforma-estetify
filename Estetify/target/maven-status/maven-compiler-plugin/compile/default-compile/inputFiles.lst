@@ -45,5 +45,8 @@
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/model/valid/ValidateRelatorio.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/utils/Colors.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrFeedback.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrGerenciaEnfermeira.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrGerenciaMedico.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrGerenciaPaciente.java
+/home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrGerenciaRecepcionista.java
 /home/vitorsrgio/Área de Trabalho/LPS/sistema-clinica-estetica/Estetify/src/main/java/com/ifcolab/estetify/view/FrLogin.java
