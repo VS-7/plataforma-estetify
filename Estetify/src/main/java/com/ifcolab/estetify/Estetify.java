@@ -1,16 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.ifcolab.estetify;
 
-/**
- *
- * @author vitorsrgio
- */
+import com.ifcolab.estetify.view.FrLogin;
+
 public class Estetify {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
+       FrLogin tela = new FrLogin();
+       tela.setVisible(true);
     }
 }
