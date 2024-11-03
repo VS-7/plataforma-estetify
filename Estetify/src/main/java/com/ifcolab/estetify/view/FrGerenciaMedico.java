@@ -27,7 +27,6 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel4 = new javax.swing.JLabel();
-        btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
@@ -46,8 +45,10 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         lblCpf = new javax.swing.JLabel();
         lblCrm = new javax.swing.JLabel();
         txtCrm = new com.ifcolab.estetify.components.CustomTextField();
+        btnAdicionar = new com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton();
         lblNome = new javax.swing.JLabel();
         txtNome = new com.ifcolab.estetify.components.CustomTextField();
+        btnAgenda = new com.ifcolab.estetify.components.SidebarCustomButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         customTable1 = new com.ifcolab.estetify.components.CustomTable();
         lblLogoText = new javax.swing.JLabel();
@@ -65,11 +66,6 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1440, 1024));
         setResizable(false);
         getContentPane().setLayout(null);
-
-        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
-        btnAdicionar.setText(" Adicionar");
-        getContentPane().add(btnAdicionar);
-        btnAdicionar.setBounds(373, 110, 150, 30);
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/editsquare.png"))); // NOI18N
         btnEditar.setText(" Editar");
@@ -194,6 +190,11 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         getContentPane().add(txtCrm);
         txtCrm.setBounds(890, 260, 170, 38);
 
+        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
+        btnAdicionar.setText(" Adicionar");
+        getContentPane().add(btnAdicionar);
+        btnAdicionar.setBounds(370, 110, 150, 30);
+
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
         lblNome.setText("Nome");
         getContentPane().add(lblNome);
@@ -207,6 +208,11 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         });
         getContentPane().add(txtNome);
         txtNome.setBounds(360, 190, 300, 38);
+
+        btnAgenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/calendar.png"))); // NOI18N
+        btnAgenda.setText(" Agendar");
+        getContentPane().add(btnAgenda);
+        btnAgenda.setBounds(10, 180, 210, 50);
 
         customTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -342,7 +348,8 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
+    private com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton btnAdicionar;
+    private com.ifcolab.estetify.components.SidebarCustomButton btnAgenda;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SidebarCustomButton btnPaginaInicial;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;

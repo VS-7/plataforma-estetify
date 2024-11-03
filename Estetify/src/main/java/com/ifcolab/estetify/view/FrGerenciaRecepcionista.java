@@ -27,7 +27,7 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel4 = new javax.swing.JLabel();
-        btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        btnAdicionar = new com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
@@ -46,6 +46,7 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         txtCrm = new com.ifcolab.estetify.components.CustomTextField();
         lblNome = new javax.swing.JLabel();
         txtNome = new com.ifcolab.estetify.components.CustomTextField();
+        btnAgenda = new com.ifcolab.estetify.components.SidebarCustomButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         customTable1 = new com.ifcolab.estetify.components.CustomTable();
         lblLogoText = new javax.swing.JLabel();
@@ -191,6 +192,11 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         });
         getContentPane().add(txtNome);
         txtNome.setBounds(360, 190, 300, 38);
+
+        btnAgenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/calendar.png"))); // NOI18N
+        btnAgenda.setText(" Agendar");
+        getContentPane().add(btnAgenda);
+        btnAgenda.setBounds(10, 180, 210, 40);
 
         customTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -350,7 +356,8 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
+    private com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton btnAdicionar;
+    private com.ifcolab.estetify.components.SidebarCustomButton btnAgenda;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SidebarCustomButton btnPaginaInicial;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;

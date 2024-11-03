@@ -32,10 +32,11 @@ public class FrLogin extends javax.swing.JFrame {
         lblDescricao = new javax.swing.JLabel();
         lblDescricaoPontos = new javax.swing.JLabel();
         lblTitutoSidebar = new javax.swing.JLabel();
+        btnEntrar = new com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton();
         txtEmail = new com.ifcolab.estetify.components.CustomTextField();
         txtSenha = new com.ifcolab.estetify.components.CustomTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblLine = new javax.swing.JLabel();
+        lblLogoText = new javax.swing.JLabel();
         lblSidebarWhite = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
 
@@ -74,6 +75,10 @@ public class FrLogin extends javax.swing.JFrame {
         getContentPane().add(lblTitutoSidebar);
         lblTitutoSidebar.setBounds(1000, 390, 300, 20);
 
+        btnEntrar.setText("Entrar");
+        getContentPane().add(btnEntrar);
+        btnEntrar.setBounds(1073, 570, 130, 30);
+
         txtEmail.setForeground(new java.awt.Color(153, 153, 153));
         txtEmail.setText("Insira seu e-mail");
         txtEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +87,7 @@ public class FrLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtEmail);
-        txtEmail.setBounds(950, 440, 390, 37);
+        txtEmail.setBounds(950, 440, 390, 50);
 
         txtSenha.setForeground(new java.awt.Color(153, 153, 153));
         txtSenha.setText("Insira sua senha");
@@ -92,20 +97,18 @@ public class FrLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtSenha);
-        txtSenha.setBounds(950, 500, 390, 37);
+        txtSenha.setBounds(950, 500, 390, 50);
 
-        jLabel2.setFont(new java.awt.Font("Fira Sans", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Entrar");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(1120, 570, 44, 17);
+        lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
+        getContentPane().add(lblLine);
+        lblLine.setBounds(950, 690, 390, 90);
 
-        jLabel1.setFont(new java.awt.Font("Fira Sans Condensed Medium", 0, 15)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo30x25.png"))); // NOI18N
-        jLabel1.setText("Estetify");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(1100, 770, 90, 30);
+        lblLogoText.setFont(new java.awt.Font("Fira Sans Condensed Medium", 0, 15)); // NOI18N
+        lblLogoText.setForeground(new java.awt.Color(0, 0, 0));
+        lblLogoText.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo30x25.png"))); // NOI18N
+        lblLogoText.setText("Estetify");
+        getContentPane().add(lblLogoText);
+        lblLogoText.setBounds(1100, 770, 90, 30);
 
         lblSidebarWhite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
         lblSidebarWhite.setText("jLabel1");
@@ -163,13 +166,14 @@ public class FrLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton btnEntrar;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblDescricaoPontos;
+    private javax.swing.JLabel lblLine;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblLogoText;
     private javax.swing.JLabel lblSidebarWhite;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTitutoSidebar;

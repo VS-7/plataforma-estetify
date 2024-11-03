@@ -1,5 +1,7 @@
 package com.ifcolab.estetify.model;
 
+import java.time.LocalDateTime;
+
 public class Pessoa {
         
     protected String nome;
@@ -7,9 +9,8 @@ public class Pessoa {
     protected String senha;
     protected String cpf;
     protected String sexo;
-    //protected dataNascimento;
+    protected LocalDateTime dataNascimento;
     protected String telefone;
     protected String endereco;
-    
-    
+    protected String tipoUsuario;
 }
