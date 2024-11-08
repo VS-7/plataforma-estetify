@@ -5,7 +5,7 @@ import java.awt.Color;
 public class Colors {
     // Cores primárias
     public static final Color PRIMARY = Color.BLACK;    // Azul principal
-    public static final Color PRIMARY_HOVER = new Color(0, 108, 227);    // Azul hover
+    public static final Color PRIMARY_HOVER = new Color(51, 51, 51);    // Azul hover
     
     // Cores neutras
     public static final Color WHITE = Color.WHITE;

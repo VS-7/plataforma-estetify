@@ -1,12 +1,15 @@
 package com.ifcolab.estetify.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Entity
+@NoArgsConstructor
 
-@Getter
-@Setter
-
-public class Enfermeira extends Pessoa{
+public class Enfermeira extends Pessoa {
+    @Column(unique = true)
     private String coren;
 }

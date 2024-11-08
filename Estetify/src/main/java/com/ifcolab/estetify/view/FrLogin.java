@@ -32,92 +32,103 @@ public class FrLogin extends javax.swing.JFrame {
         lblDescricao = new javax.swing.JLabel();
         lblDescricaoPontos = new javax.swing.JLabel();
         lblTitutoSidebar = new javax.swing.JLabel();
-        btnEntrar = new com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton();
-        txtEmail = new com.ifcolab.estetify.components.CustomTextField();
-        txtSenha = new com.ifcolab.estetify.components.CustomTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        customTextField1 = new com.ifcolab.estetify.components.CustomTextField();
+        customTextField2 = new com.ifcolab.estetify.components.CustomTextField();
+        primaryCustomButton1 = new com.ifcolab.estetify.components.PrimaryCustomButton();
         lblLine = new javax.swing.JLabel();
-        lblLogoText = new javax.swing.JLabel();
-        lblSidebarWhite = new javax.swing.JLabel();
-        lblBackground = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1440, 1024));
+        setMinimumSize(new java.awt.Dimension(1350, 850));
         setResizable(false);
         getContentPane().setLayout(null);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo100x88.png"))); // NOI18N
         getContentPane().add(lblLogo);
-        lblLogo.setBounds(60, 220, 100, 90);
+        lblLogo.setBounds(60, 110, 100, 90);
 
-        lblTitulo.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 36)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 30)); // NOI18N
         lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
         lblTitulo.setText("<html>Comece a aproveitar as ferramentas<br>de gestão da Estetify<html>");
         getContentPane().add(lblTitulo);
-        lblTitulo.setBounds(70, 370, 640, 88);
+        lblTitulo.setBounds(70, 250, 640, 88);
 
-        lblDescricao.setFont(new java.awt.Font("Fira Sans", 0, 18)); // NOI18N
+        lblDescricao.setFont(new java.awt.Font("Fira Sans", 0, 16)); // NOI18N
         lblDescricao.setForeground(new java.awt.Color(0, 0, 0));
         lblDescricao.setText("<html>Ao fazer login, você pode acessar todas as funcionalidades para gerenciar<br>sua clínica de estética em um só lugar. <b>Organize consultas</b>, acompanhe <br><b>históricos</b> de <b>procedimentos</b> e obtenha <b>feedback</b> dos pacientes, tudo<br>com <b>praticidade</b> e <b>segurança</b>.</html>");
         getContentPane().add(lblDescricao);
-        lblDescricao.setBounds(70, 480, 660, 120);
+        lblDescricao.setBounds(70, 360, 660, 120);
 
-        lblDescricaoPontos.setFont(new java.awt.Font("Fira Sans", 0, 16)); // NOI18N
+        lblDescricaoPontos.setFont(new java.awt.Font("Fira Sans", 0, 14)); // NOI18N
         lblDescricaoPontos.setForeground(new java.awt.Color(0, 0, 0));
         lblDescricaoPontos.setText("<html>Nossas ferramentas ajudam você a:<br> <li>Ganhar tempo ao organizar sua agenda de consultas e procedimentos de maneira centralizada.</li> <li>Acompanhar o histórico de tratamentos e preferências de cada paciente.</li> <li>Receber feedback e obter insights valiosos para aprimorar a experiência dos seus pacientes.</li></html>");
         getContentPane().add(lblDescricaoPontos);
-        lblDescricaoPontos.setBounds(70, 600, 630, 160);
+        lblDescricaoPontos.setBounds(70, 490, 630, 160);
 
         lblTitutoSidebar.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitutoSidebar.setForeground(new java.awt.Color(0, 0, 0));
         lblTitutoSidebar.setText("Entre nas ferramentas da Estetify");
         getContentPane().add(lblTitutoSidebar);
-        lblTitutoSidebar.setBounds(1000, 390, 300, 20);
+        lblTitutoSidebar.setBounds(920, 270, 300, 20);
 
-        btnEntrar.setText("Entrar");
-        getContentPane().add(btnEntrar);
-        btnEntrar.setBounds(1073, 570, 130, 30);
+        jLabel5.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel5.setText("Senha");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(900, 390, 70, 16);
 
-        txtEmail.setForeground(new java.awt.Color(153, 153, 153));
-        txtEmail.setText("Insira seu e-mail");
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+        jLabel6.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel6.setText("E-mail");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(900, 320, 110, 16);
+
+        customTextField1.setText("Insira sua senha");
+        customTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
+                customTextField1ActionPerformed(evt);
             }
         });
-        getContentPane().add(txtEmail);
-        txtEmail.setBounds(950, 440, 390, 50);
+        getContentPane().add(customTextField1);
+        customTextField1.setBounds(890, 410, 360, 40);
 
-        txtSenha.setForeground(new java.awt.Color(153, 153, 153));
-        txtSenha.setText("Insira sua senha");
-        txtSenha.addActionListener(new java.awt.event.ActionListener() {
+        customTextField2.setText("Insira seu e-mail");
+        customTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSenhaActionPerformed(evt);
+                customTextField2ActionPerformed(evt);
             }
         });
-        getContentPane().add(txtSenha);
-        txtSenha.setBounds(950, 500, 390, 50);
+        getContentPane().add(customTextField2);
+        customTextField2.setBounds(890, 340, 360, 40);
+
+        primaryCustomButton1.setText("Entrar");
+        getContentPane().add(primaryCustomButton1);
+        primaryCustomButton1.setBounds(1000, 480, 140, 30);
 
         lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
         getContentPane().add(lblLine);
-        lblLine.setBounds(950, 690, 390, 90);
+        lblLine.setBounds(880, 530, 390, 40);
 
-        lblLogoText.setFont(new java.awt.Font("Fira Sans Condensed Medium", 0, 15)); // NOI18N
-        lblLogoText.setForeground(new java.awt.Color(0, 0, 0));
-        lblLogoText.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo30x25.png"))); // NOI18N
-        lblLogoText.setText("Estetify");
-        getContentPane().add(lblLogoText);
-        lblLogoText.setBounds(1100, 770, 90, 30);
+        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo30x25.png"))); // NOI18N
+        jLabel1.setText("Estetify");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(1030, 570, 90, 40);
 
-        lblSidebarWhite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
-        lblSidebarWhite.setText("jLabel1");
-        getContentPane().add(lblSidebarWhite);
-        lblSidebarWhite.setBounds(780, 0, 660, 1020);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(710, 0, 660, 850);
 
-        lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
-        getContentPane().add(lblBackground);
-        lblBackground.setBounds(0, 0, 1440, 1020);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
+        jLabel3.setText("jLabel3");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(0, 0, 1350, 850);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -129,6 +140,14 @@ public class FrLogin extends javax.swing.JFrame {
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
+
+    private void customTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customTextField1ActionPerformed
+
+    private void customTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customTextField2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,18 +185,20 @@ public class FrLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.ifcolab.estetify.components.PrimaryButton.PrimaryCustomButton btnEntrar;
+    private com.ifcolab.estetify.components.CustomTextField customTextField1;
+    private com.ifcolab.estetify.components.CustomTextField customTextField2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel lblBackground;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblDescricaoPontos;
     private javax.swing.JLabel lblLine;
     private javax.swing.JLabel lblLogo;
-    private javax.swing.JLabel lblLogoText;
-    private javax.swing.JLabel lblSidebarWhite;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTitutoSidebar;
-    private com.ifcolab.estetify.components.CustomTextField txtEmail;
-    private com.ifcolab.estetify.components.CustomTextField txtSenha;
+    private com.ifcolab.estetify.components.PrimaryCustomButton primaryCustomButton1;
     // End of variables declaration//GEN-END:variables
 }

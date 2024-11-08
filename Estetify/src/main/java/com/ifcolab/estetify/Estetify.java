@@ -1,12 +1,11 @@
 package com.ifcolab.estetify;
 
-import com.ifcolab.estetify.view.FrAgendaConsulta;
+import com.ifcolab.estetify.view.FrGerenciaPaciente;
 
 public class Estetify {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-       FrAgendaConsulta tela = new FrAgendaConsulta();
+       FrGerenciaPaciente tela = new FrGerenciaPaciente();
        tela.setVisible(true);
     }
 }

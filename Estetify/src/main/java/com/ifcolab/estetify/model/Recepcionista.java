@@ -1,6 +1,6 @@
 package com.ifcolab.estetify.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 
 public class Recepcionista extends Pessoa{
-    private LocalDateTime dataContratacao;
+    private LocalDate dataContratacao;
 }
