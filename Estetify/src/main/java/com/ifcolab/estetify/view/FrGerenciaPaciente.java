@@ -3,10 +3,14 @@ package com.ifcolab.estetify.view;
 import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
+import java.text.ParseException;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -27,10 +31,11 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         this.controller = new PacienteController();
         this.habilitarFormulario(false);
         this.limparFormulario();
-        controller.atualizarTabela(customTable1);
+        this.adicionarMascaraNosCampos();
+        controller.atualizarTabela(grdPacientes);
         
         // Configurar eventos da tabela
-        customTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        grdPacientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 selecionarPaciente();
@@ -38,13 +43,35 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         });
     }
 
+private void adicionarMascaraNosCampos() {
+    try {
+        // Máscara para CPF: 999.999.999-99
+        MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
+        maskCPF.setPlaceholderCharacter('_');
+        maskCPF.install(fEdtCPF);
+        
+        // Máscara para telefone: (99) 99999-9999
+        MaskFormatter maskTelefone = new MaskFormatter("(##) #####-####");
+        maskTelefone.setPlaceholderCharacter('_');
+        maskTelefone.install(fEdtTelefone);
+        
+        // Máscara para data: dd/mm/yyyy
+        MaskFormatter maskData = new MaskFormatter("##/##/####");
+        maskData.setPlaceholderCharacter('_');
+        maskData.install(fEdtDataNascimento);
+        
+    } catch (ParseException ex) {
+        Logger.getLogger(FrGerenciaPaciente.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+
     private void habilitarFormulario(boolean habilitar) {
         edtNome.setEnabled(habilitar);
         edtEmail.setEnabled(habilitar);
-        edtCPF.setEnabled(habilitar);
+        fEdtCPF.setEnabled(habilitar);
         edtSexo.setEnabled(habilitar);
-        edtDataNascimento.setEnabled(habilitar);
-        edtTelefone.setEnabled(habilitar);
+        fEdtDataNascimento.setEnabled(habilitar);
+        fEdtTelefone.setEnabled(habilitar);
         edtEndereco.setEnabled(habilitar);
         btnSalvar.setEnabled(habilitar);
     }
@@ -52,10 +79,10 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
     private void limparFormulario() {
         edtNome.setText("");
         edtEmail.setText("");
-        edtCPF.setText("");
+        fEdtCPF.setText("");
         edtSexo.setText("");
-        edtDataNascimento.setText("");
-        edtTelefone.setText("");
+        fEdtDataNascimento.setText("");
+        fEdtTelefone.setText("");
         edtEndereco.setText("");
         paciente = null;
     }
@@ -65,18 +92,18 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         
         edtNome.setText(paciente.getNome());
         edtEmail.setText(paciente.getEmail());
-        edtCPF.setText(paciente.getCpf());
+        fEdtCPF.setText(paciente.getCpf());
         edtSexo.setText(paciente.getSexo());
-        edtDataNascimento.setText(paciente.getDataNascimento().format(formatter));
-        edtTelefone.setText(paciente.getTelefone());
+        fEdtDataNascimento.setText(paciente.getDataNascimento().format(formatter));
+        fEdtTelefone.setText(paciente.getTelefone());
         edtEndereco.setText(paciente.getEndereco());
     }
 
     private void selecionarPaciente() {
-        int linhaSelecionada = customTable1.getSelectedRow();
+        int linhaSelecionada = grdPacientes.getSelectedRow();
         if (linhaSelecionada >= 0) {
             paciente = controller.buscarPorCPF(
-                customTable1.getValueAt(linhaSelecionada, 2).toString()
+                grdPacientes.getValueAt(linhaSelecionada, 2).toString()
             );
             preencherFormulario(paciente);
         }
@@ -102,19 +129,19 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         lblDataNascimento = new javax.swing.JLabel();
         lblTelefone = new javax.swing.JLabel();
         lblEndereco = new javax.swing.JLabel();
+        fEdtTelefone = new com.ifcolab.estetify.components.CustomFormattedTextField();
+        fEdtDataNascimento = new com.ifcolab.estetify.components.CustomFormattedTextField();
+        fEdtCPF = new com.ifcolab.estetify.components.CustomFormattedTextField();
         edtSexo = new com.ifcolab.estetify.components.CustomTextField();
-        edtTelefone = new com.ifcolab.estetify.components.CustomTextField();
-        edtCPF = new com.ifcolab.estetify.components.CustomTextField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
         edtNome = new com.ifcolab.estetify.components.CustomTextField();
         edtEndereco = new com.ifcolab.estetify.components.CustomTextField();
-        edtDataNascimento = new com.ifcolab.estetify.components.CustomTextField();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         tmMedicos = new javax.swing.JScrollPane();
-        customTable1 = new com.ifcolab.estetify.components.CustomTable();
+        grdPacientes = new com.ifcolab.estetify.components.CustomTable();
         lblLogo = new javax.swing.JLabel();
         lblBackgroundTabela = new javax.swing.JLabel();
         lblEstetify = new javax.swing.JLabel();
@@ -139,12 +166,12 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
         lblNome.setText("Nome");
         getContentPane().add(lblNome);
-        lblNome.setBounds(310, 140, 35, 17);
+        lblNome.setBounds(310, 140, 160, 17);
 
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
         lblEmail.setText("Email");
         getContentPane().add(lblEmail);
-        lblEmail.setBounds(600, 140, 33, 17);
+        lblEmail.setBounds(600, 140, 170, 17);
 
         lblSexo.setForeground(new java.awt.Color(51, 51, 51));
         lblSexo.setText("Sexo");
@@ -154,7 +181,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
         lblDataNascimento.setText("Data de Nascimento");
         getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(310, 210, 140, 17);
+        lblDataNascimento.setBounds(310, 210, 170, 17);
 
         lblTelefone.setForeground(new java.awt.Color(51, 51, 51));
         lblTelefone.setText("Telefone");
@@ -166,6 +193,18 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         getContentPane().add(lblEndereco);
         lblEndereco.setBounds(510, 210, 140, 17);
 
+        fEdtTelefone.setText("Telefone");
+        getContentPane().add(fEdtTelefone);
+        fEdtTelefone.setBounds(790, 230, 208, 38);
+
+        fEdtDataNascimento.setText("Data de Nascimento");
+        getContentPane().add(fEdtDataNascimento);
+        fEdtDataNascimento.setBounds(300, 230, 180, 38);
+
+        fEdtCPF.setText("CPF");
+        getContentPane().add(fEdtCPF);
+        fEdtCPF.setBounds(880, 160, 230, 38);
+
         edtSexo.setText("Sexo");
         edtSexo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,24 +213,6 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         });
         getContentPane().add(edtSexo);
         edtSexo.setBounds(1130, 160, 150, 40);
-
-        edtTelefone.setText("Telefone");
-        edtTelefone.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtTelefoneActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtTelefone);
-        edtTelefone.setBounds(790, 230, 210, 40);
-
-        edtCPF.setText("CPF");
-        edtCPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtCPFActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtCPF);
-        edtCPF.setBounds(880, 160, 230, 40);
 
         edtEmail.setText("E-mail");
         edtEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -219,15 +240,6 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         });
         getContentPane().add(edtEndereco);
         edtEndereco.setBounds(500, 230, 270, 40);
-
-        edtDataNascimento.setText("Data de Nascimento");
-        edtDataNascimento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtDataNascimentoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtDataNascimento);
-        edtDataNascimento.setBounds(300, 230, 180, 40);
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
         btnAdicionar.setText(" Adicionar");
@@ -269,7 +281,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(680, 80, 170, 30);
 
-        customTable1.setModel(new javax.swing.table.DefaultTableModel(
+        grdPacientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -280,7 +292,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tmMedicos.setViewportView(customTable1);
+        tmMedicos.setViewportView(grdPacientes);
 
         getContentPane().add(tmMedicos);
         tmMedicos.setBounds(290, 380, 1010, 406);
@@ -344,21 +356,9 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEmailActionPerformed
 
-    private void edtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtCPFActionPerformed
-
     private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtSexoActionPerformed
-
-    private void edtDataNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtDataNascimentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtDataNascimentoActionPerformed
-
-    private void edtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtTelefoneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtTelefoneActionPerformed
 
     private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
         // TODO add your handling code here:
@@ -376,7 +376,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
                     controller.excluir(paciente);
                     this.limparFormulario();
                     this.habilitarFormulario(false);
-                    controller.atualizarTabela(customTable1);
+                    controller.atualizarTabela(grdPacientes);
                     
                     JOptionPane.showMessageDialog(this,
                         "Paciente removido com sucesso!",
@@ -406,10 +406,10 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
                     edtEmail.getText(),
                     "123456", // senha padrão
                     "123456", // confirmar senha
-                    edtCPF.getText(),
+                    fEdtCPF.getText(),
                     edtSexo.getText(),
-                    edtDataNascimento.getText(),
-                    edtTelefone.getText(),
+                    fEdtDataNascimento.getText(),
+                    fEdtTelefone.getText(),
                     edtEndereco.getText(),
                     "" // histórico médico inicial vazio
                 );
@@ -420,10 +420,10 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
                     edtEmail.getText(),
                     paciente.getSenha(),
                     paciente.getSenha(),
-                    edtCPF.getText(),
+                    fEdtCPF.getText(),
                     edtSexo.getText(),
-                    edtDataNascimento.getText(),
-                    edtTelefone.getText(),
+                    fEdtDataNascimento.getText(),
+                    fEdtTelefone.getText(),
                     edtEndereco.getText(),
                     paciente.getHistoricoMedico()
                 );
@@ -431,7 +431,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
             
             this.limparFormulario();
             this.habilitarFormulario(false);
-            controller.atualizarTabela(customTable1);
+            controller.atualizarTabela(grdPacientes);
             
             JOptionPane.showMessageDialog(this,
                 "Paciente salvo com sucesso!",
@@ -497,6 +497,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -511,14 +512,14 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
-    private com.ifcolab.estetify.components.CustomTable customTable1;
-    private com.ifcolab.estetify.components.CustomTextField edtCPF;
-    private com.ifcolab.estetify.components.CustomTextField edtDataNascimento;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
     private com.ifcolab.estetify.components.CustomTextField edtNome;
     private com.ifcolab.estetify.components.CustomTextField edtSexo;
-    private com.ifcolab.estetify.components.CustomTextField edtTelefone;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;
+    private com.ifcolab.estetify.components.CustomTable grdPacientes;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;

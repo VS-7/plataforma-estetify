@@ -3,21 +3,19 @@ package com.ifcolab.estetify.components;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-import javax.swing.text.MaskFormatter;
-import java.text.ParseException;
 
-public class CustomTextField extends JFormattedTextField {
+public class CustomFormattedTextField extends JFormattedTextField {
     
     private static final Color BORDER_COLOR = new Color(217, 217, 217); // Cinza claro
     private String placeholder;
     private Color placeholderColor = new Color(160, 160, 160);
     
-    public CustomTextField() {
+    public CustomFormattedTextField() {
         super();
         setupTextField();
     }
     
-    public CustomTextField(String placeholder) {
+    public CustomFormattedTextField(String placeholder) {
         super();
         this.placeholder = placeholder;
         setupTextField();
@@ -66,16 +64,6 @@ public class CustomTextField extends JFormattedTextField {
         return placeholder;
     }
     
-    public void setMask(String mask) {
-        try {
-            MaskFormatter formatter = new MaskFormatter(mask);
-            formatter.setPlaceholderCharacter('_');
-            formatter.install(this);
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -95,4 +83,4 @@ public class CustomTextField extends JFormattedTextField {
         g2.dispose();
         super.paintComponent(g);
     }
-}
+} 
