@@ -30,18 +30,18 @@ public class FrNovaConsulta extends javax.swing.JFrame {
         lblCPF = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
-        lblDataContratacao = new javax.swing.JLabel();
-        lblSexo = new javax.swing.JLabel();
+        lblObservacoes = new javax.swing.JLabel();
+        lblData = new javax.swing.JLabel();
         lblDataNascimento = new javax.swing.JLabel();
-        lblTelefone = new javax.swing.JLabel();
-        lblEndereco = new javax.swing.JLabel();
-        edtSexo = new com.ifcolab.estetify.components.CustomTextField();
-        edtTelefone = new com.ifcolab.estetify.components.CustomTextField();
-        edtCPF = new com.ifcolab.estetify.components.CustomTextField();
-        edtEmail = new com.ifcolab.estetify.components.CustomTextField();
-        edtEndereco = new com.ifcolab.estetify.components.CustomTextField();
-        edtDataContratacao = new com.ifcolab.estetify.components.CustomTextField();
-        edtDataNascimento = new com.ifcolab.estetify.components.CustomTextField();
+        lblHora = new javax.swing.JLabel();
+        txtObservacoes = new javax.swing.JScrollPane();
+        customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
+        fEdtHora = new com.ifcolab.estetify.components.CustomFormattedTextField();
+        fEdtData = new com.ifcolab.estetify.components.CustomFormattedTextField();
+        cbxSelecionarProcedimento = new com.ifcolab.estetify.components.CustomComboBox();
+        cbxSelecionarEnfermeira = new com.ifcolab.estetify.components.CustomComboBox();
+        cbxSelecionarMedico = new com.ifcolab.estetify.components.CustomComboBox();
+        cbxSelecionarPaciente = new com.ifcolab.estetify.components.CustomComboBox();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
@@ -65,110 +65,71 @@ public class FrNovaConsulta extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         lblCPF.setForeground(new java.awt.Color(51, 51, 51));
-        lblCPF.setText("CPF");
+        lblCPF.setText("Selecionar Enfermeira");
         getContentPane().add(lblCPF);
-        lblCPF.setBounds(890, 140, 50, 17);
+        lblCPF.setBounds(790, 120, 190, 17);
 
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
-        lblNome.setText("Nome");
+        lblNome.setText("Selecionar Paciente");
         getContentPane().add(lblNome);
-        lblNome.setBounds(310, 140, 35, 17);
+        lblNome.setBounds(310, 120, 220, 17);
 
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
-        lblEmail.setText("Email");
+        lblEmail.setText("Selecionar Médico");
         getContentPane().add(lblEmail);
-        lblEmail.setBounds(600, 140, 33, 17);
+        lblEmail.setBounds(540, 120, 170, 17);
 
-        lblDataContratacao.setForeground(new java.awt.Color(51, 51, 51));
-        lblDataContratacao.setText("Data de Contratação");
-        getContentPane().add(lblDataContratacao);
-        lblDataContratacao.setBounds(1030, 210, 140, 17);
+        lblObservacoes.setForeground(new java.awt.Color(51, 51, 51));
+        lblObservacoes.setText("Observacoes");
+        getContentPane().add(lblObservacoes);
+        lblObservacoes.setBounds(670, 200, 110, 17);
 
-        lblSexo.setForeground(new java.awt.Color(51, 51, 51));
-        lblSexo.setText("Sexo");
-        getContentPane().add(lblSexo);
-        lblSexo.setBounds(1140, 140, 50, 17);
+        lblData.setForeground(new java.awt.Color(51, 51, 51));
+        lblData.setText("Hora");
+        getContentPane().add(lblData);
+        lblData.setBounds(500, 200, 110, 17);
 
         lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
-        lblDataNascimento.setText("Data de Nascimento");
+        lblDataNascimento.setText("Selecionar Procedimento");
         getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(310, 210, 140, 17);
+        lblDataNascimento.setBounds(1050, 120, 230, 17);
 
-        lblTelefone.setForeground(new java.awt.Color(51, 51, 51));
-        lblTelefone.setText("Telefone");
-        getContentPane().add(lblTelefone);
-        lblTelefone.setBounds(800, 210, 140, 17);
+        lblHora.setForeground(new java.awt.Color(51, 51, 51));
+        lblHora.setText("Data");
+        getContentPane().add(lblHora);
+        lblHora.setBounds(320, 200, 130, 17);
 
-        lblEndereco.setForeground(new java.awt.Color(51, 51, 51));
-        lblEndereco.setText("Endereço");
-        getContentPane().add(lblEndereco);
-        lblEndereco.setBounds(510, 210, 140, 17);
+        customTextArea1.setColumns(20);
+        customTextArea1.setRows(5);
+        txtObservacoes.setViewportView(customTextArea1);
 
-        edtSexo.setText("Sexo");
-        edtSexo.addActionListener(new java.awt.event.ActionListener() {
+        getContentPane().add(txtObservacoes);
+        txtObservacoes.setBounds(660, 220, 610, 116);
+
+        fEdtHora.setText("Hora");
+        getContentPane().add(fEdtHora);
+        fEdtHora.setBounds(490, 220, 140, 38);
+
+        fEdtData.setText("Data");
+        getContentPane().add(fEdtData);
+        fEdtData.setBounds(310, 220, 160, 38);
+        getContentPane().add(cbxSelecionarProcedimento);
+        cbxSelecionarProcedimento.setBounds(1040, 140, 230, 44);
+        getContentPane().add(cbxSelecionarEnfermeira);
+        cbxSelecionarEnfermeira.setBounds(780, 140, 240, 44);
+
+        cbxSelecionarMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtSexoActionPerformed(evt);
+                cbxSelecionarMedicoActionPerformed(evt);
             }
         });
-        getContentPane().add(edtSexo);
-        edtSexo.setBounds(1130, 160, 150, 40);
-
-        edtTelefone.setText("Telefone");
-        edtTelefone.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtTelefoneActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtTelefone);
-        edtTelefone.setBounds(790, 230, 210, 40);
-
-        edtCPF.setText("CPF");
-        edtCPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtCPFActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtCPF);
-        edtCPF.setBounds(880, 160, 230, 40);
-
-        edtEmail.setText("E-mail");
-        edtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtEmailActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtEmail);
-        edtEmail.setBounds(590, 160, 270, 40);
-
-        edtEndereco.setText("Endereço");
-        edtEndereco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtEnderecoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtEndereco);
-        edtEndereco.setBounds(500, 230, 270, 40);
-
-        edtDataContratacao.setText("Data de Contratação");
-        edtDataContratacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtDataContratacaoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtDataContratacao);
-        edtDataContratacao.setBounds(1020, 230, 180, 40);
-
-        edtDataNascimento.setText("Data de Nascimento");
-        edtDataNascimento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtDataNascimentoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtDataNascimento);
-        edtDataNascimento.setBounds(300, 230, 180, 40);
+        getContentPane().add(cbxSelecionarMedico);
+        cbxSelecionarMedico.setBounds(530, 140, 230, 44);
+        getContentPane().add(cbxSelecionarPaciente);
+        cbxSelecionarPaciente.setBounds(300, 140, 210, 44);
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
-        btnAdicionar.setText(" Adicionar");
+        btnAdicionar.setText(" Agendar");
         getContentPane().add(btnAdicionar);
         btnAdicionar.setBounds(300, 80, 170, 30);
 
@@ -254,33 +215,9 @@ public class FrNovaConsulta extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
 
-    private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
+    private void cbxSelecionarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxSelecionarMedicoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edtEmailActionPerformed
-
-    private void edtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtCPFActionPerformed
-
-    private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtSexoActionPerformed
-
-    private void edtDataNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtDataNascimentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtDataNascimentoActionPerformed
-
-    private void edtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtTelefoneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtTelefoneActionPerformed
-
-    private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtEnderecoActionPerformed
-
-    private void edtDataContratacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtDataContratacaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtDataContratacaoActionPerformed
+    }//GEN-LAST:event_cbxSelecionarMedicoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -353,31 +290,31 @@ public class FrNovaConsulta extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
+    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarEnfermeira;
+    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarMedico;
+    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarPaciente;
+    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarProcedimento;
     private com.ifcolab.estetify.components.CustomTable customTable1;
-    private com.ifcolab.estetify.components.CustomTextField edtCPF;
-    private com.ifcolab.estetify.components.CustomTextField edtDataContratacao;
-    private com.ifcolab.estetify.components.CustomTextField edtDataNascimento;
-    private com.ifcolab.estetify.components.CustomTextField edtEmail;
-    private com.ifcolab.estetify.components.CustomTextField edtEndereco;
-    private com.ifcolab.estetify.components.CustomTextField edtSexo;
-    private com.ifcolab.estetify.components.CustomTextField edtTelefone;
+    private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtData;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtHora;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
     private javax.swing.JLabel lblCPF;
-    private javax.swing.JLabel lblDataContratacao;
+    private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblDataNascimento;
     private javax.swing.JLabel lblEmail;
-    private javax.swing.JLabel lblEndereco;
     private javax.swing.JLabel lblEstetify;
+    private javax.swing.JLabel lblHora;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNome;
-    private javax.swing.JLabel lblSexo;
+    private javax.swing.JLabel lblObservacoes;
     private javax.swing.JLabel lblSidebar;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
-    private javax.swing.JLabel lblTelefone;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
     private javax.swing.JScrollPane tmMedicos;
+    private javax.swing.JScrollPane txtObservacoes;
     // End of variables declaration//GEN-END:variables
 }
