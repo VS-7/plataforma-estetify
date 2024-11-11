@@ -34,13 +34,11 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         lblDataNascimento = new javax.swing.JLabel();
         lblTelefone = new javax.swing.JLabel();
         lblEndereco = new javax.swing.JLabel();
-        lblCRM = new javax.swing.JLabel();
         edtSexo = new com.ifcolab.estetify.components.CustomTextField();
         edtTelefone = new com.ifcolab.estetify.components.CustomTextField();
         edtCPF = new com.ifcolab.estetify.components.CustomTextField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
         edtNome = new com.ifcolab.estetify.components.CustomTextField();
-        edtCRM = new com.ifcolab.estetify.components.CustomTextField();
         edtEndereco = new com.ifcolab.estetify.components.CustomTextField();
         edtDataNascimento = new com.ifcolab.estetify.components.CustomTextField();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
@@ -100,11 +98,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         getContentPane().add(lblEndereco);
         lblEndereco.setBounds(510, 210, 140, 17);
 
-        lblCRM.setForeground(new java.awt.Color(51, 51, 51));
-        lblCRM.setText("COREN");
-        getContentPane().add(lblCRM);
-        lblCRM.setBounds(1030, 210, 140, 17);
-
         edtSexo.setText("Sexo");
         edtSexo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,15 +142,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         });
         getContentPane().add(edtNome);
         edtNome.setBounds(300, 160, 270, 40);
-
-        edtCRM.setText("COREN");
-        edtCRM.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtCRMActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtCRM);
-        edtCRM.setBounds(1020, 230, 210, 40);
 
         edtEndereco.setText("Endereço");
         edtEndereco.addActionListener(new java.awt.event.ActionListener() {
@@ -244,7 +228,7 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
 
         lblTitleGerenciaMedicos.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitleGerenciaMedicos.setForeground(new java.awt.Color(51, 51, 51));
-        lblTitleGerenciaMedicos.setText("Gerenciar Médicos");
+        lblTitleGerenciaMedicos.setText("Gerenciar Recepcionistas");
         getContentPane().add(lblTitleGerenciaMedicos);
         lblTitleGerenciaMedicos.setBounds(280, 20, 210, 22);
 
@@ -291,10 +275,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEnderecoActionPerformed
-
-    private void edtCRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCRMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtCRMActionPerformed
 
     /**
      * @param args the command line arguments
@@ -345,7 +325,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
     private com.ifcolab.estetify.components.CustomTable customTable1;
     private com.ifcolab.estetify.components.CustomTextField edtCPF;
-    private com.ifcolab.estetify.components.CustomTextField edtCRM;
     private com.ifcolab.estetify.components.CustomTextField edtDataNascimento;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
@@ -357,7 +336,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
     private javax.swing.JLabel lblCPF;
-    private javax.swing.JLabel lblCRM;
     private javax.swing.JLabel lblDataNascimento;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblEndereco;

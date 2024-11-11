@@ -1,4 +1,4 @@
-package com.ifcolab.estetify.components.ratingstars;
+package com.ifcolab.estetify.components;
 
 import com.ifcolab.estetify.utils.Colors;
 import javax.swing.*;

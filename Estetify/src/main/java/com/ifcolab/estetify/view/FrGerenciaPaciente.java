@@ -346,7 +346,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
 
         lblTitleGerenciaMedicos.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitleGerenciaMedicos.setForeground(new java.awt.Color(51, 51, 51));
-        lblTitleGerenciaMedicos.setText("Gerenciar Médicos");
+        lblTitleGerenciaMedicos.setText("Gerenciar Pacientes");
         getContentPane().add(lblTitleGerenciaMedicos);
         lblTitleGerenciaMedicos.setBounds(280, 20, 210, 22);
 
