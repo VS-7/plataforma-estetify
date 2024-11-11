@@ -168,9 +168,9 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         lblCPF.setForeground(new java.awt.Color(51, 51, 51));
-        lblCPF.setText("CPF");
+        lblCPF.setText("Duração Estimada");
         getContentPane().add(lblCPF);
-        lblCPF.setBounds(890, 140, 50, 17);
+        lblCPF.setBounds(890, 140, 190, 17);
 
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
         lblNome.setText("Nome");
@@ -178,7 +178,7 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
         lblNome.setBounds(310, 140, 160, 17);
 
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
-        lblEmail.setText("Email");
+        lblEmail.setText("Descrição");
         getContentPane().add(lblEmail);
         lblEmail.setBounds(600, 140, 170, 17);
 
@@ -188,29 +188,29 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
         lblSexo.setBounds(1140, 140, 50, 17);
 
         lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
-        lblDataNascimento.setText("Data de Nascimento");
+        lblDataNascimento.setText("Data/Hora");
         getContentPane().add(lblDataNascimento);
         lblDataNascimento.setBounds(310, 210, 170, 17);
 
         lblTelefone.setForeground(new java.awt.Color(51, 51, 51));
-        lblTelefone.setText("Telefone");
+        lblTelefone.setText("Requisitos");
         getContentPane().add(lblTelefone);
         lblTelefone.setBounds(800, 210, 140, 17);
 
         lblEndereco.setForeground(new java.awt.Color(51, 51, 51));
-        lblEndereco.setText("Endereço");
+        lblEndereco.setText("Valor");
         getContentPane().add(lblEndereco);
         lblEndereco.setBounds(510, 210, 140, 17);
 
-        fEdtTelefone.setText("Telefone");
+        fEdtTelefone.setText("Requisitos");
         getContentPane().add(fEdtTelefone);
         fEdtTelefone.setBounds(790, 230, 208, 38);
 
-        fEdtDataNascimento.setText("Data de Nascimento");
+        fEdtDataNascimento.setText("Data Hora");
         getContentPane().add(fEdtDataNascimento);
         fEdtDataNascimento.setBounds(300, 230, 180, 38);
 
-        fEdtCPF.setText("CPF");
+        fEdtCPF.setText("Duração Estimada");
         getContentPane().add(fEdtCPF);
         fEdtCPF.setBounds(880, 160, 230, 38);
 
@@ -223,7 +223,7 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
         getContentPane().add(edtSexo);
         edtSexo.setBounds(1130, 160, 150, 40);
 
-        edtEmail.setText("E-mail");
+        edtEmail.setText("Descrição");
         edtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edtEmailActionPerformed(evt);
@@ -241,7 +241,7 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
         getContentPane().add(edtNome);
         edtNome.setBounds(300, 160, 270, 40);
 
-        edtEndereco.setText("Endereço");
+        edtEndereco.setText("Valor");
         edtEndereco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edtEnderecoActionPerformed(evt);
@@ -290,12 +290,12 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(680, 80, 170, 30);
 
-        edtHistoricoMedico.setText("Histórico Médico");
+        edtHistoricoMedico.setText("Contraindicações");
         getContentPane().add(edtHistoricoMedico);
         edtHistoricoMedico.setBounds(1020, 230, 260, 38);
 
         lblHistoricoMedico.setForeground(new java.awt.Color(51, 51, 51));
-        lblHistoricoMedico.setText("Histórico Médico");
+        lblHistoricoMedico.setText("Contraindicações");
         getContentPane().add(lblHistoricoMedico);
         lblHistoricoMedico.setBounds(1030, 210, 140, 17);
 
@@ -346,7 +346,7 @@ public class FrGerenciaProcedimentos extends javax.swing.JFrame {
 
         lblTitleGerenciaMedicos.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitleGerenciaMedicos.setForeground(new java.awt.Color(51, 51, 51));
-        lblTitleGerenciaMedicos.setText("Gerenciar Pacientes");
+        lblTitleGerenciaMedicos.setText("Gerenciar Procedimentos");
         getContentPane().add(lblTitleGerenciaMedicos);
         lblTitleGerenciaMedicos.setBounds(280, 20, 210, 22);
 

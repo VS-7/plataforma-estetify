@@ -1,4 +1,4 @@
-package com.ifcolab.estetify.components.customcombobox;
+package com.ifcolab.estetify.components;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;

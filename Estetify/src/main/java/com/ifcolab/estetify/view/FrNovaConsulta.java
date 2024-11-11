@@ -8,12 +8,12 @@ package com.ifcolab.estetify.view;
  *
  * @author vitorsrgio
  */
-public class FrGerenciaRecepcionista extends javax.swing.JFrame {
+public class FrNovaConsulta extends javax.swing.JFrame {
 
     /**
      * Creates new form FrLogin
      */
-    public FrGerenciaRecepcionista() {
+    public FrNovaConsulta() {
         initComponents();
     }
 
@@ -39,7 +39,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         edtTelefone = new com.ifcolab.estetify.components.CustomTextField();
         edtCPF = new com.ifcolab.estetify.components.CustomTextField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
-        edtNome = new com.ifcolab.estetify.components.CustomTextField();
         edtEndereco = new com.ifcolab.estetify.components.CustomTextField();
         edtDataContratacao = new com.ifcolab.estetify.components.CustomTextField();
         edtDataNascimento = new com.ifcolab.estetify.components.CustomTextField();
@@ -141,15 +140,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         getContentPane().add(edtEmail);
         edtEmail.setBounds(590, 160, 270, 40);
 
-        edtNome.setText("Nome");
-        edtNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtNomeActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtNome);
-        edtNome.setBounds(300, 160, 270, 40);
-
         edtEndereco.setText("Endereço");
         edtEndereco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -244,7 +234,7 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
 
         lblTitleGerenciaMedicos.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitleGerenciaMedicos.setForeground(new java.awt.Color(51, 51, 51));
-        lblTitleGerenciaMedicos.setText("Gerenciar Recepcionistas");
+        lblTitleGerenciaMedicos.setText("Nova Consulta");
         getContentPane().add(lblTitleGerenciaMedicos);
         lblTitleGerenciaMedicos.setBounds(280, 20, 210, 22);
 
@@ -263,10 +253,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
-
-    private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtNomeActionPerformed
 
     private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
         // TODO add your handling code here:
@@ -313,14 +299,38 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrNovaConsulta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrNovaConsulta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrNovaConsulta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrGerenciaRecepcionista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrNovaConsulta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -333,7 +343,7 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrGerenciaRecepcionista().setVisible(true);
+                new FrNovaConsulta().setVisible(true);
             }
         });
     }
@@ -349,7 +359,6 @@ public class FrGerenciaRecepcionista extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.CustomTextField edtDataNascimento;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
-    private com.ifcolab.estetify.components.CustomTextField edtNome;
     private com.ifcolab.estetify.components.CustomTextField edtSexo;
     private com.ifcolab.estetify.components.CustomTextField edtTelefone;
     private javax.swing.JLabel jLabel4;
