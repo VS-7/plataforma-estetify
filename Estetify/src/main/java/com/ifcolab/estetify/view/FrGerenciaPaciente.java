@@ -19,51 +19,52 @@ import javax.swing.text.MaskFormatter;
 public class FrGerenciaPaciente extends javax.swing.JFrame {
 
     private PacienteController controller;
-    private Paciente paciente;
+    private int idPacienteEditando;
 
 
     public FrGerenciaPaciente() {
         initComponents();
-        this.configurarForm();
-    }
-
-    private void configurarForm() {
-        this.controller = new PacienteController();
+        
+        controller = new PacienteController();
+        idPacienteEditando = -1;
+ 
+        this.adicionarMascaraNosCampos();
         this.habilitarFormulario(false);
         this.limparFormulario();
-        this.adicionarMascaraNosCampos();
-        controller.atualizarTabela(grdPacientes);
         
-        // Configurar eventos da tabela
-        grdPacientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                selecionarPaciente();
+        // Adicionar listener de duplo clique
+        grdPacientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grdPacientesMouseClicked(evt);
             }
         });
+        
+        controller.atualizarTabela(grdPacientes);
     }
 
-private void adicionarMascaraNosCampos() {
-    try {
-        // Máscara para CPF: 999.999.999-99
-        MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
-        maskCPF.setPlaceholderCharacter('_');
-        maskCPF.install(fEdtCPF);
-        
-        // Máscara para telefone: (99) 99999-9999
-        MaskFormatter maskTelefone = new MaskFormatter("(##) #####-####");
-        maskTelefone.setPlaceholderCharacter('_');
-        maskTelefone.install(fEdtTelefone);
-        
-        // Máscara para data: dd/mm/yyyy
-        MaskFormatter maskData = new MaskFormatter("##/##/####");
-        maskData.setPlaceholderCharacter('_');
-        maskData.install(fEdtDataNascimento);
-        
-    } catch (ParseException ex) {
-        Logger.getLogger(FrGerenciaPaciente.class.getName()).log(Level.SEVERE, null, ex);
+
+
+    private void adicionarMascaraNosCampos() {
+        try {
+            // Máscara para CPF: 999.999.999-99
+            MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
+            maskCPF.setPlaceholderCharacter('_');
+            maskCPF.install(fEdtCPF);
+            
+            // Máscara para telefone: (99) 99999-9999
+            MaskFormatter maskTelefone = new MaskFormatter("(##) #####-####");
+            maskTelefone.setPlaceholderCharacter('_');
+            maskTelefone.install(fEdtTelefone);
+            
+            // Máscara para data: dd/mm/yyyy
+            MaskFormatter maskData = new MaskFormatter("##/##/####");
+            maskData.setPlaceholderCharacter('_');
+            maskData.install(fEdtDataNascimento);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(FrGerenciaPaciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-}
 
     private void habilitarFormulario(boolean habilitar) {
         edtNome.setEnabled(habilitar);
@@ -73,6 +74,7 @@ private void adicionarMascaraNosCampos() {
         fEdtDataNascimento.setEnabled(habilitar);
         fEdtTelefone.setEnabled(habilitar);
         edtEndereco.setEnabled(habilitar);
+        edtHistoricoMedico.setEnabled(habilitar);
         btnSalvar.setEnabled(habilitar);
     }
 
@@ -84,7 +86,7 @@ private void adicionarMascaraNosCampos() {
         fEdtDataNascimento.setText("");
         fEdtTelefone.setText("");
         edtEndereco.setText("");
-        paciente = null;
+        edtHistoricoMedico.setText("");
     }
 
     private void preencherFormulario(Paciente paciente) {
@@ -97,18 +99,23 @@ private void adicionarMascaraNosCampos() {
         fEdtDataNascimento.setText(paciente.getDataNascimento().format(formatter));
         fEdtTelefone.setText(paciente.getTelefone());
         edtEndereco.setText(paciente.getEndereco());
+        edtHistoricoMedico.setText(paciente.getHistoricoMedico());
     }
 
-    private void selecionarPaciente() {
-        int linhaSelecionada = grdPacientes.getSelectedRow();
-        if (linhaSelecionada >= 0) {
-            paciente = controller.buscarPorCPF(
-                grdPacientes.getValueAt(linhaSelecionada, 2).toString()
-            );
-            preencherFormulario(paciente);
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdPacientes.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdPacientes.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
+    }
+
+    private void grdPacientesMouseClicked(java.awt.event.MouseEvent evt) {
+        if (evt.getClickCount() == 2) {
+            btnEditarActionPerformed(null);
         }
     }
-
 
 
 
@@ -140,6 +147,8 @@ private void adicionarMascaraNosCampos() {
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
+        edtHistoricoMedico = new com.ifcolab.estetify.components.CustomTextField();
+        lblHistoricoMedico = new javax.swing.JLabel();
         tmMedicos = new javax.swing.JScrollPane();
         grdPacientes = new com.ifcolab.estetify.components.CustomTable();
         lblLogo = new javax.swing.JLabel();
@@ -281,6 +290,15 @@ private void adicionarMascaraNosCampos() {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(680, 80, 170, 30);
 
+        edtHistoricoMedico.setText("Histórico Médico");
+        getContentPane().add(edtHistoricoMedico);
+        edtHistoricoMedico.setBounds(1020, 230, 260, 38);
+
+        lblHistoricoMedico.setForeground(new java.awt.Color(51, 51, 51));
+        lblHistoricoMedico.setText("Histórico Médico");
+        getContentPane().add(lblHistoricoMedico);
+        lblHistoricoMedico.setBounds(1030, 210, 140, 17);
+
         grdPacientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -365,42 +383,47 @@ private void adicionarMascaraNosCampos() {
     }//GEN-LAST:event_edtEnderecoActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-            if (paciente != null) {
-            int opcao = JOptionPane.showConfirmDialog(this,
-                "Deseja realmente remover o paciente " + paciente.getNome() + "?",
-                "Remover Paciente",
-                JOptionPane.YES_NO_OPTION);
-                
-            if (opcao == JOptionPane.YES_OPTION) {
+        Paciente pacienteExcluido = (Paciente) this.getObjetoSelecionadoNaGrid();
+
+        if (pacienteExcluido == null)
+            JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            int response = JOptionPane.showConfirmDialog(null,
+                    "Deseja excluir o Paciente \n("
+                    + pacienteExcluido.getNome() + ", "
+                    + pacienteExcluido.getCpf() + ") ?",
+                    "Confirmar exclusão",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.OK_OPTION) {
                 try {
-                    controller.excluir(paciente);
-                    this.limparFormulario();
-                    this.habilitarFormulario(false);
+                    controller.excluir(pacienteExcluido);
                     controller.atualizarTabela(grdPacientes);
-                    
-                    JOptionPane.showMessageDialog(this,
-                        "Paciente removido com sucesso!",
-                        "Remover Paciente",
-                        JOptionPane.INFORMATION_MESSAGE);
-                        
+                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
                 } catch (PacienteException ex) {
-                    JOptionPane.showMessageDialog(this,
-                        ex.getMessage(),
-                        "Erro ao Remover",
-                        JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
                 }
             }
-        } else {
-            JOptionPane.showMessageDialog(this,
-                "Selecione um paciente para remover",
-                "Remover Paciente",
-                JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
-            if (paciente == null) {
+            if (idPacienteEditando > 0) {
+                controller.atualizar(
+                    idPacienteEditando,
+                    edtNome.getText(),
+                    edtEmail.getText(),
+                    "123456", // senha
+                    "123456", // confirmar senha
+                    fEdtCPF.getText(),
+                    edtSexo.getText(),
+                    fEdtDataNascimento.getText(),
+                    fEdtTelefone.getText(),
+                    edtEndereco.getText(),
+                    edtHistoricoMedico.getText()
+                );
+            } else {
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
@@ -411,49 +434,32 @@ private void adicionarMascaraNosCampos() {
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
-                    "" // histórico médico inicial vazio
-                );
-            } else {
-                controller.atualizar(
-                    paciente.getId(),
-                    edtNome.getText(),
-                    edtEmail.getText(),
-                    paciente.getSenha(),
-                    paciente.getSenha(),
-                    fEdtCPF.getText(),
-                    edtSexo.getText(),
-                    fEdtDataNascimento.getText(),
-                    fEdtTelefone.getText(),
-                    edtEndereco.getText(),
-                    paciente.getHistoricoMedico()
+                    edtHistoricoMedico.getText()
                 );
             }
             
-            this.limparFormulario();
-            this.habilitarFormulario(false);
+            this.idPacienteEditando = -1;
             controller.atualizarTabela(grdPacientes);
+            this.habilitarFormulario(false);
+            this.limparFormulario();
             
-            JOptionPane.showMessageDialog(this,
-                "Paciente salvo com sucesso!",
-                "Salvar Paciente",
-                JOptionPane.INFORMATION_MESSAGE);
-                
-        } catch (PacienteException ex) {
-            JOptionPane.showMessageDialog(this,
-                ex.getMessage(),
-                "Erro ao Salvar",
-                JOptionPane.ERROR_MESSAGE);
+        } catch (PacienteException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
+
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        if (paciente != null) {
+        Paciente pacienteEditando = (Paciente) this.getObjetoSelecionadoNaGrid();
+
+        if (pacienteEditando == null)
+            JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            this.limparFormulario();
             this.habilitarFormulario(true);
-        } else {
-            JOptionPane.showMessageDialog(this,
-                "Selecione um paciente para editar",
-                "Editar Paciente",
-                JOptionPane.WARNING_MESSAGE);
+            this.preencherFormulario(pacienteEditando);
+            this.idPacienteEditando = pacienteEditando.getId();
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
@@ -514,6 +520,7 @@ private void adicionarMascaraNosCampos() {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
+    private com.ifcolab.estetify.components.CustomTextField edtHistoricoMedico;
     private com.ifcolab.estetify.components.CustomTextField edtNome;
     private com.ifcolab.estetify.components.CustomTextField edtSexo;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
@@ -529,6 +536,7 @@ private void adicionarMascaraNosCampos() {
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblEndereco;
     private javax.swing.JLabel lblEstetify;
+    private javax.swing.JLabel lblHistoricoMedico;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSexo;
