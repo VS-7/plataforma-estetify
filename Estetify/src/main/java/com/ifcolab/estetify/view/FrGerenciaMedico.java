@@ -152,7 +152,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         tmMedicos = new javax.swing.JScrollPane();
-        customTable1 = new com.ifcolab.estetify.components.CustomTable();
+        grdMedicos = new com.ifcolab.estetify.components.CustomTable();
         lblLogo = new javax.swing.JLabel();
         lblBackgroundTabela = new javax.swing.JLabel();
         lblEstetify = new javax.swing.JLabel();
@@ -317,7 +317,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(680, 80, 170, 30);
 
-        customTable1.setModel(new javax.swing.table.DefaultTableModel(
+        grdMedicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -328,7 +328,12 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tmMedicos.setViewportView(customTable1);
+        grdMedicos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grdMedicosMouseClicked(evt);
+            }
+        });
+        tmMedicos.setViewportView(grdMedicos);
 
         getContentPane().add(tmMedicos);
         tmMedicos.setBounds(290, 380, 1010, 406);
@@ -401,7 +406,8 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
     }//GEN-LAST:event_edtEnderecoActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-
+        this.limparFormulario();
+        this.habilitarFormulario(true);
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -462,8 +468,33 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        Medico medicoExcluido = (Medico) this.getObjetoSelecionadoNaGrid();
 
+        if (medicoExcluido == null)
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            int response = JOptionPane.showConfirmDialog(null,
+                "Deseja excluir o Paciente \n("
+                + medicoExcluido.getNome() + ", "
+                + medicoExcluido.getCpf() + ") ?",
+                "Confirmar exclusão",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.OK_OPTION) {
+                try {
+                    controller.excluir(medicoExcluido);
+                    controller.atualizarTabela(grdMedicos);
+                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
+                } catch (PacienteException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
+            }
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void grdMedicosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grdMedicosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_grdMedicosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -513,7 +544,6 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
-    private com.ifcolab.estetify.components.CustomTable customTable1;
     private com.ifcolab.estetify.components.CustomTextField edtCRM;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
@@ -523,6 +553,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;
+    private com.ifcolab.estetify.components.CustomTable grdMedicos;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;

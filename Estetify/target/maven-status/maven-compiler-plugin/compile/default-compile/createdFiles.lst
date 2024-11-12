@@ -7,7 +7,6 @@ com/ifcolab/estetify/view/FrFeedback$1.class
 com/ifcolab/estetify/model/dao/Dao.class
 com/ifcolab/estetify/components/SecondaryCustomButton$1.class
 com/ifcolab/estetify/view/FrGerenciaRecepcionista$8.class
-com/ifcolab/estetify/view/FrGerenciaMedico$10$1.class
 com/ifcolab/estetify/view/FrLogin.class
 com/ifcolab/estetify/model/Recepcionista.class
 com/ifcolab/estetify/factory/DatabaseJPA.class
