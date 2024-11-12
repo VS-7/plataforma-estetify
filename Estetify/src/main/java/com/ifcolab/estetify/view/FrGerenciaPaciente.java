@@ -1,29 +1,32 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ */
 package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import java.text.ParseException;
-import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
 /**
  *
  * @author vitorsrgio
  */
-public class FrGerenciaPaciente extends javax.swing.JFrame {
+public class FrGerenciaPaciente extends javax.swing.JDialog {
 
     private PacienteController controller;
     private int idPacienteEditando;
 
-
-    public FrGerenciaPaciente() {
+    public FrGerenciaPaciente(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        
         
         controller = new PacienteController();
         idPacienteEditando = -1;
@@ -41,8 +44,6 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         
         controller.atualizarTabela(grdPacientes);
     }
-
-
 
     private void adicionarMascaraNosCampos() {
         try {
@@ -115,9 +116,8 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             btnEditarActionPerformed(null);
         }
+
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,7 +128,6 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel4 = new javax.swing.JLabel();
         lblCPF = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
@@ -160,11 +159,8 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         lblTitleGerenciaMedicos = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
 
-        jLabel4.setText("jLabel4");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1350, 850));
-        setResizable(false);
         getContentPane().setLayout(null);
 
         lblCPF.setForeground(new java.awt.Color(51, 51, 51));
@@ -358,54 +354,26 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+    private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaActionPerformed
-
-    private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtNomeActionPerformed
+    }//GEN-LAST:event_edtSexoActionPerformed
 
     private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEmailActionPerformed
 
-    private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
+    private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edtSexoActionPerformed
+    }//GEN-LAST:event_edtNomeActionPerformed
 
     private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEnderecoActionPerformed
 
-    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        Paciente pacienteExcluido = (Paciente) this.getObjetoSelecionadoNaGrid();
-
-        if (pacienteExcluido == null)
-            JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
-        else {
-            int response = JOptionPane.showConfirmDialog(null,
-                    "Deseja excluir o Paciente \n("
-                    + pacienteExcluido.getNome() + ", "
-                    + pacienteExcluido.getCpf() + ") ?",
-                    "Confirmar exclusão",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if (response == JOptionPane.OK_OPTION) {
-                try {
-                    controller.excluir(pacienteExcluido);
-                    controller.atualizarTabela(grdPacientes);
-                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
-                } catch (PacienteException ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage());
-                }
-            }
-        }
-    }//GEN-LAST:event_btnRemoverActionPerformed
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        this.limparFormulario();
+        this.habilitarFormulario(true);
+    }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
@@ -437,24 +405,23 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
                     edtHistoricoMedico.getText()
                 );
             }
-            
+
             this.idPacienteEditando = -1;
             controller.atualizarTabela(grdPacientes);
             this.habilitarFormulario(false);
             this.limparFormulario();
-            
+
         } catch (PacienteException e) {
             System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
-
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         Paciente pacienteEditando = (Paciente) this.getObjetoSelecionadoNaGrid();
 
         if (pacienteEditando == null)
-            JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
         else {
             this.limparFormulario();
             this.habilitarFormulario(true);
@@ -463,10 +430,30 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        this.limparFormulario();
-        this.habilitarFormulario(true);
-    }//GEN-LAST:event_btnAdicionarActionPerformed
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        Paciente pacienteExcluido = (Paciente) this.getObjetoSelecionadoNaGrid();
+
+        if (pacienteExcluido == null)
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            int response = JOptionPane.showConfirmDialog(null,
+                "Deseja excluir o Paciente \n("
+                + pacienteExcluido.getNome() + ", "
+                + pacienteExcluido.getCpf() + ") ?",
+                "Confirmar exclusão",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.OK_OPTION) {
+                try {
+                    controller.excluir(pacienteExcluido);
+                    controller.atualizarTabela(grdPacientes);
+                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
+                } catch (PacienteException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -479,7 +466,7 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -495,20 +482,18 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrGerenciaPaciente().setVisible(true);
+                FrGerenciaPaciente dialog = new FrGerenciaPaciente(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -527,7 +512,6 @@ public class FrGerenciaPaciente extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;
     private com.ifcolab.estetify.components.CustomTable grdPacientes;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;

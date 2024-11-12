@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package com.ifcolab.estetify.view;
 
@@ -8,12 +8,13 @@ package com.ifcolab.estetify.view;
  *
  * @author vitorsrgio
  */
-public class FrGerenciaMedico extends javax.swing.JFrame {
+public class FrGerenciaMedico extends javax.swing.JDialog {
 
     /**
-     * Creates new form FrLogin
+     * Creates new form FrGerenciaMedico1
      */
-    public FrGerenciaMedico() {
+    public FrGerenciaMedico(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -26,7 +27,6 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel4 = new javax.swing.JLabel();
         lblCPF = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
@@ -60,11 +60,8 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         lblTitleGerenciaMedicos = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
 
-        jLabel4.setText("jLabel4");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1350, 850));
-        setResizable(false);
         getContentPane().setLayout(null);
 
         lblCPF.setForeground(new java.awt.Color(51, 51, 51));
@@ -272,49 +269,41 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaActionPerformed
-
-    private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtNomeActionPerformed
-
-    private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtEmailActionPerformed
-
-    private void edtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtCPFActionPerformed
-
     private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtSexoActionPerformed
-
-    private void edtDataNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtDataNascimentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtDataNascimentoActionPerformed
 
     private void edtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtTelefoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtTelefoneActionPerformed
 
-    private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
+    private void edtEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEspecializacaoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edtEnderecoActionPerformed
+    }//GEN-LAST:event_edtEspecializacaoActionPerformed
+
+    private void edtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCPFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edtCPFActionPerformed
+
+    private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edtEmailActionPerformed
+
+    private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edtNomeActionPerformed
 
     private void edtCRMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtCRMActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtCRMActionPerformed
 
-    private void edtEspecializacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEspecializacaoActionPerformed
+    private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edtEspecializacaoActionPerformed
+    }//GEN-LAST:event_edtEnderecoActionPerformed
+
+    private void edtDataNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtDataNascimentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edtDataNascimentoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -327,7 +316,7 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -344,10 +333,17 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrGerenciaMedico().setVisible(true);
+                FrGerenciaMedico dialog = new FrGerenciaMedico(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -367,7 +363,6 @@ public class FrGerenciaMedico extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.CustomTextField edtNome;
     private com.ifcolab.estetify.components.CustomTextField edtSexo;
     private com.ifcolab.estetify.components.CustomTextField edtTelefone;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;

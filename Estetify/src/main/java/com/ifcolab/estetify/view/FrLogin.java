@@ -108,6 +108,11 @@ public class FrLogin extends javax.swing.JFrame {
         customTextField2.setBounds(890, 340, 360, 40);
 
         primaryCustomButton1.setText("Entrar");
+        primaryCustomButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                primaryCustomButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(primaryCustomButton1);
         primaryCustomButton1.setBounds(1000, 480, 140, 30);
 
@@ -148,6 +153,15 @@ public class FrLogin extends javax.swing.JFrame {
     private void customTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_customTextField2ActionPerformed
+
+    private void primaryCustomButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_primaryCustomButton1ActionPerformed
+        FrGerenciaPaciente dlgGerenciaPaciente = new FrGerenciaPaciente(this, true);
+        
+        // Configura o posicionamento relativo, faz o dialgo aparecer na mesma tela que o pai(qdo estamos mais de uma tela)
+        dlgGerenciaPaciente.setLocationRelativeTo(this);
+        dlgGerenciaPaciente.setVisible(true);
+
+    }//GEN-LAST:event_primaryCustomButton1ActionPerformed
 
     /**
      * @param args the command line arguments

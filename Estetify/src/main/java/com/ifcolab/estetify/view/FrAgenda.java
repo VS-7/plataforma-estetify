@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package com.ifcolab.estetify.view;
 
@@ -8,12 +8,13 @@ package com.ifcolab.estetify.view;
  *
  * @author vitorsrgio
  */
-public class FrAgenda extends javax.swing.JFrame {
+public class FrAgenda extends javax.swing.JDialog {
 
     /**
-     * Creates new form FrLogin
+     * Creates new form FrAgenda1
      */
-    public FrAgenda() {
+    public FrAgenda(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -26,27 +27,17 @@ public class FrAgenda extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel4 = new javax.swing.JLabel();
-        lblCPF = new javax.swing.JLabel();
-        lblNome = new javax.swing.JLabel();
-        lblEmail = new javax.swing.JLabel();
-        lblObservacoes = new javax.swing.JLabel();
-        lblData = new javax.swing.JLabel();
-        lblDataNascimento = new javax.swing.JLabel();
-        lblHora = new javax.swing.JLabel();
-        txtObservacoes = new javax.swing.JScrollPane();
-        customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
+        lblFiltrarPaciente = new javax.swing.JLabel();
         customCalendar2 = new com.ifcolab.estetify.components.CustomCalendar();
-        fEdtHora = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        fEdtData = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        cbxSelecionarProcedimento = new com.ifcolab.estetify.components.CustomComboBox();
-        cbxSelecionarEnfermeira = new com.ifcolab.estetify.components.CustomComboBox();
-        cbxSelecionarMedico = new com.ifcolab.estetify.components.CustomComboBox();
-        cbxSelecionarPaciente = new com.ifcolab.estetify.components.CustomComboBox();
+        lblNome1 = new javax.swing.JLabel();
+        lblNome = new javax.swing.JLabel();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
-        btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
-        btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
-        btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
+        secondaryCustomButton1 = new com.ifcolab.estetify.components.SecondaryCustomButton();
+        customComboBox2 = new com.ifcolab.estetify.components.CustomComboBox();
+        customComboBox1 = new com.ifcolab.estetify.components.CustomComboBox();
+        customComboBox3 = new com.ifcolab.estetify.components.CustomComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        customTable1 = new com.ifcolab.estetify.components.CustomTable();
         lblLogo = new javax.swing.JLabel();
         lblBackgroundTabela = new javax.swing.JLabel();
         lblEstetify = new javax.swing.JLabel();
@@ -56,98 +47,58 @@ public class FrAgenda extends javax.swing.JFrame {
         lblTitleGerenciaMedicos = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
 
-        jLabel4.setText("jLabel4");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1350, 850));
-        setResizable(false);
         getContentPane().setLayout(null);
 
-        lblCPF.setForeground(new java.awt.Color(51, 51, 51));
-        lblCPF.setText("Selecionar Enfermeira");
-        getContentPane().add(lblCPF);
-        lblCPF.setBounds(800, 600, 190, 17);
+        lblFiltrarPaciente.setForeground(new java.awt.Color(51, 51, 51));
+        lblFiltrarPaciente.setText("Filtrar Paciente");
+        getContentPane().add(lblFiltrarPaciente);
+        lblFiltrarPaciente.setBounds(310, 120, 170, 17);
+        getContentPane().add(customCalendar2);
+        customCalendar2.setBounds(290, 190, 1030, 310);
+
+        lblNome1.setForeground(new java.awt.Color(51, 51, 51));
+        lblNome1.setText("Filtrar Enfermeira");
+        getContentPane().add(lblNome1);
+        lblNome1.setBounds(890, 120, 170, 17);
 
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
-        lblNome.setText("Selecionar Paciente");
+        lblNome.setText("Filtrar Médico");
         getContentPane().add(lblNome);
-        lblNome.setBounds(320, 600, 220, 17);
-
-        lblEmail.setForeground(new java.awt.Color(51, 51, 51));
-        lblEmail.setText("Selecionar Médico");
-        getContentPane().add(lblEmail);
-        lblEmail.setBounds(550, 600, 170, 17);
-
-        lblObservacoes.setForeground(new java.awt.Color(51, 51, 51));
-        lblObservacoes.setText("Observacoes");
-        getContentPane().add(lblObservacoes);
-        lblObservacoes.setBounds(680, 680, 110, 17);
-
-        lblData.setForeground(new java.awt.Color(51, 51, 51));
-        lblData.setText("Hora");
-        getContentPane().add(lblData);
-        lblData.setBounds(510, 680, 110, 17);
-
-        lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
-        lblDataNascimento.setText("Selecionar Procedimento");
-        getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(1060, 600, 230, 17);
-
-        lblHora.setForeground(new java.awt.Color(51, 51, 51));
-        lblHora.setText("Data");
-        getContentPane().add(lblHora);
-        lblHora.setBounds(330, 680, 130, 17);
-
-        customTextArea1.setColumns(20);
-        customTextArea1.setRows(5);
-        txtObservacoes.setViewportView(customTextArea1);
-
-        getContentPane().add(txtObservacoes);
-        txtObservacoes.setBounds(670, 700, 610, 116);
-        getContentPane().add(customCalendar2);
-        customCalendar2.setBounds(290, 80, 1030, 420);
-
-        fEdtHora.setText("Hora");
-        getContentPane().add(fEdtHora);
-        fEdtHora.setBounds(500, 700, 140, 38);
-
-        fEdtData.setText("Data");
-        getContentPane().add(fEdtData);
-        fEdtData.setBounds(320, 700, 160, 38);
-        getContentPane().add(cbxSelecionarProcedimento);
-        cbxSelecionarProcedimento.setBounds(1050, 620, 230, 44);
-        getContentPane().add(cbxSelecionarEnfermeira);
-        cbxSelecionarEnfermeira.setBounds(790, 620, 240, 44);
-
-        cbxSelecionarMedico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxSelecionarMedicoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(cbxSelecionarMedico);
-        cbxSelecionarMedico.setBounds(540, 620, 230, 44);
-        getContentPane().add(cbxSelecionarPaciente);
-        cbxSelecionarPaciente.setBounds(310, 620, 210, 44);
+        lblNome.setBounds(610, 120, 170, 17);
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
-        btnAdicionar.setText(" Agendar");
+        btnAdicionar.setText(" Novo Agendamento");
         getContentPane().add(btnAdicionar);
-        btnAdicionar.setBounds(310, 560, 170, 30);
+        btnAdicionar.setBounds(300, 80, 210, 30);
 
-        btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
-        btnSalvar.setText(" Salvar");
-        getContentPane().add(btnSalvar);
-        btnSalvar.setBounds(880, 560, 170, 30);
+        secondaryCustomButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/search.png"))); // NOI18N
+        secondaryCustomButton1.setText(" Filtrar");
+        getContentPane().add(secondaryCustomButton1);
+        secondaryCustomButton1.setBounds(530, 78, 200, 30);
+        getContentPane().add(customComboBox2);
+        customComboBox2.setBounds(880, 140, 270, 44);
+        getContentPane().add(customComboBox1);
+        customComboBox1.setBounds(300, 140, 270, 44);
+        getContentPane().add(customComboBox3);
+        customComboBox3.setBounds(590, 140, 270, 44);
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/editsquare.png"))); // NOI18N
-        btnEditar.setText(" Editar");
-        getContentPane().add(btnEditar);
-        btnEditar.setBounds(500, 560, 170, 30);
+        customTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(customTable1);
 
-        btnRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/trash.png"))); // NOI18N
-        btnRemover.setText(" Remover");
-        getContentPane().add(btnRemover);
-        btnRemover.setBounds(690, 560, 170, 30);
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(296, 596, 1020, 210);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo45x40.png"))); // NOI18N
         getContentPane().add(lblLogo);
@@ -170,9 +121,9 @@ public class FrAgenda extends javax.swing.JFrame {
 
         lblSubtituloGerenciaMedicos.setFont(new java.awt.Font("Fira Sans Medium", 0, 13)); // NOI18N
         lblSubtituloGerenciaMedicos.setForeground(new java.awt.Color(102, 102, 102));
-        lblSubtituloGerenciaMedicos.setText("Gerenciar Médicos");
+        lblSubtituloGerenciaMedicos.setText("Visualize e realize novos agendamentos de consultas");
         getContentPane().add(lblSubtituloGerenciaMedicos);
-        lblSubtituloGerenciaMedicos.setBounds(280, 40, 210, 17);
+        lblSubtituloGerenciaMedicos.setBounds(280, 40, 400, 17);
 
         lblBackgroundCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BackgroundCad.png"))); // NOI18N
         getContentPane().add(lblBackgroundCadastro);
@@ -192,18 +143,6 @@ public class FrAgenda extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaActionPerformed
-
-    private void cbxSelecionarMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxSelecionarMedicoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbxSelecionarMedicoActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -215,7 +154,7 @@ public class FrAgenda extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -231,106 +170,41 @@ public class FrAgenda extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrAgenda().setVisible(true);
+                FrAgenda dialog = new FrAgenda(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
-    private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
-    private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
-    private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
-    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarEnfermeira;
-    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarMedico;
-    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarPaciente;
-    private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarProcedimento;
     private com.ifcolab.estetify.components.CustomCalendar customCalendar2;
-    private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
-    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtData;
-    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtHora;
-    private javax.swing.JLabel jLabel4;
+    private com.ifcolab.estetify.components.CustomComboBox customComboBox1;
+    private com.ifcolab.estetify.components.CustomComboBox customComboBox2;
+    private com.ifcolab.estetify.components.CustomComboBox customComboBox3;
+    private com.ifcolab.estetify.components.CustomTable customTable1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
-    private javax.swing.JLabel lblCPF;
-    private javax.swing.JLabel lblData;
-    private javax.swing.JLabel lblDataNascimento;
-    private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblEstetify;
-    private javax.swing.JLabel lblHora;
+    private javax.swing.JLabel lblFiltrarPaciente;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNome;
-    private javax.swing.JLabel lblObservacoes;
+    private javax.swing.JLabel lblNome1;
     private javax.swing.JLabel lblSidebar;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
-    private javax.swing.JScrollPane txtObservacoes;
+    private com.ifcolab.estetify.components.SecondaryCustomButton secondaryCustomButton1;
     // End of variables declaration//GEN-END:variables
 }

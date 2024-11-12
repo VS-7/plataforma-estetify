@@ -8,9 +8,10 @@ public class TMViewPaciente extends AbstractTableModel {
 
     private List<Paciente> lista;
     private final int COL_NOME = 0;
-    private final int COL_EMAIL = 1;
-    private final int COL_CPF = 2;
-    private final int COL_TELEFONE = 3;
+        private final int COL_SEXO = 1;
+    private final int COL_EMAIL = 2;
+    private final int COL_CPF = 3;
+    private final int COL_TELEFONE = 4;
 
     public TMViewPaciente(List<Paciente> lst) {
         this.lista = lst;
@@ -23,7 +24,7 @@ public class TMViewPaciente extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -36,6 +37,8 @@ public class TMViewPaciente extends AbstractTableModel {
             switch (columnIndex) {
                 case COL_NOME:
                     return aux.getNome();
+                case COL_SEXO:
+                    return aux.getSexo();                    
                 case COL_EMAIL:
                     return aux.getEmail();
                 case COL_CPF:
@@ -59,6 +62,8 @@ public class TMViewPaciente extends AbstractTableModel {
         switch (columnIndex) {
             case COL_NOME:
                 return "Nome";
+            case COL_SEXO:
+                return "Sexo";
             case COL_EMAIL:
                 return "Email";
             case COL_CPF:
