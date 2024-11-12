@@ -1,15 +1,50 @@
 package com.ifcolab.estetify.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.OneToMany;
 
-@Data
+@Getter
+@Setter
 @Entity
-@NoArgsConstructor
-
-public class Enfermeira extends Pessoa {
+public class Enfermeira extends Pessoa implements Serializable {
+    
     @Column(unique = true)
     private String coren;
+    
+    @OneToMany(mappedBy = "enfermeira")
+    private List<Procedimento> procedimentos;
+    
+    public Enfermeira() {
+        super();
+    }
+    
+    public Enfermeira(
+            String nome,
+            String email,
+            String senha,
+            String cpf,
+            String sexo,
+            String dataNascimento,
+            String telefone,
+            String endereco,
+            String coren
+    ) {
+        super(nome, 
+              email, 
+              senha, 
+              cpf, 
+              sexo, 
+              LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
+              telefone, 
+              endereco, 
+              "ENFERMEIRA");
+        this.coren = coren;
+    }
 }
