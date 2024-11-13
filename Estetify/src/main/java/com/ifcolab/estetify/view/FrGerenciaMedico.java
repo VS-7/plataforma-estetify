@@ -474,7 +474,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
         else {
             int response = JOptionPane.showConfirmDialog(null,
-                "Deseja excluir o Paciente \n("
+                "Deseja excluir o Médico \n("
                 + medicoExcluido.getNome() + ", "
                 + medicoExcluido.getCpf() + ") ?",
                 "Confirmar exclusão",

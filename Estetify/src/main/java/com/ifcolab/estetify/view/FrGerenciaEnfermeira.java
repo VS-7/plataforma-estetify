@@ -394,7 +394,7 @@ public class FrGerenciaEnfermeira extends javax.swing.JDialog {
         JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
         else {
             int response = JOptionPane.showConfirmDialog(null,
-                "Deseja excluir o Paciente \n("
+                "Deseja excluir a Enfermeira \n("
                 + enfermeiraExcluido.getNome() + ", "
                 + enfermeiraExcluido.getCpf() + ") ?",
                 "Confirmar exclusão",
