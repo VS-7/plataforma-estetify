@@ -156,12 +156,12 @@ public class FrGerenciaEnfermeira extends javax.swing.JDialog {
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
         lblNome.setText("Nome");
         getContentPane().add(lblNome);
-        lblNome.setBounds(310, 140, 35, 17);
+        lblNome.setBounds(310, 140, 130, 17);
 
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
         lblEmail.setText("Email");
         getContentPane().add(lblEmail);
-        lblEmail.setBounds(600, 140, 33, 17);
+        lblEmail.setBounds(600, 140, 130, 17);
 
         lblSexo.setForeground(new java.awt.Color(51, 51, 51));
         lblSexo.setText("Sexo");
@@ -171,7 +171,7 @@ public class FrGerenciaEnfermeira extends javax.swing.JDialog {
         lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
         lblDataNascimento.setText("Data de Nascimento");
         getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(310, 210, 140, 17);
+        lblDataNascimento.setBounds(310, 210, 170, 17);
 
         lblTelefone.setForeground(new java.awt.Color(51, 51, 51));
         lblTelefone.setText("Telefone");
