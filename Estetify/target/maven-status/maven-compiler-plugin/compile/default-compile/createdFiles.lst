@@ -86,7 +86,6 @@ com/ifcolab/estetify/model/dao/RelatorioDAO.class
 com/ifcolab/estetify/model/Consulta.class
 com/ifcolab/estetify/view/FrGerenciaRecepcionista$4.class
 com/ifcolab/estetify/view/FrGerenciaProcedimento$2.class
-com/ifcolab/estetify/view/FrGerenciaRecepcionista$9$1.class
 com/ifcolab/estetify/controller/RecepcionistaController.class
 com/ifcolab/estetify/view/FrGerenciaPaciente$10.class
 com/ifcolab/estetify/components/CustomFormattedTextField$1.class
