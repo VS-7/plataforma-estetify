@@ -18,8 +18,8 @@ public class Enfermeira extends Pessoa implements Serializable {
     @Column(unique = true)
     private String coren;
     
-    @OneToMany(mappedBy = "enfermeira")
-    private List<Procedimento> procedimentos;
+   // @OneToMany(mappedBy = "enfermeira")
+    //private List<Procedimento> procedimentos;
     
     public Enfermeira() {
         super();

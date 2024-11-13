@@ -91,7 +91,6 @@ com/ifcolab/estetify/controller/RecepcionistaController.class
 com/ifcolab/estetify/view/FrGerenciaPaciente$10.class
 com/ifcolab/estetify/components/CustomFormattedTextField$1.class
 com/ifcolab/estetify/view/FrFeedback.class
-com/ifcolab/estetify/model/valid/ValidateEnferemeira.class
 com/ifcolab/estetify/model/valid/ValidateConsulta.class
 com/ifcolab/estetify/components/CustomCalendar.class
 com/ifcolab/estetify/view/FrGerenciaMedico$1.class
@@ -130,7 +129,6 @@ com/ifcolab/estetify/components/sidebarcustombuttom/SidebarCustomButton.class
 com/ifcolab/estetify/view/FrGerenciaProcedimento$9.class
 com/ifcolab/estetify/view/FrGerenciaEnfermeira$1.class
 com/ifcolab/estetify/view/FrGerenciaRecepcionista.class
-com/ifcolab/estetify/view/FrGerenciaEnfermeira$9$1.class
 com/ifcolab/estetify/view/FrGerenciaProcedimento$9$1.class
 com/ifcolab/estetify/model/dao/PacienteDAO.class
 com/ifcolab/estetify/view/FrGerenciaProcedimento$3.class

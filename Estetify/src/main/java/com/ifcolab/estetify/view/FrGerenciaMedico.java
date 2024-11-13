@@ -174,12 +174,12 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
         lblNome.setText("Nome");
         getContentPane().add(lblNome);
-        lblNome.setBounds(310, 120, 35, 17);
+        lblNome.setBounds(310, 120, 170, 17);
 
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
         lblEmail.setText("Email");
         getContentPane().add(lblEmail);
-        lblEmail.setBounds(600, 120, 33, 17);
+        lblEmail.setBounds(600, 120, 180, 17);
 
         lblSexo.setForeground(new java.awt.Color(51, 51, 51));
         lblSexo.setText("Sexo");
@@ -319,13 +319,13 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
 
         grdMedicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         grdMedicos.addMouseListener(new java.awt.event.MouseAdapter() {
