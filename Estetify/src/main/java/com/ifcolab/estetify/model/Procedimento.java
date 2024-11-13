@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Getter
 @Setter
@@ -46,8 +45,9 @@ public class Procedimento implements Serializable {
     @JoinColumn(name = "enfermeira_id")
     private Enfermeira enfermeira;
     
-    @OneToOne(mappedBy = "procedimento")
-    private Pagamento pagamento;
+    @ManyToOne
+    @JoinColumn(name = "medico_id")
+    private Medico medico;
     
     public Procedimento() {
     }
@@ -60,7 +60,8 @@ public class Procedimento implements Serializable {
             String requisitos,
             String contraindicacoes,
             Paciente paciente,
-            Enfermeira enfermeira
+            Enfermeira enfermeira,
+            Medico medico
     ) {
         this.dataHora = LocalDateTime.parse(dataHora, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
         this.descricao = descricao;
@@ -70,6 +71,7 @@ public class Procedimento implements Serializable {
         this.contraindicacoes = contraindicacoes;
         this.paciente = paciente;
         this.enfermeira = enfermeira;
+        this.medico = medico;
     }
     
     private Duration parseDuracao(String duracao) {
@@ -92,9 +94,5 @@ public class Procedimento implements Serializable {
     
     public String getValorFormatado() {
         return String.format("R$ %.2f", valor);
-    }
-    
-    public boolean isPago() {
-        return pagamento != null;
     }
 }
