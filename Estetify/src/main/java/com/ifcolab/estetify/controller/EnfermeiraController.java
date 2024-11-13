@@ -1,13 +1,103 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ifcolab.estetify.controller;
 
-/**
- *
- * @author vitorsrgio
- */
+import com.ifcolab.estetify.controller.tablemodel.TMViewEnfermeira;
+import com.ifcolab.estetify.model.Enfermeira;
+import com.ifcolab.estetify.model.dao.EnfermeiraDAO;
+import com.ifcolab.estetify.model.exceptions.EnfermeiraException;
+import com.ifcolab.estetify.model.valid.ValidateEnfermeira;
+import javax.swing.JTable;
+
 public class EnfermeiraController {
     
+    private EnfermeiraDAO repositorio;
+    
+    public EnfermeiraController() {
+        repositorio = new EnfermeiraDAO();
+    }
+    
+    public void cadastrar(
+            String nome,
+            String email,
+            String senha,
+            String confirmarSenha,
+            String cpf,
+            String sexo,
+            String dataNascimento,
+            String telefone,
+            String endereco,
+            String coren
+    ) {
+        ValidateEnfermeira valid = new ValidateEnfermeira();
+        Enfermeira enfermeira = valid.validaCamposEntrada(
+                nome,
+                email,
+                senha,
+                confirmarSenha,
+                cpf,
+                sexo,
+                dataNascimento,
+                telefone,
+                endereco,
+                coren
+        );
+        
+        if (repositorio.findByCOREN(coren) != null) {
+            throw new EnfermeiraException("COREN já cadastrado");
+        }
+        
+        repositorio.save(enfermeira);
+    }
+    
+    public void atualizar(
+            int id,
+            String nome,
+            String email,
+            String senha,
+            String confirmarSenha,
+            String cpf,
+            String sexo,
+            String dataNascimento,
+            String telefone,
+            String endereco,
+            String coren
+    ) {
+        ValidateEnfermeira valid = new ValidateEnfermeira();
+        Enfermeira enfermeira = valid.validaCamposEntrada(
+                nome,
+                email,
+                senha,
+                confirmarSenha,
+                cpf,
+                sexo,
+                dataNascimento,
+                telefone,
+                endereco,
+                coren
+        );
+        
+        enfermeira.setId(id);
+        repositorio.update(enfermeira);
+    }
+    
+    public void excluir(Enfermeira enfermeira) {
+        if (enfermeira != null) {
+            repositorio.delete(enfermeira.getId());
+        } else {
+            throw new EnfermeiraException("Erro - Enfermeira inexistente.");
+        }
+    }
+    
+    public Enfermeira buscarPorCOREN(String coren) {
+        return repositorio.findByCOREN(coren);
+    }
+    
+    public void atualizarTabela(JTable grd) {
+        TMViewEnfermeira tmEnfermeira = new TMViewEnfermeira(repositorio.findAll());
+        grd.setModel(tmEnfermeira);
+    }
+    
+    public void filtrarTabela(JTable grd, String nome) {
+        TMViewEnfermeira tmEnfermeira = new TMViewEnfermeira(repositorio.filterByName(nome));
+        grd.setModel(tmEnfermeira);
+    }
 }
