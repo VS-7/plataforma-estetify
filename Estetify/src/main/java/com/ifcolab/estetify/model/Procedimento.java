@@ -23,8 +23,6 @@ public class Procedimento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    private LocalDateTime dataHora;
-    
     @Column(length = 1000)
     private String descricao;
     
@@ -37,41 +35,21 @@ public class Procedimento implements Serializable {
     @Column(length = 500)
     private String contraindicacoes;
     
-    @ManyToOne
-    @JoinColumn(name = "paciente_id")
-    private Paciente paciente;
-    
-    @ManyToOne
-    @JoinColumn(name = "enfermeira_id")
-    private Enfermeira enfermeira;
-    
-    @ManyToOne
-    @JoinColumn(name = "medico_id")
-    private Medico medico;
-    
     public Procedimento() {
     }
     
     public Procedimento(
-            String dataHora,
             String descricao,
             String duracao,
             double valor,
             String requisitos,
-            String contraindicacoes,
-            Paciente paciente,
-            Enfermeira enfermeira,
-            Medico medico
+            String contraindicacoes
     ) {
-        this.dataHora = LocalDateTime.parse(dataHora, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
         this.descricao = descricao;
         this.duracaoEstimada = parseDuracao(duracao);
         this.valor = valor;
         this.requisitos = requisitos;
         this.contraindicacoes = contraindicacoes;
-        this.paciente = paciente;
-        this.enfermeira = enfermeira;
-        this.medico = medico;
     }
     
     private Duration parseDuracao(String duracao) {
@@ -80,19 +58,5 @@ public class Procedimento implements Serializable {
         int horas = Integer.parseInt(partes[0]);
         int minutos = Integer.parseInt(partes[1]);
         return Duration.ofHours(horas).plusMinutes(minutos);
-    }
-    
-    public String getDataHoraFormatada() {
-        return dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-    }
-    
-    public String getDuracaoFormatada() {
-        long horas = duracaoEstimada.toHours();
-        long minutos = duracaoEstimada.toMinutesPart();
-        return String.format("%02d:%02d", horas, minutos);
-    }
-    
-    public String getValorFormatado() {
-        return String.format("R$ %.2f", valor);
     }
 }

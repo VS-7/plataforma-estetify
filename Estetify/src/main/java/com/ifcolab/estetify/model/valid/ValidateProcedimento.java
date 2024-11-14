@@ -1,14 +1,11 @@
 package com.ifcolab.estetify.model.valid;
 
 import com.ifcolab.estetify.model.Procedimento;
-import com.ifcolab.estetify.model.Paciente;
-import com.ifcolab.estetify.model.Enfermeira;
-import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.dao.ProcedimentoDAO;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class ValidateProcedimento {
     
@@ -19,22 +16,12 @@ public class ValidateProcedimento {
     }
     
     public Procedimento validaCamposEntrada(
-            String dataHora,
             String descricao,
             String duracao,
             String valor,
             String requisitos,
-            String contraindicacoes,
-            Paciente paciente,
-            Enfermeira enfermeira,
-            Medico medico
+            String contraindicacoes
     ) {
-        if (dataHora == null || dataHora.isEmpty()) {
-            throw new ProcedimentoException("Data e hora não podem estar em branco.");
-        }
-        
-        isValidDataHora(dataHora);
-        
         if (descricao == null || descricao.isEmpty()) {
             throw new ProcedimentoException("Descrição não pode estar em branco.");
         }
@@ -51,12 +38,15 @@ public class ValidateProcedimento {
         
         double valorNumerico;
         try {
-            valorNumerico = Double.parseDouble(valor.replace("R$", "").trim().replace(",", "."));
+            NumberFormat format = NumberFormat.getInstance(new Locale("pt", "BR"));
+            Number number = format.parse(valor.replace("R$", "").trim());
+            valorNumerico = number.doubleValue();
+            
             if (valorNumerico <= 0) {
                 throw new ProcedimentoException("Valor deve ser maior que zero.");
             }
-        } catch (NumberFormatException e) {
-            throw new ProcedimentoException("Valor inválido.");
+        } catch (ParseException e) {
+            throw new ProcedimentoException("Valor inválido. Use o formato: R$ 0,00");
         }
         
         if (requisitos != null && requisitos.length() > 500) {
@@ -67,43 +57,13 @@ public class ValidateProcedimento {
             throw new ProcedimentoException("Contraindicações muito longas. Máximo de 500 caracteres.");
         }
         
-        if (paciente == null) {
-            throw new ProcedimentoException("Paciente não pode estar em branco.");
-        }
-        
-        if (enfermeira == null) {
-            throw new ProcedimentoException("Enfermeira não pode estar em branco.");
-        }
-        
-        if (medico == null) {
-            throw new ProcedimentoException("Médico não pode estar em branco.");
-        }
-        
         return new Procedimento(
-                dataHora,
                 descricao,
                 duracao,
                 valorNumerico,
                 requisitos,
-                contraindicacoes,
-                paciente,
-                enfermeira,
-                medico
+                contraindicacoes
         );
-    }
-    
-    private void isValidDataHora(String dataHora) {
-        try {
-            LocalDateTime dateTime = LocalDateTime.parse(dataHora, 
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            
-            LocalDateTime agora = LocalDateTime.now();
-            if (dateTime.isBefore(agora)) {
-                throw new ProcedimentoException("Data e hora não podem ser no passado.");
-            }
-        } catch (DateTimeParseException e) {
-            throw new ProcedimentoException("Data e hora inválidas. Use o formato dd/MM/yyyy HH:mm");
-        }
     }
     
     private void isValidDuracao(String duracao) {

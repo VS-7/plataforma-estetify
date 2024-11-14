@@ -20,27 +20,19 @@ public class ProcedimentoController {
     }
     
     public void cadastrar(
-            String dataHora,
             String descricao,
             String duracao,
             String valor,
             String requisitos,
-            String contraindicacoes,
-            Paciente paciente,
-            Enfermeira enfermeira,
-            Medico medico
+            String contraindicacoes
     ) {
         ValidateProcedimento valid = new ValidateProcedimento();
         Procedimento procedimento = valid.validaCamposEntrada(
-                dataHora,
                 descricao,
                 duracao,
                 valor,
                 requisitos,
-                contraindicacoes,
-                paciente,
-                enfermeira,
-                medico
+                contraindicacoes
         );
         
         repositorio.save(procedimento);
@@ -48,27 +40,19 @@ public class ProcedimentoController {
     
     public void atualizar(
             int id,
-            String dataHora,
             String descricao,
             String duracao,
             String valor,
             String requisitos,
-            String contraindicacoes,
-            Paciente paciente,
-            Enfermeira enfermeira,
-            Medico medico
+            String contraindicacoes
     ) {
         ValidateProcedimento valid = new ValidateProcedimento();
         Procedimento procedimento = valid.validaCamposEntrada(
-                dataHora,
                 descricao,
                 duracao,
                 valor,
                 requisitos,
-                contraindicacoes,
-                paciente,
-                enfermeira,
-                medico
+                contraindicacoes
         );
         
         procedimento.setId(id);

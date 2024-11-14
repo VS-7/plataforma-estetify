@@ -3,17 +3,17 @@ package com.ifcolab.estetify.controller.tablemodel;
 import com.ifcolab.estetify.model.Procedimento;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import java.time.format.DateTimeFormatter;
+import java.text.DecimalFormat;
 
 public class TMViewProcedimento extends AbstractTableModel {
 
     private List<Procedimento> lista;
-    private final int COL_DATA_HORA = 0;
-    private final int COL_DESCRICAO = 1;
-    private final int COL_PACIENTE = 2;
-    private final int COL_MEDICO = 3;
-    private final int COL_ENFERMEIRA = 4;
-    private final int COL_DURACAO = 5;
-    private final int COL_VALOR = 6;
+    private final int COL_DESCRICAO = 0;
+    private final int COL_DURACAO = 1;
+    private final int COL_VALOR = 2;
+    private final int COL_REQUISITOS = 3;
+    private final int COL_CONTRAINDICACOES = 4;
 
     public TMViewProcedimento(List<Procedimento> lst) {
         this.lista = lst;
@@ -26,7 +26,7 @@ public class TMViewProcedimento extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return 5;
     }
 
     @Override
@@ -36,21 +36,21 @@ public class TMViewProcedimento extends AbstractTableModel {
             return aux;
         } else {
             aux = lista.get(rowIndex);
+            DecimalFormat decimalFormat = new DecimalFormat("R$ #,##0.00");
+            
             switch (columnIndex) {
-                case COL_DATA_HORA:
-                    return aux.getDataHoraFormatada();
                 case COL_DESCRICAO:
                     return aux.getDescricao();
-                case COL_PACIENTE:
-                    return aux.getPaciente().getNome();
-                case COL_MEDICO:
-                    return aux.getMedico().getNome();
-                case COL_ENFERMEIRA:
-                    return aux.getEnfermeira().getNome();
                 case COL_DURACAO:
-                    return aux.getDuracaoFormatada();
+                    long horas = aux.getDuracaoEstimada().toHours();
+                    long minutos = aux.getDuracaoEstimada().toMinutesPart();
+                    return String.format("%02d:%02d", horas, minutos);
                 case COL_VALOR:
-                    return aux.getValorFormatado();
+                    return decimalFormat.format(aux.getValor());
+                case COL_REQUISITOS:
+                    return aux.getRequisitos();
+                case COL_CONTRAINDICACOES:
+                    return aux.getContraindicacoes();
                 default:
                     break;
             }
@@ -66,20 +66,16 @@ public class TMViewProcedimento extends AbstractTableModel {
     @Override
     public String getColumnName(int columnIndex) {
         switch (columnIndex) {
-            case COL_DATA_HORA:
-                return "Data/Hora";
             case COL_DESCRICAO:
                 return "Descrição";
-            case COL_PACIENTE:
-                return "Paciente";
-            case COL_MEDICO:
-                return "Médico";
-            case COL_ENFERMEIRA:
-                return "Enfermeira";
             case COL_DURACAO:
                 return "Duração";
             case COL_VALOR:
                 return "Valor";
+            case COL_REQUISITOS:
+                return "Requisitos";
+            case COL_CONTRAINDICACOES:
+                return "Contraindicações";
             default:
                 break;
         }

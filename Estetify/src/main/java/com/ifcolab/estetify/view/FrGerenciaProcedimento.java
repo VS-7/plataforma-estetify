@@ -1,12 +1,101 @@
 package com.ifcolab.estetify.view;
 
+import com.ifcolab.estetify.controller.ProcedimentoController;
+import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.exceptions.PacienteException;
+import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
+
 
 public class FrGerenciaProcedimento extends javax.swing.JDialog {
 
-
+    private ProcedimentoController controller;
+    private int idProcedimentoEditando;
+    
     public FrGerenciaProcedimento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        controller = new ProcedimentoController();
+        idProcedimentoEditando = -1;
+ 
+        this.adicionarMascaraNosCampos();
+        this.habilitarFormulario(false);
+        this.limparFormulario();
+        
+        // Adicionar listener de duplo clique
+        grdProcedimentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grdProcedimentosMouseClicked(evt);
+            }
+        });
+        
+        controller.atualizarTabela(grdProcedimentos);
+    }
+    
+    private void adicionarMascaraNosCampos() {
+        try {
+            // Máscara para duração: HH:mm
+            MaskFormatter maskDuracao = new MaskFormatter("##:##");
+            maskDuracao.setPlaceholderCharacter('_');
+            maskDuracao.install(fEdtDuracaoEstimada);
+            
+            // Máscara para valor: R$ ###.###,##
+            MaskFormatter maskValor = new MaskFormatter("R$ ###.###,##");
+            maskValor.setPlaceholderCharacter('_');
+            maskValor.install(fEdtValor);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(FrGerenciaPaciente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void habilitarFormulario(boolean habilitar) {
+        edtDescricao.setEnabled(habilitar);
+        fEdtDuracaoEstimada.setEnabled(habilitar);
+        fEdtValor.setEnabled(habilitar);
+        edtRequisitos.setEnabled(habilitar);
+        edtContraIndicacoes.setEnabled(habilitar);
+        btnSalvar.setEnabled(habilitar);
+    }
+
+    private void limparFormulario() {
+        edtDescricao.setText("");
+        fEdtDuracaoEstimada.setText("");
+        fEdtValor.setText("");
+        edtRequisitos.setText("");
+        edtContraIndicacoes.setText("");
+    }
+
+    private void preencherFormulario(Procedimento procedimento) {
+        DecimalFormat decimalFormat = new DecimalFormat("R$ ##,##0.00");
+        
+        edtDescricao.setText(procedimento.getDescricao());
+        
+        // Formata duração HH:mm
+        long horas = procedimento.getDuracaoEstimada().toHours();
+        long minutos = procedimento.getDuracaoEstimada().toMinutesPart();
+        fEdtDuracaoEstimada.setText(String.format("%02d:%02d", horas, minutos));
+        
+        // Formata valor em reais
+        fEdtValor.setText(decimalFormat.format(procedimento.getValor()));
+        
+        edtRequisitos.setText(procedimento.getRequisitos());
+        edtContraIndicacoes.setText(procedimento.getContraindicacoes());
+    }
+
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdProcedimentos.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdProcedimentos.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
     }
 
     /**
@@ -18,28 +107,22 @@ public class FrGerenciaProcedimento extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblCPF = new javax.swing.JLabel();
-        lblNome = new javax.swing.JLabel();
-        lblEmail = new javax.swing.JLabel();
-        lblSexo = new javax.swing.JLabel();
-        lblDataNascimento = new javax.swing.JLabel();
-        lblTelefone = new javax.swing.JLabel();
-        lblEndereco = new javax.swing.JLabel();
-        fEdtTelefone = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        fEdtDataNascimento = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        fEdtCPF = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        edtSexo = new com.ifcolab.estetify.components.CustomTextField();
-        edtEmail = new com.ifcolab.estetify.components.CustomTextField();
-        edtNome = new com.ifcolab.estetify.components.CustomTextField();
-        edtEndereco = new com.ifcolab.estetify.components.CustomTextField();
+        lblDuracaoEstimada = new javax.swing.JLabel();
+        lblDescricao = new javax.swing.JLabel();
+        lblRequisitos = new javax.swing.JLabel();
+        lblValor = new javax.swing.JLabel();
+        fEdtDuracaoEstimada = new com.ifcolab.estetify.components.CustomFormattedTextField();
+        fEdtValor = new com.ifcolab.estetify.components.CustomFormattedTextField();
+        edtDescricao = new com.ifcolab.estetify.components.CustomTextField();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
-        edtHistoricoMedico = new com.ifcolab.estetify.components.CustomTextField();
-        lblHistoricoMedico = new javax.swing.JLabel();
-        tmMedicos = new javax.swing.JScrollPane();
-        grdPacientes = new com.ifcolab.estetify.components.CustomTable();
+        edtRequisitos = new com.ifcolab.estetify.components.CustomTextField();
+        edtContraIndicacoes = new com.ifcolab.estetify.components.CustomTextField();
+        lblContraIndicacoes = new javax.swing.JLabel();
+        tmProcedimentos = new javax.swing.JScrollPane();
+        grdProcedimentos = new com.ifcolab.estetify.components.CustomTable();
         lblLogo = new javax.swing.JLabel();
         lblBackgroundTabela = new javax.swing.JLabel();
         lblEstetify = new javax.swing.JLabel();
@@ -53,88 +136,42 @@ public class FrGerenciaProcedimento extends javax.swing.JDialog {
         setPreferredSize(new java.awt.Dimension(1350, 850));
         getContentPane().setLayout(null);
 
-        lblCPF.setForeground(new java.awt.Color(51, 51, 51));
-        lblCPF.setText("Duração Estimada");
-        getContentPane().add(lblCPF);
-        lblCPF.setBounds(890, 140, 190, 17);
+        lblDuracaoEstimada.setForeground(new java.awt.Color(51, 51, 51));
+        lblDuracaoEstimada.setText("Duração Estimada");
+        getContentPane().add(lblDuracaoEstimada);
+        lblDuracaoEstimada.setBounds(740, 140, 190, 17);
 
-        lblNome.setForeground(new java.awt.Color(51, 51, 51));
-        lblNome.setText("Nome");
-        getContentPane().add(lblNome);
-        lblNome.setBounds(310, 140, 160, 17);
+        lblDescricao.setForeground(new java.awt.Color(51, 51, 51));
+        lblDescricao.setText("Descrição");
+        getContentPane().add(lblDescricao);
+        lblDescricao.setBounds(310, 140, 310, 17);
 
-        lblEmail.setForeground(new java.awt.Color(51, 51, 51));
-        lblEmail.setText("Descrição");
-        getContentPane().add(lblEmail);
-        lblEmail.setBounds(600, 140, 170, 17);
+        lblRequisitos.setForeground(new java.awt.Color(51, 51, 51));
+        lblRequisitos.setText("Requisitos");
+        getContentPane().add(lblRequisitos);
+        lblRequisitos.setBounds(310, 210, 200, 17);
 
-        lblSexo.setForeground(new java.awt.Color(51, 51, 51));
-        lblSexo.setText("Sexo");
-        getContentPane().add(lblSexo);
-        lblSexo.setBounds(1140, 140, 50, 17);
+        lblValor.setForeground(new java.awt.Color(51, 51, 51));
+        lblValor.setText("Valor");
+        getContentPane().add(lblValor);
+        lblValor.setBounds(990, 140, 230, 17);
 
-        lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
-        lblDataNascimento.setText("Data/Hora");
-        getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(310, 210, 170, 17);
+        fEdtDuracaoEstimada.setText("Duração Estimada");
+        getContentPane().add(fEdtDuracaoEstimada);
+        fEdtDuracaoEstimada.setBounds(730, 160, 230, 38);
 
-        lblTelefone.setForeground(new java.awt.Color(51, 51, 51));
-        lblTelefone.setText("Requisitos");
-        getContentPane().add(lblTelefone);
-        lblTelefone.setBounds(800, 210, 140, 17);
+        fEdtValor.setText("Valor");
+        getContentPane().add(fEdtValor);
+        fEdtValor.setBounds(980, 160, 290, 38);
 
-        lblEndereco.setForeground(new java.awt.Color(51, 51, 51));
-        lblEndereco.setText("Valor");
-        getContentPane().add(lblEndereco);
-        lblEndereco.setBounds(510, 210, 140, 17);
-
-        fEdtTelefone.setText("Requisitos");
-        getContentPane().add(fEdtTelefone);
-        fEdtTelefone.setBounds(790, 230, 208, 38);
-
-        fEdtDataNascimento.setText("Data Hora");
-        getContentPane().add(fEdtDataNascimento);
-        fEdtDataNascimento.setBounds(300, 230, 180, 38);
-
-        fEdtCPF.setText("Duração Estimada");
-        getContentPane().add(fEdtCPF);
-        fEdtCPF.setBounds(880, 160, 230, 38);
-
-        edtSexo.setText("Sexo");
-        edtSexo.addActionListener(new java.awt.event.ActionListener() {
+        edtDescricao.setText("Descrição");
+        edtDescricao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtSexoActionPerformed(evt);
+                edtDescricaoActionPerformed(evt);
             }
         });
-        getContentPane().add(edtSexo);
-        edtSexo.setBounds(1130, 160, 150, 40);
-
-        edtEmail.setText("Descrição");
-        edtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtEmailActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtEmail);
-        edtEmail.setBounds(590, 160, 270, 40);
-
-        edtNome.setText("Nome");
-        edtNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtNomeActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtNome);
-        edtNome.setBounds(300, 160, 270, 40);
-
-        edtEndereco.setText("Valor");
-        edtEndereco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtEnderecoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtEndereco);
-        edtEndereco.setBounds(500, 230, 270, 40);
+        getContentPane().add(edtDescricao);
+        edtDescricao.setBounds(300, 160, 410, 40);
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
         btnAdicionar.setText(" Adicionar");
@@ -176,16 +213,20 @@ public class FrGerenciaProcedimento extends javax.swing.JDialog {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(680, 80, 170, 30);
 
-        edtHistoricoMedico.setText("Contraindicações");
-        getContentPane().add(edtHistoricoMedico);
-        edtHistoricoMedico.setBounds(1020, 230, 260, 38);
+        edtRequisitos.setText("Requisitos");
+        getContentPane().add(edtRequisitos);
+        edtRequisitos.setBounds(300, 230, 430, 38);
 
-        lblHistoricoMedico.setForeground(new java.awt.Color(51, 51, 51));
-        lblHistoricoMedico.setText("Contraindicações");
-        getContentPane().add(lblHistoricoMedico);
-        lblHistoricoMedico.setBounds(1030, 210, 140, 17);
+        edtContraIndicacoes.setText("Contraindicações");
+        getContentPane().add(edtContraIndicacoes);
+        edtContraIndicacoes.setBounds(750, 230, 520, 38);
 
-        grdPacientes.setModel(new javax.swing.table.DefaultTableModel(
+        lblContraIndicacoes.setForeground(new java.awt.Color(51, 51, 51));
+        lblContraIndicacoes.setText("Contraindicações");
+        getContentPane().add(lblContraIndicacoes);
+        lblContraIndicacoes.setBounds(760, 210, 400, 17);
+
+        grdProcedimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -196,10 +237,15 @@ public class FrGerenciaProcedimento extends javax.swing.JDialog {
 
             }
         ));
-        tmMedicos.setViewportView(grdPacientes);
+        grdProcedimentos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grdProcedimentosMouseClicked(evt);
+            }
+        });
+        tmProcedimentos.setViewportView(grdProcedimentos);
 
-        getContentPane().add(tmMedicos);
-        tmMedicos.setBounds(290, 380, 1010, 406);
+        getContentPane().add(tmProcedimentos);
+        tmProcedimentos.setBounds(290, 380, 1010, 406);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo45x40.png"))); // NOI18N
         getContentPane().add(lblLogo);
@@ -244,37 +290,90 @@ public class FrGerenciaProcedimento extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
+    private void edtDescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtDescricaoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edtSexoActionPerformed
-
-    private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtEmailActionPerformed
-
-    private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtNomeActionPerformed
-
-    private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtEnderecoActionPerformed
+    }//GEN-LAST:event_edtDescricaoActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-
+       this.limparFormulario();
+       this.habilitarFormulario(true);
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        try {
+            if (idProcedimentoEditando > 0) {
+                controller.atualizar(
+                    idProcedimentoEditando,
+                    edtDescricao.getText(),
+                    fEdtDuracaoEstimada.getText(),
+                    fEdtValor.getText(),
+                    edtRequisitos.getText(),
+                    edtContraIndicacoes.getText()
+                );
+            } else {
+                controller.cadastrar(
+                    edtDescricao.getText(),
+                    fEdtDuracaoEstimada.getText(),
+                    fEdtValor.getText(),
+                    edtRequisitos.getText(),
+                    edtContraIndicacoes.getText()
+                );
+            }
 
+            this.idProcedimentoEditando = -1;
+            controller.atualizarTabela(grdProcedimentos);
+            this.habilitarFormulario(false);
+            this.limparFormulario();
+
+        } catch (ProcedimentoException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        Procedimento procedimentoEditando = (Procedimento) this.getObjetoSelecionadoNaGrid();
 
+        if (procedimentoEditando == null)
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            this.limparFormulario();
+            this.habilitarFormulario(true);
+            this.preencherFormulario(procedimentoEditando);
+            this.idProcedimentoEditando = procedimentoEditando.getId();
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        
+        Procedimento procedimentoExcluido = (Procedimento) this.getObjetoSelecionadoNaGrid();
+
+        if (procedimentoExcluido == null)
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            int response = JOptionPane.showConfirmDialog(null,
+                "Deseja excluir o Procedimento \n("
+                + procedimentoExcluido.getDescricao()
+                +  ") ?",
+                "Confirmar exclusão",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.OK_OPTION) {
+                try {
+                    controller.excluir(procedimentoExcluido);
+                    controller.atualizarTabela(grdProcedimentos);
+                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
+                } catch (ProcedimentoException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
+            }
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grdProcedimentosMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnEditarActionPerformed(null);
+        }
+    }//GEN-LAST:event_grdProcedimentosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -324,31 +423,25 @@ public class FrGerenciaProcedimento extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
-    private com.ifcolab.estetify.components.CustomTextField edtEmail;
-    private com.ifcolab.estetify.components.CustomTextField edtEndereco;
-    private com.ifcolab.estetify.components.CustomTextField edtHistoricoMedico;
-    private com.ifcolab.estetify.components.CustomTextField edtNome;
-    private com.ifcolab.estetify.components.CustomTextField edtSexo;
-    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
-    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;
-    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;
-    private com.ifcolab.estetify.components.CustomTable grdPacientes;
+    private com.ifcolab.estetify.components.CustomTextField edtContraIndicacoes;
+    private com.ifcolab.estetify.components.CustomTextField edtDescricao;
+    private com.ifcolab.estetify.components.CustomTextField edtRequisitos;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDuracaoEstimada;
+    private com.ifcolab.estetify.components.CustomFormattedTextField fEdtValor;
+    private com.ifcolab.estetify.components.CustomTable grdProcedimentos;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
-    private javax.swing.JLabel lblCPF;
-    private javax.swing.JLabel lblDataNascimento;
-    private javax.swing.JLabel lblEmail;
-    private javax.swing.JLabel lblEndereco;
+    private javax.swing.JLabel lblContraIndicacoes;
+    private javax.swing.JLabel lblDescricao;
+    private javax.swing.JLabel lblDuracaoEstimada;
     private javax.swing.JLabel lblEstetify;
-    private javax.swing.JLabel lblHistoricoMedico;
     private javax.swing.JLabel lblLogo;
-    private javax.swing.JLabel lblNome;
-    private javax.swing.JLabel lblSexo;
+    private javax.swing.JLabel lblRequisitos;
     private javax.swing.JLabel lblSidebar;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
-    private javax.swing.JLabel lblTelefone;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
-    private javax.swing.JScrollPane tmMedicos;
+    private javax.swing.JLabel lblValor;
+    private javax.swing.JScrollPane tmProcedimentos;
     // End of variables declaration//GEN-END:variables
 }
