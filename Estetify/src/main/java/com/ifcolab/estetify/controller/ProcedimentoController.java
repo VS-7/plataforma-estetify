@@ -9,6 +9,7 @@ import com.ifcolab.estetify.model.dao.ProcedimentoDAO;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
 import com.ifcolab.estetify.model.valid.ValidateProcedimento;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.swing.JTable;
 
 public class ProcedimentoController {
@@ -66,6 +67,11 @@ public class ProcedimentoController {
             throw new ProcedimentoException("Erro - Procedimento inexistente.");
         }
     }
+    
+    public List<Procedimento> findAll() {
+        return repositorio.findAll();
+    }
+    
     
     public void atualizarTabela(JTable grd) {
         TMViewProcedimento tmProcedimento = new TMViewProcedimento(repositorio.findAll());

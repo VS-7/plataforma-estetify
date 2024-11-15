@@ -38,7 +38,7 @@ public class ConsultaDAO extends Dao<Consulta> {
     @Override
     public List<Consulta> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = "SELECT c FROM Consulta c";
+        jpql = "SELECT DISTINCT c FROM Consulta c LEFT JOIN FETCH c.procedimentos";
         qry = this.entityManager.createQuery(jpql, Consulta.class);
         List<Consulta> lst = qry.getResultList();
         this.entityManager.close();

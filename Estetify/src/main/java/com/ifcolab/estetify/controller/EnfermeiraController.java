@@ -6,6 +6,7 @@ import com.ifcolab.estetify.model.dao.EnfermeiraDAO;
 import com.ifcolab.estetify.model.exceptions.EnfermeiraException;
 import com.ifcolab.estetify.model.valid.ValidateEnfermeira;
 import javax.swing.JTable;
+import java.util.List;
 
 public class EnfermeiraController {
     
@@ -99,5 +100,9 @@ public class EnfermeiraController {
     public void filtrarTabela(JTable grd, String nome) {
         TMViewEnfermeira tmEnfermeira = new TMViewEnfermeira(repositorio.filterByName(nome));
         grd.setModel(tmEnfermeira);
+    }
+    
+    public List<Enfermeira> findAll() {
+        return repositorio.findAll();
     }
 }

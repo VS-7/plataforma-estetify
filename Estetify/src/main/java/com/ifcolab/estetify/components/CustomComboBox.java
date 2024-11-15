@@ -5,13 +5,18 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
-public class CustomComboBox extends JComboBox<String> {
+public class CustomComboBox<E> extends JComboBox<E> {
     
-    private static final Color BORDER_COLOR = new Color(217, 217, 217); // Mesmo cinza claro
+    private static final Color BORDER_COLOR = new Color(217, 217, 217);
     
     public CustomComboBox() {
         super();
         setupComboBox();
+    }
+    
+    @Override
+    public void setModel(ComboBoxModel<E> model) {
+        super.setModel(model);
     }
     
     private void setupComboBox() {
@@ -20,7 +25,7 @@ public class CustomComboBox extends JComboBox<String> {
         
         // Configurar cores
         setBackground(Color.WHITE);
-        setForeground(new Color(111, 111, 111)); // Mesmo cinza escuro
+        setForeground(new Color(111, 111, 111));
         
         // Remover borda padrão
         setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
@@ -35,7 +40,6 @@ public class CustomComboBox extends JComboBox<String> {
                 return new JButton() {
                     @Override
                     public void paint(Graphics g) {
-                        // Desenhar seta customizada
                         Graphics2D g2 = (Graphics2D) g.create();
                         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
                                           RenderingHints.VALUE_ANTIALIAS_ON);
@@ -43,7 +47,6 @@ public class CustomComboBox extends JComboBox<String> {
                         int width = getWidth();
                         int height = getHeight();
                         
-                        // Desenhar seta
                         g2.setColor(new Color(111, 111, 111));
                         int[] xPoints = {width/4, width/2, width*3/4};
                         int[] yPoints = {height/3, height*2/3, height/3};
@@ -84,14 +87,11 @@ public class CustomComboBox extends JComboBox<String> {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        // Usar a altura do componente como raio para bordas 100% redondas
         int radius = getHeight();
         
-        // Desenhar background
         g2.setColor(getBackground());
         g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), radius, radius));
         
-        // Desenhar borda
         g2.setColor(BORDER_COLOR);
         g2.draw(new RoundRectangle2D.Float(0, 0, getWidth() - 1, getHeight() - 1, radius, radius));
         

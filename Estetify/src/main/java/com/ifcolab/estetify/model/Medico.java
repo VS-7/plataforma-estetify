@@ -54,4 +54,9 @@ public class Medico extends Pessoa implements Serializable {
         this.crm = crm;
         this.especializacao = especializacao;
     }
+    
+    @Override
+    public String toString() {
+        return this.getNome() + " (CRM: " + this.getCrm() + ")";
+    }
 }

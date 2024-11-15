@@ -48,4 +48,9 @@ public class Paciente extends Pessoa {
               "PACIENTE");
         this.historicoMedico = historicoMedico;
     }
+    
+    @Override
+    public String toString() {
+        return this.getNome();
+    }
 }

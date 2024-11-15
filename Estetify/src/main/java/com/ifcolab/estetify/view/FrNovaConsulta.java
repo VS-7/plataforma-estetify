@@ -1,12 +1,186 @@
 package com.ifcolab.estetify.view;
 
+import com.ifcolab.estetify.controller.ConsultaController;
+import com.ifcolab.estetify.controller.EnfermeiraController;
+import com.ifcolab.estetify.controller.MedicoController;
+import com.ifcolab.estetify.controller.PacienteController;
+import com.ifcolab.estetify.controller.ProcedimentoController;
+import com.ifcolab.estetify.model.Consulta;
+import com.ifcolab.estetify.model.Enfermeira;
+import com.ifcolab.estetify.model.Medico;
+import com.ifcolab.estetify.model.Paciente;
+import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.exceptions.ConsultaException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
+
 public class FrNovaConsulta extends javax.swing.JDialog {
 
+    private ConsultaController controller;
+    private PacienteController pacienteController;
+    private MedicoController medicoController;
+    private EnfermeiraController enfermeiraController;
+    private ProcedimentoController procedimentoController;
+    private List<Procedimento> procedimentosSelecionados;
+    private int idConsultaEditando;
     
     public FrNovaConsulta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        controller = new ConsultaController();
+        pacienteController = new PacienteController();
+        medicoController = new MedicoController();
+        enfermeiraController = new EnfermeiraController();
+        procedimentoController = new ProcedimentoController();
+        procedimentosSelecionados = new ArrayList<>(); 
+        idConsultaEditando = -1;
+        
+        this.adicionarMascaraNosCampos();
+        this.preencherComboBoxes();
+        this.habilitarFormulario(false);
+        this.limparFormulario();
+        
+        controller.atualizarTabela(grdConsultas);
     }
+    
+    private void adicionarMascaraNosCampos() {
+        try {
+            // Máscara para data: dd/MM/yyyy
+            MaskFormatter maskData = new MaskFormatter("##/##/####");
+            maskData.setPlaceholderCharacter('_');
+            maskData.install(fEdtData);
+            
+            // Máscara para hora: HH:mm
+            MaskFormatter maskHora = new MaskFormatter("##:##");
+            maskHora.setPlaceholderCharacter('_');
+            maskHora.install(fEdtHora);
+            
+        } catch (ParseException ex) {
+            System.err.println("Erro ao criar máscaras: " + ex.getMessage());
+        }
+    }
+    
+    private void preencherComboBoxes() {
+        try {
+            // Preenche ComboBox de Pacientes
+            DefaultComboBoxModel<Paciente> modelPaciente = new DefaultComboBoxModel<>();
+            modelPaciente.addElement(null); // Adiciona item vazio
+            pacienteController.findAll().forEach(modelPaciente::addElement);
+            cbxSelecionarPaciente.setModel(modelPaciente);
+
+            // Preenche ComboBox de Médicos
+            DefaultComboBoxModel<Medico> modelMedico = new DefaultComboBoxModel<>();
+            modelMedico.addElement(null); // Adiciona item vazio
+            medicoController.findAll().forEach(modelMedico::addElement);
+            cbxSelecionarMedico.setModel(modelMedico);
+
+            // Preenche ComboBox de Enfermeiras
+            DefaultComboBoxModel<Enfermeira> modelEnfermeira = new DefaultComboBoxModel<>();
+            modelEnfermeira.addElement(null); // Adiciona item vazio
+            enfermeiraController.findAll().forEach(modelEnfermeira::addElement);
+            cbxSelecionarEnfermeira.setModel(modelEnfermeira);
+
+            // Preenche ComboBox de Procedimentos
+            DefaultComboBoxModel<Procedimento> modelProcedimento = new DefaultComboBoxModel<>();
+            modelProcedimento.addElement(null); // Adiciona item vazio
+            procedimentoController.findAll().forEach(modelProcedimento::addElement);
+            cbxSelecionarProcedimento.setModel(modelProcedimento);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, 
+                "Erro ao carregar dados: " + ex.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void habilitarFormulario(boolean habilitar) {
+        cbxSelecionarPaciente.setEnabled(habilitar);
+        cbxSelecionarMedico.setEnabled(habilitar);
+        cbxSelecionarEnfermeira.setEnabled(habilitar);
+        cbxSelecionarProcedimento.setEnabled(habilitar);
+        fEdtData.setEnabled(habilitar);
+        fEdtHora.setEnabled(habilitar);
+        txtObeservacoes.setEnabled(habilitar);
+        btnAdicionarProcedimento.setEnabled(habilitar);
+        listProcedimentosSelecionados.setEnabled(habilitar);
+        btnSalvar.setEnabled(habilitar);
+    }
+    
+    private void limparFormulario() {
+        cbxSelecionarPaciente.setSelectedIndex(-1);
+        cbxSelecionarMedico.setSelectedIndex(-1);
+        cbxSelecionarEnfermeira.setSelectedIndex(-1);
+        cbxSelecionarProcedimento.setSelectedIndex(-1);
+        fEdtData.setText("");
+        fEdtHora.setText("");
+        txtObeservacoes.setText("");
+        procedimentosSelecionados.clear();
+        atualizarListaProcedimentos();
+    }
+    
+    private void preencherFormulario(Consulta consulta) {
+        cbxSelecionarPaciente.setSelectedItem(consulta.getPaciente());
+        cbxSelecionarMedico.setSelectedItem(consulta.getMedico());
+        cbxSelecionarEnfermeira.setSelectedItem(consulta.getEnfermeira());
+        
+        // Formata data e hora
+        fEdtData.setText(consulta.getDataHora().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        fEdtHora.setText(consulta.getDataHora().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")));
+        
+        txtObeservacoes.setText(consulta.getObservacoes());
+        procedimentosSelecionados = new ArrayList<>(consulta.getProcedimentos());
+    }
+    
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdConsultas.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdConsultas.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
+    }    
+    
+    private void verificarDisponibilidade() {
+        try {
+            String dataHora = fEdtData.getText() + " " + fEdtHora.getText();
+            Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
+            Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
+            
+            if (medico != null && enfermeira != null) {
+                boolean disponivel = controller.verificarDisponibilidade(
+                    dataHora,
+                    medico.getId(),
+                    enfermeira.getId()
+                );
+                
+                if (!disponivel) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Médico ou enfermeira não disponível neste horário.",
+                        "Indisponibilidade",
+                        JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        } catch (ConsultaException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    private void atualizarListaProcedimentos() {
+        DefaultListModel<Procedimento> model = new DefaultListModel<>();
+        for (Procedimento proc : procedimentosSelecionados) {
+            model.addElement(proc);
+        }
+        listProcedimentosSelecionados.setModel(model);
+    }
+    
+
 
 
     @SuppressWarnings("unchecked")
@@ -20,20 +194,23 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         lblData = new javax.swing.JLabel();
         lblDataNascimento = new javax.swing.JLabel();
         lblHora = new javax.swing.JLabel();
-        txtObservacoes = new javax.swing.JScrollPane();
-        customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
+        txtObservacoesScrollPane = new javax.swing.JScrollPane();
+        txtObeservacoes = new com.ifcolab.estetify.components.CustomTextArea();
         fEdtHora = new com.ifcolab.estetify.components.CustomFormattedTextField();
         fEdtData = new com.ifcolab.estetify.components.CustomFormattedTextField();
         cbxSelecionarProcedimento = new com.ifcolab.estetify.components.CustomComboBox();
         cbxSelecionarEnfermeira = new com.ifcolab.estetify.components.CustomComboBox();
         cbxSelecionarMedico = new com.ifcolab.estetify.components.CustomComboBox();
         cbxSelecionarPaciente = new com.ifcolab.estetify.components.CustomComboBox();
+        btnAdicionarProcedimento = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
-        tmMedicos = new javax.swing.JScrollPane();
-        customTable1 = new com.ifcolab.estetify.components.CustomTable();
+        scrollProcedimentos = new javax.swing.JScrollPane();
+        listProcedimentosSelecionados = new javax.swing.JList<>();
+        tmConsultas = new javax.swing.JScrollPane();
+        grdConsultas = new com.ifcolab.estetify.components.CustomTable();
         lblLogo = new javax.swing.JLabel();
         lblBackgroundTabela = new javax.swing.JLabel();
         lblEstetify = new javax.swing.JLabel();
@@ -75,19 +252,19 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
         lblDataNascimento.setText("Selecionar Procedimento");
         getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(1050, 120, 230, 17);
+        lblDataNascimento.setBounds(1030, 120, 230, 17);
 
         lblHora.setForeground(new java.awt.Color(51, 51, 51));
         lblHora.setText("Data");
         getContentPane().add(lblHora);
         lblHora.setBounds(320, 200, 130, 17);
 
-        customTextArea1.setColumns(20);
-        customTextArea1.setRows(5);
-        txtObservacoes.setViewportView(customTextArea1);
+        txtObeservacoes.setColumns(20);
+        txtObeservacoes.setRows(5);
+        txtObservacoesScrollPane.setViewportView(txtObeservacoes);
 
-        getContentPane().add(txtObservacoes);
-        txtObservacoes.setBounds(660, 220, 610, 116);
+        getContentPane().add(txtObservacoesScrollPane);
+        txtObservacoesScrollPane.setBounds(660, 220, 610, 116);
 
         fEdtHora.setText("Hora");
         getContentPane().add(fEdtHora);
@@ -97,9 +274,9 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         getContentPane().add(fEdtData);
         fEdtData.setBounds(310, 220, 160, 38);
         getContentPane().add(cbxSelecionarProcedimento);
-        cbxSelecionarProcedimento.setBounds(1040, 140, 230, 44);
+        cbxSelecionarProcedimento.setBounds(1020, 140, 210, 44);
         getContentPane().add(cbxSelecionarEnfermeira);
-        cbxSelecionarEnfermeira.setBounds(780, 140, 240, 44);
+        cbxSelecionarEnfermeira.setBounds(780, 140, 220, 44);
 
         cbxSelecionarMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,41 +288,82 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         getContentPane().add(cbxSelecionarPaciente);
         cbxSelecionarPaciente.setBounds(300, 140, 210, 44);
 
+        btnAdicionarProcedimento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
+        btnAdicionarProcedimento.setText("");
+        btnAdicionarProcedimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarProcedimentoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAdicionarProcedimento);
+        btnAdicionarProcedimento.setBounds(1240, 140, 40, 40);
+
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
         btnAdicionar.setText(" Agendar");
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAdicionar);
         btnAdicionar.setBounds(300, 80, 170, 30);
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
         btnSalvar.setText(" Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnSalvar);
         btnSalvar.setBounds(870, 80, 170, 30);
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/editsquare.png"))); // NOI18N
         btnEditar.setText(" Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEditar);
         btnEditar.setBounds(490, 80, 170, 30);
 
         btnRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/trash.png"))); // NOI18N
         btnRemover.setText(" Remover");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnRemover);
         btnRemover.setBounds(680, 80, 170, 30);
 
-        customTable1.setModel(new javax.swing.table.DefaultTableModel(
+        listProcedimentosSelecionados.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listProcedimentosSelecionados.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                listProcedimentosSelecionadosKeyPressed(evt);
+            }
+        });
+        scrollProcedimentos.setViewportView(listProcedimentosSelecionados);
+
+        getContentPane().add(scrollProcedimentos);
+        scrollProcedimentos.setBounds(1030, 190, 200, 20);
+
+        grdConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        tmMedicos.setViewportView(customTable1);
+        tmConsultas.setViewportView(grdConsultas);
 
-        getContentPane().add(tmMedicos);
-        tmMedicos.setBounds(290, 380, 1010, 406);
+        getContentPane().add(tmConsultas);
+        tmConsultas.setBounds(290, 380, 1010, 406);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo45x40.png"))); // NOI18N
         getContentPane().add(lblLogo);
@@ -194,6 +412,111 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbxSelecionarMedicoActionPerformed
 
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        this.limparFormulario();
+        this.habilitarFormulario(true);
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        Consulta consultaEditando = (Consulta) this.getObjetoSelecionadoNaGrid();
+
+        if (consultaEditando == null)
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            this.limparFormulario();
+            this.habilitarFormulario(true);
+            this.preencherFormulario(consultaEditando);
+            this.idConsultaEditando = consultaEditando.getId();
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        Consulta consultaExcluido = (Consulta) this.getObjetoSelecionadoNaGrid();
+
+        if (consultaExcluido == null)
+        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
+        else {
+            int response = JOptionPane.showConfirmDialog(null,
+                "Deseja excluir a consulta?"
+                ,
+                "Confirmar exclusão",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.OK_OPTION) {
+                try {
+                    controller.excluir(consultaExcluido);
+                    controller.atualizarTabela(grdConsultas);
+                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
+                } catch (ConsultaException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        try {
+            String dataHora = fEdtData.getText() + " " + fEdtHora.getText();
+            Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
+            Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
+            Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
+            
+            if (idConsultaEditando > 0) {
+                controller.atualizar(
+                    idConsultaEditando,
+                    dataHora,
+                    txtObeservacoes.getText(),
+                    paciente,
+                    medico,
+                    enfermeira,
+                    procedimentosSelecionados
+                );
+            } else {
+                controller.cadastrar(
+                    dataHora,
+                    txtObeservacoes.getText(),
+                    paciente,
+                    medico,
+                    enfermeira,
+                    procedimentosSelecionados
+                );
+            }
+            
+            this.idConsultaEditando = -1;
+            controller.atualizarTabela(grdConsultas);
+            this.habilitarFormulario(false);
+            this.limparFormulario();
+            
+        } catch (ConsultaException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnAdicionarProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarProcedimentoActionPerformed
+        Procedimento procedimento = (Procedimento) cbxSelecionarProcedimento.getSelectedItem();
+        if (procedimento != null) {
+            if (!procedimentosSelecionados.contains(procedimento)) {
+                procedimentosSelecionados.add(procedimento);
+                atualizarListaProcedimentos();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Este procedimento já foi adicionado",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnAdicionarProcedimentoActionPerformed
+
+    private void listProcedimentosSelecionadosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listProcedimentosSelecionadosKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) {
+            int index = listProcedimentosSelecionados.getSelectedIndex();
+            if (index != -1) {
+                procedimentosSelecionados.remove(index);
+                atualizarListaProcedimentos();
+            }
+        }
+    }//GEN-LAST:event_listProcedimentosSelecionadosKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -241,6 +564,7 @@ public class FrNovaConsulta extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
+    private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionarProcedimento;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
@@ -248,10 +572,9 @@ public class FrNovaConsulta extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarMedico;
     private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarPaciente;
     private com.ifcolab.estetify.components.CustomComboBox cbxSelecionarProcedimento;
-    private com.ifcolab.estetify.components.CustomTable customTable1;
-    private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtData;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtHora;
+    private com.ifcolab.estetify.components.CustomTable grdConsultas;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
@@ -267,7 +590,10 @@ public class FrNovaConsulta extends javax.swing.JDialog {
     private javax.swing.JLabel lblSidebar;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
-    private javax.swing.JScrollPane tmMedicos;
-    private javax.swing.JScrollPane txtObservacoes;
+    private javax.swing.JList<Procedimento> listProcedimentosSelecionados;
+    private javax.swing.JScrollPane scrollProcedimentos;
+    private javax.swing.JScrollPane tmConsultas;
+    private com.ifcolab.estetify.components.CustomTextArea txtObeservacoes;
+    private javax.swing.JScrollPane txtObservacoesScrollPane;
     // End of variables declaration//GEN-END:variables
 }

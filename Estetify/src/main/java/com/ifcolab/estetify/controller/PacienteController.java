@@ -10,6 +10,7 @@ import com.ifcolab.estetify.model.dao.PacienteDAO;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import com.ifcolab.estetify.model.valid.ValidatePaciente;
 import javax.swing.JTable;
+import java.util.List;
 
 /**
  *
@@ -97,6 +98,10 @@ public class PacienteController {
     
     public Paciente buscarPorCPF(String cpf) {
         return repositorio.findByCPF(cpf);
+    }
+    
+    public List<Paciente> findAll() {
+        return repositorio.findAll();
     }
     
     public void atualizarTabela(JTable grd) {

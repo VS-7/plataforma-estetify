@@ -45,4 +45,9 @@ public class Enfermeira extends Pessoa implements Serializable {
               "ENFERMEIRA");
         this.coren = coren;
     }
+    
+    @Override
+    public String toString() {
+        return this.getNome() + " (COREN: " + this.getCoren() + ")";
+    }
 }

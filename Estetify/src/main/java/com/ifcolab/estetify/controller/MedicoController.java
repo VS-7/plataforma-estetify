@@ -6,6 +6,7 @@ import com.ifcolab.estetify.model.dao.MedicoDAO;
 import com.ifcolab.estetify.model.exceptions.MedicoException;
 import com.ifcolab.estetify.model.valid.ValidateMedico;
 import javax.swing.JTable;
+import java.util.List;
 
 public class MedicoController {
     
@@ -103,5 +104,9 @@ public class MedicoController {
     public void filtrarTabela(JTable grd, String nome) {
         TMViewMedico tmMedico = new TMViewMedico(repositorio.filterByName(nome));
         grd.setModel(tmMedico);
+    }
+    
+    public List<Medico> findAll() {
+        return repositorio.findAll();
     }
 }

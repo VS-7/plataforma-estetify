@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package com.ifcolab.estetify.view;
 
 /**
@@ -98,7 +94,7 @@ public class FrAgenda extends javax.swing.JDialog {
         jScrollPane1.setViewportView(customTable1);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(296, 596, 1020, 210);
+        jScrollPane1.setBounds(296, 556, 1020, 250);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo45x40.png"))); // NOI18N
         getContentPane().add(lblLogo);

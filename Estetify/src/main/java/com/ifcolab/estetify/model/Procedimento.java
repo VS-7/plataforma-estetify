@@ -59,4 +59,9 @@ public class Procedimento implements Serializable {
         int minutos = Integer.parseInt(partes[1]);
         return Duration.ofHours(horas).plusMinutes(minutos);
     }
+    
+    @Override
+    public String toString() {
+        return this.getDescricao();
+    }
 }
