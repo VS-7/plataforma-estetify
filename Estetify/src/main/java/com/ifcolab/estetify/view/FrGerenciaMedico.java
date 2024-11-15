@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.MedicoController;
@@ -17,10 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
-/**
- *
- * @author vitorsrgio
- */
+
 public class FrGerenciaMedico extends javax.swing.JDialog {
 
     private MedicoController controller;
@@ -117,11 +110,6 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         return obj;
     }
 
-    private void grdPacientesMouseClicked(java.awt.event.MouseEvent evt) {
-        if (evt.getClickCount() == 2) {
-            btnEditarActionPerformed(null);
-        }
-    }
 
 
 
@@ -493,7 +481,9 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void grdMedicosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grdMedicosMouseClicked
-        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) {
+            btnEditarActionPerformed(null);
+        }
     }//GEN-LAST:event_grdMedicosMouseClicked
 
     /**
