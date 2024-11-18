@@ -141,13 +141,10 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         tmMedicos = new javax.swing.JScrollPane();
         grdMedicos = new com.ifcolab.estetify.components.CustomTable();
-        lblLogo = new javax.swing.JLabel();
-        lblBackgroundTabela = new javax.swing.JLabel();
-        lblEstetify = new javax.swing.JLabel();
-        lblSidebar = new javax.swing.JLabel();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
-        lblBackgroundCadastro = new javax.swing.JLabel();
         lblTitleGerenciaMedicos = new javax.swing.JLabel();
+        lblBackgroundCadastro = new javax.swing.JLabel();
+        lblBackgroundTabela = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -162,12 +159,12 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         lblNome.setForeground(new java.awt.Color(51, 51, 51));
         lblNome.setText("Nome");
         getContentPane().add(lblNome);
-        lblNome.setBounds(310, 120, 170, 17);
+        lblNome.setBounds(70, 120, 170, 17);
 
         lblEmail.setForeground(new java.awt.Color(51, 51, 51));
         lblEmail.setText("Email");
         getContentPane().add(lblEmail);
-        lblEmail.setBounds(600, 120, 180, 17);
+        lblEmail.setBounds(530, 120, 240, 17);
 
         lblSexo.setForeground(new java.awt.Color(51, 51, 51));
         lblSexo.setText("Sexo");
@@ -177,17 +174,17 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         lblDataNascimento.setForeground(new java.awt.Color(51, 51, 51));
         lblDataNascimento.setText("Data de Nascimento");
         getContentPane().add(lblDataNascimento);
-        lblDataNascimento.setBounds(310, 190, 140, 17);
+        lblDataNascimento.setBounds(70, 190, 140, 17);
 
         lblTelefone.setForeground(new java.awt.Color(51, 51, 51));
         lblTelefone.setText("Telefone");
         getContentPane().add(lblTelefone);
-        lblTelefone.setBounds(800, 190, 140, 17);
+        lblTelefone.setBounds(720, 190, 140, 17);
 
         lblEndereco.setForeground(new java.awt.Color(51, 51, 51));
         lblEndereco.setText("Endereço");
         getContentPane().add(lblEndereco);
-        lblEndereco.setBounds(510, 190, 140, 17);
+        lblEndereco.setBounds(310, 190, 140, 17);
 
         lblCRM.setForeground(new java.awt.Color(51, 51, 51));
         lblCRM.setText("CRM");
@@ -197,7 +194,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         lblEspecializacao.setForeground(new java.awt.Color(51, 51, 51));
         lblEspecializacao.setText("Especialização");
         getContentPane().add(lblEspecializacao);
-        lblEspecializacao.setBounds(310, 260, 140, 17);
+        lblEspecializacao.setBounds(70, 260, 140, 17);
 
         fEdtCPF.setText("CPF");
         getContentPane().add(fEdtCPF);
@@ -205,11 +202,11 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
 
         fEdtDataNascimento.setText("Data de Nascimento");
         getContentPane().add(fEdtDataNascimento);
-        fEdtDataNascimento.setBounds(300, 210, 180, 38);
+        fEdtDataNascimento.setBounds(60, 210, 210, 38);
 
         fEdtTelefone.setText("Telefone");
         getContentPane().add(fEdtTelefone);
-        fEdtTelefone.setBounds(790, 210, 208, 38);
+        fEdtTelefone.setBounds(710, 210, 280, 38);
 
         edtSexo.setText("Sexo");
         edtSexo.addActionListener(new java.awt.event.ActionListener() {
@@ -227,7 +224,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(edtEspecializacao);
-        edtEspecializacao.setBounds(300, 280, 210, 40);
+        edtEspecializacao.setBounds(60, 280, 280, 40);
 
         edtEmail.setText("E-mail");
         edtEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -236,7 +233,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(edtEmail);
-        edtEmail.setBounds(590, 140, 270, 40);
+        edtEmail.setBounds(520, 140, 330, 40);
 
         edtNome.setText("Nome");
         edtNome.addActionListener(new java.awt.event.ActionListener() {
@@ -245,7 +242,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(edtNome);
-        edtNome.setBounds(300, 140, 270, 40);
+        edtNome.setBounds(60, 140, 430, 40);
 
         edtCRM.setText("CRM");
         edtCRM.addActionListener(new java.awt.event.ActionListener() {
@@ -263,7 +260,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(edtEndereco);
-        edtEndereco.setBounds(500, 210, 270, 40);
+        edtEndereco.setBounds(300, 210, 380, 40);
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
         btnAdicionar.setText(" Adicionar");
@@ -273,7 +270,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnAdicionar);
-        btnAdicionar.setBounds(300, 80, 170, 30);
+        btnAdicionar.setBounds(60, 80, 170, 30);
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
         btnSalvar.setText(" Salvar");
@@ -283,7 +280,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnSalvar);
-        btnSalvar.setBounds(870, 80, 170, 30);
+        btnSalvar.setBounds(690, 80, 170, 30);
 
         btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/editsquare.png"))); // NOI18N
         btnEditar.setText(" Editar");
@@ -293,7 +290,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnEditar);
-        btnEditar.setBounds(490, 80, 170, 30);
+        btnEditar.setBounds(270, 80, 170, 30);
 
         btnRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/trash.png"))); // NOI18N
         btnRemover.setText(" Remover");
@@ -303,7 +300,7 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
             }
         });
         getContentPane().add(btnRemover);
-        btnRemover.setBounds(680, 80, 170, 30);
+        btnRemover.setBounds(480, 80, 170, 30);
 
         grdMedicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -324,42 +321,27 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
         tmMedicos.setViewportView(grdMedicos);
 
         getContentPane().add(tmMedicos);
-        tmMedicos.setBounds(290, 380, 1010, 406);
-
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo45x40.png"))); // NOI18N
-        getContentPane().add(lblLogo);
-        lblLogo.setBounds(10, 10, 50, 50);
-
-        lblBackgroundTabela.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BackgroundCadastro.png"))); // NOI18N
-        lblBackgroundTabela.setText("jLabel18");
-        getContentPane().add(lblBackgroundTabela);
-        lblBackgroundTabela.setBounds(230, 330, 1120, 500);
-
-        lblEstetify.setFont(new java.awt.Font("Fira Sans Condensed Medium", 0, 18)); // NOI18N
-        lblEstetify.setForeground(new java.awt.Color(51, 51, 51));
-        lblEstetify.setText("Estetify");
-        getContentPane().add(lblEstetify);
-        lblEstetify.setBounds(60, 30, 90, 22);
-
-        lblSidebar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
-        getContentPane().add(lblSidebar);
-        lblSidebar.setBounds(-460, 0, 750, 900);
+        tmMedicos.setBounds(40, 380, 1260, 420);
 
         lblSubtituloGerenciaMedicos.setFont(new java.awt.Font("Fira Sans Medium", 0, 13)); // NOI18N
         lblSubtituloGerenciaMedicos.setForeground(new java.awt.Color(102, 102, 102));
-        lblSubtituloGerenciaMedicos.setText("Gerenciar Médicos");
+        lblSubtituloGerenciaMedicos.setText("Adicione, edite ou remova informações dos médicos, incluindo especialidades e dados de contato.");
         getContentPane().add(lblSubtituloGerenciaMedicos);
-        lblSubtituloGerenciaMedicos.setBounds(280, 40, 210, 17);
-
-        lblBackgroundCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BackgroundCad.png"))); // NOI18N
-        getContentPane().add(lblBackgroundCadastro);
-        lblBackgroundCadastro.setBounds(230, 60, 1100, 280);
+        lblSubtituloGerenciaMedicos.setBounds(30, 40, 780, 17);
 
         lblTitleGerenciaMedicos.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitleGerenciaMedicos.setForeground(new java.awt.Color(51, 51, 51));
         lblTitleGerenciaMedicos.setText("Gerenciar Médicos");
         getContentPane().add(lblTitleGerenciaMedicos);
-        lblTitleGerenciaMedicos.setBounds(280, 20, 210, 22);
+        lblTitleGerenciaMedicos.setBounds(30, 20, 210, 22);
+
+        lblBackgroundCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backgroundCrud.png"))); // NOI18N
+        getContentPane().add(lblBackgroundCadastro);
+        lblBackgroundCadastro.setBounds(-10, 60, 1330, 290);
+
+        lblBackgroundTabela.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backgroundTableModel.png"))); // NOI18N
+        getContentPane().add(lblBackgroundTabela);
+        lblBackgroundTabela.setBounds(-10, 340, 1390, 500);
 
         lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
         lblBackground.setText("jLabel3");
@@ -553,11 +535,8 @@ public class FrGerenciaMedico extends javax.swing.JDialog {
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblEndereco;
     private javax.swing.JLabel lblEspecializacao;
-    private javax.swing.JLabel lblEstetify;
-    private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSexo;
-    private javax.swing.JLabel lblSidebar;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTelefone;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
