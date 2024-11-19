@@ -104,6 +104,26 @@
         </Constraint>
       </Constraints>
     </Component>
+    <Component class="com.ifcolab.estetify.components.PrimaryCustomButton" name="primaryCustomButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Todos Feedbacks"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="700" y="50" width="190" height="30"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="com.ifcolab.estetify.components.SecondaryCustomButton" name="btnSeusFeedbacks">
+      <Properties>
+        <Property name="text" type="java.lang.String" value=" Seus Feedbacks"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="920" y="50" width="200" height="30"/>
+        </Constraint>
+      </Constraints>
+    </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -162,7 +182,7 @@
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="690" y="40" width="590" height="770"/>
+          <AbsoluteConstraints x="690" y="90" width="610" height="720"/>
         </Constraint>
       </Constraints>
 
@@ -191,19 +211,19 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="80" y="700" width="390" height="40"/>
+          <AbsoluteConstraints x="90" y="700" width="390" height="40"/>
         </Constraint>
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="lblBackgrundFeedback">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/images/sidebar.png"/>
+          <Image iconType="3" name="/images/backgroundTmFeedback.png"/>
         </Property>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="630" y="30" width="670" height="790"/>
+          <AbsoluteConstraints x="640" y="30" width="670" height="800"/>
         </Constraint>
       </Constraints>
     </Component>

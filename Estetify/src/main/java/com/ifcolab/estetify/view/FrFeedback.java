@@ -24,6 +24,8 @@ public class FrFeedback extends javax.swing.JDialog {
         lblSubtitulo = new javax.swing.JLabel();
         lblDescricaoFeedback = new javax.swing.JLabel();
         lblTituloFeedback = new javax.swing.JLabel();
+        primaryCustomButton1 = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        btnSeusFeedbacks = new com.ifcolab.estetify.components.SecondaryCustomButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
         ratingStars1 = new com.ifcolab.estetify.components.RatingStars();
@@ -68,6 +70,14 @@ public class FrFeedback extends javax.swing.JDialog {
         getContentPane().add(lblTituloFeedback);
         lblTituloFeedback.setBounds(60, 290, 110, 16);
 
+        primaryCustomButton1.setText("Todos Feedbacks");
+        getContentPane().add(primaryCustomButton1);
+        primaryCustomButton1.setBounds(700, 50, 190, 30);
+
+        btnSeusFeedbacks.setText(" Seus Feedbacks");
+        getContentPane().add(btnSeusFeedbacks);
+        btnSeusFeedbacks.setBounds(920, 50, 200, 30);
+
         customTextArea1.setColumns(20);
         customTextArea1.setRows(5);
         jScrollPane1.setViewportView(customTextArea1);
@@ -104,15 +114,15 @@ public class FrFeedback extends javax.swing.JDialog {
         jScrollPane2.setViewportView(customTable1);
 
         getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(690, 40, 590, 770);
+        jScrollPane2.setBounds(690, 90, 610, 720);
 
         lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
         getContentPane().add(lblLine);
-        lblLine.setBounds(80, 700, 390, 40);
+        lblLine.setBounds(90, 700, 390, 40);
 
-        lblBackgrundFeedback.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
+        lblBackgrundFeedback.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/backgroundTmFeedback.png"))); // NOI18N
         getContentPane().add(lblBackgrundFeedback);
-        lblBackgrundFeedback.setBounds(630, 30, 670, 790);
+        lblBackgrundFeedback.setBounds(640, 30, 670, 800);
 
         lblBackgrundFeedback1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
         getContentPane().add(lblBackgrundFeedback1);
@@ -175,6 +185,7 @@ public class FrFeedback extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnEnviarFeedback;
+    private com.ifcolab.estetify.components.SecondaryCustomButton btnSeusFeedbacks;
     private com.ifcolab.estetify.components.CustomTable customTable1;
     private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
     private com.ifcolab.estetify.components.CustomTextField edtTitulo;
@@ -189,6 +200,7 @@ public class FrFeedback extends javax.swing.JDialog {
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTituloFeedback;
+    private com.ifcolab.estetify.components.PrimaryCustomButton primaryCustomButton1;
     private com.ifcolab.estetify.components.RatingStars ratingStars1;
     // End of variables declaration//GEN-END:variables
 }

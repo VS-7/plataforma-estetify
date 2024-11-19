@@ -157,7 +157,8 @@ public class FrNovaConsulta extends javax.swing.JDialog {
                 boolean disponivel = controller.verificarDisponibilidade(
                     dataHora,
                     medico.getId(),
-                    enfermeira.getId()
+                    enfermeira.getId(),
+                    idConsultaEditando
                 );
                 
                 if (!disponivel) {

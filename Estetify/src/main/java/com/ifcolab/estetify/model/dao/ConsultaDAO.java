@@ -106,18 +106,25 @@ public class ConsultaDAO extends Dao<Consulta> {
         return lst;
     }
     
-    public boolean verificarDisponibilidade(LocalDateTime dataHora, int medicoId, int enfermeiraId) {
+    public boolean verificarDisponibilidade(LocalDateTime dataHora, int medicoId, int enfermeiraId, int consultaId) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         jpql = "SELECT COUNT(c) FROM Consulta c " +
                "WHERE c.dataHora = :dataHora " +
                "AND (c.medico.id = :medicoId OR c.enfermeira.id = :enfermeiraId) " +
-               "AND c.status != 'CANCELADA'";
+               "AND c.status != 'CANCELADA' " +
+               "AND c.id != :consultaId";  // Ignora a consulta sendo editada
         qry = this.entityManager.createQuery(jpql, Long.class);
         qry.setParameter("dataHora", dataHora);
         qry.setParameter("medicoId", medicoId);
         qry.setParameter("enfermeiraId", enfermeiraId);
+        qry.setParameter("consultaId", consultaId);
         Long count = (Long) qry.getSingleResult();
         this.entityManager.close();
         return count == 0;
+    }
+
+    // Manter o método original para novos agendamentos
+    public boolean verificarDisponibilidade(LocalDateTime dataHora, int medicoId, int enfermeiraId) {
+        return verificarDisponibilidade(dataHora, medicoId, enfermeiraId, -1);
     }
 }
