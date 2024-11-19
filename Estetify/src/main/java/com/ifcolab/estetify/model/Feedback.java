@@ -22,11 +22,9 @@ public class Feedback implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
+    private String titulo;
     private String avaliacao;
     private int numAvaliacaoEstrela;
-    
-    @Column(length = 1000)
-    private String comentarios;
     
     @ManyToOne
     @JoinColumn(name = "paciente_id")

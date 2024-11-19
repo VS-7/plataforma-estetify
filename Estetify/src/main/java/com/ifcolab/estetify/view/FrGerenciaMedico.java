@@ -1,9 +1,7 @@
 package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.MedicoController;
-import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.model.Medico;
-import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.exceptions.MedicoException;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import java.text.ParseException;

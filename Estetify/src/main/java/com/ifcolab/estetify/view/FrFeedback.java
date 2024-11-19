@@ -21,17 +21,20 @@ public class FrFeedback extends javax.swing.JDialog {
 
         lblLogo = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
-        lblDescricao = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lblSubtitulo = new javax.swing.JLabel();
+        lblDescricaoFeedback = new javax.swing.JLabel();
+        lblTituloFeedback = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
         ratingStars1 = new com.ifcolab.estetify.components.RatingStars();
-        customTextField2 = new com.ifcolab.estetify.components.CustomTextField();
-        primaryCustomButton1 = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        edtTitulo = new com.ifcolab.estetify.components.CustomTextField();
+        btnEnviarFeedback = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        customTable1 = new com.ifcolab.estetify.components.CustomTable();
         lblLine = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblBackgrundFeedback = new javax.swing.JLabel();
+        lblBackgrundFeedback1 = new javax.swing.JLabel();
+        lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1350, 850));
@@ -47,23 +50,23 @@ public class FrFeedback extends javax.swing.JDialog {
         getContentPane().add(lblTitulo);
         lblTitulo.setBounds(70, 130, 640, 88);
 
-        lblDescricao.setFont(new java.awt.Font("Fira Sans", 0, 16)); // NOI18N
-        lblDescricao.setForeground(new java.awt.Color(0, 0, 0));
-        lblDescricao.setText("Cadastre aqui seu feedback");
-        getContentPane().add(lblDescricao);
-        lblDescricao.setBounds(70, 200, 660, 40);
+        lblSubtitulo.setFont(new java.awt.Font("Fira Sans", 0, 16)); // NOI18N
+        lblSubtitulo.setForeground(new java.awt.Color(0, 0, 0));
+        lblSubtitulo.setText("Cadastre aqui seu feedback");
+        getContentPane().add(lblSubtitulo);
+        lblSubtitulo.setBounds(70, 200, 660, 40);
 
-        jLabel5.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel5.setText("Descrição");
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(60, 370, 70, 16);
+        lblDescricaoFeedback.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        lblDescricaoFeedback.setForeground(new java.awt.Color(51, 51, 51));
+        lblDescricaoFeedback.setText("Descrição");
+        getContentPane().add(lblDescricaoFeedback);
+        lblDescricaoFeedback.setBounds(60, 370, 70, 16);
 
-        jLabel6.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel6.setText("Titulo");
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(60, 290, 110, 16);
+        lblTituloFeedback.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        lblTituloFeedback.setForeground(new java.awt.Color(51, 51, 51));
+        lblTituloFeedback.setText("Titulo");
+        getContentPane().add(lblTituloFeedback);
+        lblTituloFeedback.setBounds(60, 290, 110, 16);
 
         customTextArea1.setColumns(20);
         customTextArea1.setRows(5);
@@ -74,38 +77,58 @@ public class FrFeedback extends javax.swing.JDialog {
         getContentPane().add(ratingStars1);
         ratingStars1.setBounds(70, 240, 136, 24);
 
-        customTextField2.setText("Insira um titulo...");
-        customTextField2.addActionListener(new java.awt.event.ActionListener() {
+        edtTitulo.setText("Insira um titulo...");
+        edtTitulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customTextField2ActionPerformed(evt);
+                edtTituloActionPerformed(evt);
             }
         });
-        getContentPane().add(customTextField2);
-        customTextField2.setBounds(60, 310, 450, 40);
+        getContentPane().add(edtTitulo);
+        edtTitulo.setBounds(60, 310, 450, 40);
 
-        primaryCustomButton1.setText("Enviar Feedback");
-        getContentPane().add(primaryCustomButton1);
-        primaryCustomButton1.setBounds(160, 750, 230, 30);
+        btnEnviarFeedback.setText("Enviar Feedback");
+        getContentPane().add(btnEnviarFeedback);
+        btnEnviarFeedback.setBounds(160, 750, 230, 30);
+
+        customTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(customTable1);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(690, 40, 590, 770);
 
         lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
         getContentPane().add(lblLine);
         lblLine.setBounds(80, 700, 390, 40);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(-50, 0, 670, 850);
+        lblBackgrundFeedback.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
+        getContentPane().add(lblBackgrundFeedback);
+        lblBackgrundFeedback.setBounds(630, 30, 670, 790);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
-        jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(0, 0, 1350, 850);
+        lblBackgrundFeedback1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
+        getContentPane().add(lblBackgrundFeedback1);
+        lblBackgrundFeedback1.setBounds(-50, 0, 670, 850);
+
+        lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
+        lblBackground.setText("jLabel3");
+        getContentPane().add(lblBackground);
+        lblBackground.setBounds(0, 0, 1350, 850);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void customTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customTextField2ActionPerformed
+    private void edtTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtTituloActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_customTextField2ActionPerformed
+    }//GEN-LAST:event_edtTituloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -151,18 +174,21 @@ public class FrFeedback extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.ifcolab.estetify.components.PrimaryCustomButton btnEnviarFeedback;
+    private com.ifcolab.estetify.components.CustomTable customTable1;
     private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
-    private com.ifcolab.estetify.components.CustomTextField customTextField2;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private com.ifcolab.estetify.components.CustomTextField edtTitulo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblDescricao;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblBackground;
+    private javax.swing.JLabel lblBackgrundFeedback;
+    private javax.swing.JLabel lblBackgrundFeedback1;
+    private javax.swing.JLabel lblDescricaoFeedback;
     private javax.swing.JLabel lblLine;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
-    private com.ifcolab.estetify.components.PrimaryCustomButton primaryCustomButton1;
+    private javax.swing.JLabel lblTituloFeedback;
     private com.ifcolab.estetify.components.RatingStars ratingStars1;
     // End of variables declaration//GEN-END:variables
 }
