@@ -26,8 +26,7 @@ public class ValidateConsulta {
             Paciente paciente,
             Medico medico,
             Enfermeira enfermeira,
-            List<Procedimento> procedimentos,
-            int consultaId
+            List<Procedimento> procedimentos
     ) {
         // Validação da data e hora
         LocalDateTime dataHoraObj = validaDataHora(dataHora);
@@ -58,7 +57,7 @@ public class ValidateConsulta {
         }
         
         // Verifica disponibilidade da equipe
-        if (!verificarDisponibilidadeEquipe(dataHoraObj, medico.getId(), enfermeira.getId(), consultaId)) {
+        if (!verificarDisponibilidadeEquipe(dataHoraObj, medico.getId(), enfermeira.getId())) {
             throw new ConsultaException("Médico ou enfermeira não disponível neste horário.");
         }
         
@@ -99,8 +98,8 @@ public class ValidateConsulta {
         }
     }
     
-    private boolean verificarDisponibilidadeEquipe(LocalDateTime dataHora, int medicoId, int enfermeiraId, int consultaId) {
-        return repositorio.verificarDisponibilidade(dataHora, medicoId, enfermeiraId, consultaId);
+    private boolean verificarDisponibilidadeEquipe(LocalDateTime dataHora, int medicoId, int enfermeiraId) {
+        return repositorio.verificarDisponibilidade(dataHora, medicoId, enfermeiraId);
     }
     
     public void validaAlteracaoStatus(Consulta consulta, String novoStatus) {
@@ -146,16 +145,5 @@ public class ValidateConsulta {
         if (consulta.isConfirmada()) {
             throw new ConsultaException("Não é possível excluir consultas confirmadas. Cancele primeiro.");
         }
-    }
-    
-    public Consulta validaCamposEntrada(
-            String dataHora,
-            String observacoes,
-            Paciente paciente,
-            Medico medico,
-            Enfermeira enfermeira,
-            List<Procedimento> procedimentos
-    ) {
-        return validaCamposEntrada(dataHora, observacoes, paciente, medico, enfermeira, procedimentos, -1);
     }
 }

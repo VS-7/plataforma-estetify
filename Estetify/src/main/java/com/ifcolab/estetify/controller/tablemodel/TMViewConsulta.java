@@ -19,6 +19,7 @@ public class TMViewConsulta extends AbstractTableModel {
     private final int COL_VALOR_TOTAL = 5;
     private final int COL_STATUS = 6;
     private final int COL_OBSERVACOES = 7;
+    private final int COL_ACAO = 8;
 
     public TMViewConsulta(List<Consulta> lst) {
         this.lista = lst;
@@ -31,7 +32,7 @@ public class TMViewConsulta extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 8;
+        return 9;
     }
 
     @Override
@@ -71,6 +72,9 @@ public class TMViewConsulta extends AbstractTableModel {
                 case COL_OBSERVACOES:
                     return aux.getObservacoes();
                     
+                case COL_ACAO:
+                    return "[*]";
+                    
                 default:
                     break;
             }
@@ -109,6 +113,9 @@ public class TMViewConsulta extends AbstractTableModel {
                 
             case COL_OBSERVACOES:
                 return "Observações";
+                
+            case COL_ACAO:
+                return "Ação";
                 
             default:
                 break;

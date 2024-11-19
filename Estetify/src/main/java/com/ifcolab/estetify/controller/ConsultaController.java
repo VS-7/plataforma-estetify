@@ -119,18 +119,13 @@ public class ConsultaController {
         grd.setModel(tmConsulta);
     }
     
-    public boolean verificarDisponibilidade(String dataHora, int medicoId, int enfermeiraId, int consultaId) {
+    public boolean verificarDisponibilidade(String dataHora, int medicoId, int enfermeiraId) {
         try {
             LocalDateTime dataHoraObj = LocalDateTime.parse(dataHora, 
                 java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            return repositorio.verificarDisponibilidade(dataHoraObj, medicoId, enfermeiraId, consultaId);
+            return repositorio.verificarDisponibilidade(dataHoraObj, medicoId, enfermeiraId);
         } catch (Exception e) {
             throw new ConsultaException("Data e hora inválidas.");
         }
-    }
-
-    // Manter o método original para novos agendamentos
-    public boolean verificarDisponibilidade(String dataHora, int medicoId, int enfermeiraId) {
-        return verificarDisponibilidade(dataHora, medicoId, enfermeiraId, -1);
     }
 }

@@ -5,6 +5,7 @@ import com.ifcolab.estetify.controller.EnfermeiraController;
 import com.ifcolab.estetify.controller.MedicoController;
 import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.controller.ProcedimentoController;
+import com.ifcolab.estetify.controller.tablemodel.TMViewConsulta;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
@@ -147,32 +148,6 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         return obj;
     }    
     
-    private void verificarDisponibilidade() {
-        try {
-            String dataHora = fEdtData.getText() + " " + fEdtHora.getText();
-            Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
-            Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
-
-            if (medico != null && enfermeira != null) {
-                boolean disponivel = controller.verificarDisponibilidade(
-                    dataHora,
-                    medico.getId(),
-                    enfermeira.getId(),
-                    idConsultaEditando  // Passa o ID da consulta sendo editada
-                );
-
-                if (!disponivel) {
-                    JOptionPane.showMessageDialog(this, 
-                        "Médico ou enfermeira não disponível neste horário.",
-                        "Indisponibilidade",
-                        JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        } catch (ConsultaException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }
-    
     private void atualizarListaProcedimentos() {
         DefaultListModel<Procedimento> model = new DefaultListModel<>();
         for (Procedimento proc : procedimentosSelecionados) {
@@ -180,8 +155,6 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         }
         listProcedimentosSelecionados.setModel(model);
     }
-    
-
 
 
     @SuppressWarnings("unchecked")
@@ -262,23 +235,44 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         txtObservacoesScrollPane.setViewportView(txtObeservacoes);
 
         getContentPane().add(txtObservacoesScrollPane);
-        txtObservacoesScrollPane.setBounds(240, 206, 730, 130);
+        txtObservacoesScrollPane.setBounds(240, 206, 720, 130);
 
         fEdtHora.setText("Hora");
+        fEdtHora.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                fEdtHoraPropertyChange(evt);
+            }
+        });
         getContentPane().add(fEdtHora);
         fEdtHora.setBounds(60, 280, 160, 38);
 
         fEdtData.setText("Data");
+        fEdtData.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                fEdtDataPropertyChange(evt);
+            }
+        });
         getContentPane().add(fEdtData);
         fEdtData.setBounds(60, 210, 160, 38);
         getContentPane().add(cbxSelecionarProcedimento);
         cbxSelecionarProcedimento.setBounds(980, 140, 250, 44);
+
+        cbxSelecionarEnfermeira.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                cbxSelecionarEnfermeiraPropertyChange(evt);
+            }
+        });
         getContentPane().add(cbxSelecionarEnfermeira);
         cbxSelecionarEnfermeira.setBounds(700, 140, 250, 44);
 
         cbxSelecionarMedico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxSelecionarMedicoActionPerformed(evt);
+            }
+        });
+        cbxSelecionarMedico.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                cbxSelecionarMedicoPropertyChange(evt);
             }
         });
         getContentPane().add(cbxSelecionarMedico);
@@ -345,7 +339,7 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         scrollProcedimentos.setViewportView(listProcedimentosSelecionados);
 
         getContentPane().add(scrollProcedimentos);
-        scrollProcedimentos.setBounds(980, 190, 300, 150);
+        scrollProcedimentos.setBounds(980, 200, 300, 130);
 
         grdConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -358,6 +352,11 @@ public class FrNovaConsulta extends javax.swing.JDialog {
 
             }
         ));
+        grdConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                grdConsultasMouseClicked(evt);
+            }
+        });
         tmConsultas.setViewportView(grdConsultas);
 
         getContentPane().add(tmConsultas);
@@ -443,7 +442,7 @@ public class FrNovaConsulta extends javax.swing.JDialog {
             Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
             Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
             Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
-
+            
             if (idConsultaEditando > 0) {
                 controller.atualizar(
                     idConsultaEditando,
@@ -464,12 +463,12 @@ public class FrNovaConsulta extends javax.swing.JDialog {
                     procedimentosSelecionados
                 );
             }
-
+            
             this.idConsultaEditando = -1;
             controller.atualizarTabela(grdConsultas);
             this.habilitarFormulario(false);
             this.limparFormulario();
-
+            
         } catch (ConsultaException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -499,6 +498,56 @@ public class FrNovaConsulta extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_listProcedimentosSelecionadosKeyPressed
+
+    private void fEdtDataPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_fEdtDataPropertyChange
+
+    }//GEN-LAST:event_fEdtDataPropertyChange
+
+    private void fEdtHoraPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_fEdtHoraPropertyChange
+
+    }//GEN-LAST:event_fEdtHoraPropertyChange
+
+    private void cbxSelecionarMedicoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cbxSelecionarMedicoPropertyChange
+
+    }//GEN-LAST:event_cbxSelecionarMedicoPropertyChange
+
+    private void cbxSelecionarEnfermeiraPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cbxSelecionarEnfermeiraPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbxSelecionarEnfermeiraPropertyChange
+
+    private void grdConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grdConsultasMouseClicked
+        int row = grdConsultas.rowAtPoint(evt.getPoint());
+            int col = grdConsultas.columnAtPoint(evt.getPoint());
+
+            if (col == 8) { // Coluna de ação
+                Consulta consulta = ((TMViewConsulta)grdConsultas.getModel()).getConsulta(row);
+                if (consulta != null) {
+                    String[] opcoes = {"AGENDADA", "CONFIRMADA", "CONCLUIDA", "CANCELADA"};
+                    String novoStatus = (String) JOptionPane.showInputDialog(
+                        null,
+                        "Selecione o novo status:",
+                        "Alterar Status",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opcoes,
+                        consulta.getStatus()
+                    );
+
+                    if (novoStatus != null) {
+                        try {
+                            controller.alterarStatus(consulta, novoStatus);
+                            controller.atualizarTabela(grdConsultas);
+                            JOptionPane.showMessageDialog(null, "Status atualizado com sucesso!");
+                        } catch (ConsultaException ex) {
+                            JOptionPane.showMessageDialog(null, 
+                                ex.getMessage(),
+                                "Erro",
+                                JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            }
+    }//GEN-LAST:event_grdConsultasMouseClicked
 
     /**
      * @param args the command line arguments
