@@ -2,9 +2,6 @@ package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.controller.tablemodel.TMViewProcedimento;
 import com.ifcolab.estetify.model.Procedimento;
-import com.ifcolab.estetify.model.Paciente;
-import com.ifcolab.estetify.model.Enfermeira;
-import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.dao.ProcedimentoDAO;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
 import com.ifcolab.estetify.model.valid.ValidateProcedimento;
