@@ -152,15 +152,15 @@ public class FrNovaConsulta extends javax.swing.JDialog {
             String dataHora = fEdtData.getText() + " " + fEdtHora.getText();
             Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
             Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
-            
+
             if (medico != null && enfermeira != null) {
                 boolean disponivel = controller.verificarDisponibilidade(
                     dataHora,
                     medico.getId(),
                     enfermeira.getId(),
-                    idConsultaEditando
+                    idConsultaEditando  // Passa o ID da consulta sendo editada
                 );
-                
+
                 if (!disponivel) {
                     JOptionPane.showMessageDialog(this, 
                         "Médico ou enfermeira não disponível neste horário.",
@@ -443,7 +443,7 @@ public class FrNovaConsulta extends javax.swing.JDialog {
             Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
             Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
             Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
-            
+
             if (idConsultaEditando > 0) {
                 controller.atualizar(
                     idConsultaEditando,
@@ -464,12 +464,12 @@ public class FrNovaConsulta extends javax.swing.JDialog {
                     procedimentosSelecionados
                 );
             }
-            
+
             this.idConsultaEditando = -1;
             controller.atualizarTabela(grdConsultas);
             this.habilitarFormulario(false);
             this.limparFormulario();
-            
+
         } catch (ConsultaException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
