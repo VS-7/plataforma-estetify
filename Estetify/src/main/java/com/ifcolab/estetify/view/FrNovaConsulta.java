@@ -47,7 +47,6 @@ public class FrNovaConsulta extends javax.swing.JDialog {
         this.habilitarFormulario(false);
         this.limparFormulario();
         
-        controller.atualizarTabela(grdConsultas);
     }
     
     private void adicionarMascaraNosCampos() {
@@ -413,65 +412,11 @@ public class FrNovaConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        Consulta consultaExcluido = (Consulta) this.getObjetoSelecionadoNaGrid();
 
-        if (consultaExcluido == null)
-        JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
-        else {
-            int response = JOptionPane.showConfirmDialog(null,
-                "Deseja excluir a consulta?"
-                ,
-                "Confirmar exclusão",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-            if (response == JOptionPane.OK_OPTION) {
-                try {
-                    controller.excluir(consultaExcluido);
-                    controller.atualizarTabela(grdConsultas);
-                    JOptionPane.showMessageDialog(this, "Exclusão feita com sucesso!");
-                } catch (ConsultaException ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage());
-                }
-            }
-        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-            String dataHora = fEdtData.getText() + " " + fEdtHora.getText();
-            Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
-            Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
-            Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
-            
-            if (idConsultaEditando > 0) {
-                controller.atualizar(
-                    idConsultaEditando,
-                    dataHora,
-                    txtObeservacoes.getText(),
-                    paciente,
-                    medico,
-                    enfermeira,
-                    procedimentosSelecionados
-                );
-            } else {
-                controller.cadastrar(
-                    dataHora,
-                    txtObeservacoes.getText(),
-                    paciente,
-                    medico,
-                    enfermeira,
-                    procedimentosSelecionados
-                );
-            }
-            
-            this.idConsultaEditando = -1;
-            controller.atualizarTabela(grdConsultas);
-            this.habilitarFormulario(false);
-            this.limparFormulario();
-            
-        } catch (ConsultaException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+ 
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAdicionarProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarProcedimentoActionPerformed
@@ -516,37 +461,7 @@ public class FrNovaConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxSelecionarEnfermeiraPropertyChange
 
     private void grdConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grdConsultasMouseClicked
-        int row = grdConsultas.rowAtPoint(evt.getPoint());
-            int col = grdConsultas.columnAtPoint(evt.getPoint());
 
-            if (col == 8) { // Coluna de ação
-                Consulta consulta = ((TMViewConsulta)grdConsultas.getModel()).getConsulta(row);
-                if (consulta != null) {
-                    String[] opcoes = {"AGENDADA", "CONFIRMADA", "CONCLUIDA", "CANCELADA"};
-                    String novoStatus = (String) JOptionPane.showInputDialog(
-                        null,
-                        "Selecione o novo status:",
-                        "Alterar Status",
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        opcoes,
-                        consulta.getStatus()
-                    );
-
-                    if (novoStatus != null) {
-                        try {
-                            controller.alterarStatus(consulta, novoStatus);
-                            controller.atualizarTabela(grdConsultas);
-                            JOptionPane.showMessageDialog(null, "Status atualizado com sucesso!");
-                        } catch (ConsultaException ex) {
-                            JOptionPane.showMessageDialog(null, 
-                                ex.getMessage(),
-                                "Erro",
-                                JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
-            }
     }//GEN-LAST:event_grdConsultasMouseClicked
 
     /**

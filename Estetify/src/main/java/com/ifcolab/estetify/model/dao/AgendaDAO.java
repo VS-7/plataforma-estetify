@@ -2,11 +2,11 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Agenda;
+import com.ifcolab.estetify.model.HorarioDisponivel;
+import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.exceptions.AgendaException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AgendaDAO extends Dao<Agenda> {
@@ -33,91 +33,96 @@ public class AgendaDAO extends Dao<Agenda> {
     @Override
     public Agenda find(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        Agenda a = this.entityManager.find(Agenda.class, id);
+        Agenda agenda = this.entityManager.find(Agenda.class, id);
         this.entityManager.close();
-        return a;
+        return agenda;
     }
     
     @Override
     public List<Agenda> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = "SELECT DISTINCT a FROM Agenda a LEFT JOIN FETCH a.consultas";
+        jpql = "SELECT a FROM Agenda a";
         qry = this.entityManager.createQuery(jpql, Agenda.class);
         List<Agenda> lst = qry.getResultList();
         this.entityManager.close();
         return lst;
     }
     
-    public List<Consulta> findConsultasByData(LocalDate data) {
+    public List<Agenda> findByMedico(Medico medico) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = "SELECT c FROM Consulta c WHERE DATE(c.dataHora) = :data";
-        qry = this.entityManager.createQuery(jpql, Consulta.class);
-        qry.setParameter("data", data);
-        List<Consulta> lst = qry.getResultList();
+        jpql = "SELECT a FROM Agenda a WHERE a.medico = :medico";
+        qry = this.entityManager.createQuery(jpql, Agenda.class);
+        qry.setParameter("medico", medico);
+        List<Agenda> lst = qry.getResultList();
         this.entityManager.close();
         return lst;
     }
     
-    public List<Consulta> findConsultasByPeriodo(LocalDate dataInicio, LocalDate dataFim) {
+    public Agenda findByMedicoAndData(Medico medico, LocalDate data) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = "SELECT c FROM Consulta c WHERE DATE(c.dataHora) BETWEEN :dataInicio AND :dataFim";
-        qry = this.entityManager.createQuery(jpql, Consulta.class);
-        qry.setParameter("dataInicio", dataInicio);
-        qry.setParameter("dataFim", dataFim);
-        List<Consulta> lst = qry.getResultList();
+        jpql = "SELECT a FROM Agenda a WHERE a.medico = :medico AND a.data = :data";
+        qry = this.entityManager.createQuery(jpql, Agenda.class);
+        qry.setParameter("medico", medico);
+        qry.setParameter("data", data);
+        List<Agenda> lst = qry.getResultList();
+        this.entityManager.close();
+        return !lst.isEmpty() ? lst.get(0) : null;
+    }
+    
+    public List<Agenda> findByData(LocalDate data) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        jpql = "SELECT a FROM Agenda a WHERE a.data = :data";
+        qry = this.entityManager.createQuery(jpql, Agenda.class);
+        qry.setParameter("data", data);
+        List<Agenda> lst = qry.getResultList();
         this.entityManager.close();
         return lst;
     }
     
-    public List<Consulta> findConsultasAgendadasPorData(LocalDate data) {
+    public List<HorarioDisponivel> buscarHorarios(Agenda agenda) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = "SELECT c FROM Consulta c WHERE DATE(c.dataHora) = :data AND c.status = 'AGENDADA'";
-        qry = this.entityManager.createQuery(jpql, Consulta.class);
-        qry.setParameter("data", data);
-        List<Consulta> lst = qry.getResultList();
-        this.entityManager.close();
-        return lst;
-    }
-    
-    public List<Consulta> findConsultasPorProfissionalEData(int profissionalId, boolean isMedico, LocalDate data) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = isMedico ?
-            "SELECT c FROM Consulta c WHERE c.medico.id = :profissionalId AND DATE(c.dataHora) = :data" :
-            "SELECT c FROM Consulta c WHERE c.enfermeira.id = :profissionalId AND DATE(c.dataHora) = :data";
-        qry = this.entityManager.createQuery(jpql, Consulta.class);
-        qry.setParameter("profissionalId", profissionalId);
-        qry.setParameter("data", data);
-        List<Consulta> lst = qry.getResultList();
-        this.entityManager.close();
-        return lst;
-    }
-    
-    public List<LocalDateTime> getHorariosDisponiveis(LocalDate data, int medicoId, int enfermeiraId) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        // Consulta para obter horários ocupados
-        jpql = "SELECT c.dataHora FROM Consulta c " +
-               "WHERE DATE(c.dataHora) = :data " +
-               "AND (c.medico.id = :medicoId OR c.enfermeira.id = :enfermeiraId) " +
-               "AND c.status != 'CANCELADA'";
-        qry = this.entityManager.createQuery(jpql, LocalDateTime.class);
-        qry.setParameter("data", data);
-        qry.setParameter("medicoId", medicoId);
-        qry.setParameter("enfermeiraId", enfermeiraId);
-        List<LocalDateTime> horariosOcupados = qry.getResultList();
-        this.entityManager.close();
-
-        // Gera lista de horários disponíveis (8h às 18h, intervalos de 1h)
-        List<LocalDateTime> todosHorarios = new ArrayList<>();
-        LocalDateTime horarioInicial = data.atStartOfDay().plusHours(8);
-        LocalDateTime horarioFinal = data.atStartOfDay().plusHours(18);
-
-        while (horarioInicial.isBefore(horarioFinal)) {
-            if (!horariosOcupados.contains(horarioInicial)) {
-                todosHorarios.add(horarioInicial);
-            }
-            horarioInicial = horarioInicial.plusHours(1);
+        try {
+            jpql = "SELECT h FROM HorarioDisponivel h WHERE h.agenda.id = :agendaId";
+            qry = this.entityManager.createQuery(jpql, HorarioDisponivel.class);
+            qry.setParameter("agendaId", agenda.getId());
+            return qry.getResultList();
+        } finally {
+            this.entityManager.close();
         }
-
-        return todosHorarios;
+    }
+    
+    public List<Consulta> buscarConsultas(Agenda agenda) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            jpql = "SELECT c FROM Consulta c WHERE c.agenda.id = :agendaId";
+            qry = this.entityManager.createQuery(jpql, Consulta.class);
+            qry.setParameter("agendaId", agenda.getId());
+            return qry.getResultList();
+        } finally {
+            this.entityManager.close();
+        }
+    }
+    
+    public void salvarHorario(HorarioDisponivel horario) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            this.entityManager.getTransaction().begin();
+            this.entityManager.persist(horario);
+            this.entityManager.getTransaction().commit();
+        } finally {
+            this.entityManager.close();
+        }
+    }
+    
+    public void removerHorario(HorarioDisponivel horario) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            this.entityManager.getTransaction().begin();
+            horario = this.entityManager.merge(horario);
+            this.entityManager.remove(horario);
+            this.entityManager.getTransaction().commit();
+        } finally {
+            this.entityManager.close();
+        }
     }
 }

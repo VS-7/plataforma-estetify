@@ -23,17 +23,8 @@ public class Enfermeira extends Pessoa implements Serializable {
         super();
     }
     
-    public Enfermeira(
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            String sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String coren
-    ) {
+    public Enfermeira(String nome, String email, String senha, String cpf, String sexo, String dataNascimento, String telefone, String endereco, String coren) {
+        
         super(nome, 
               email, 
               senha, 

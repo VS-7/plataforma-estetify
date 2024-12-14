@@ -51,6 +51,10 @@ public class Consulta implements Serializable {
     
     @OneToOne(mappedBy = "consulta")
     private Pagamento pagamento;
+
+    @ManyToOne
+    @JoinColumn(name = "agenda_id")
+    private Agenda agenda;
     
     public Consulta(
             LocalDateTime dataHora,
@@ -58,7 +62,8 @@ public class Consulta implements Serializable {
             Paciente paciente,
             Medico medico,
             Enfermeira enfermeira,
-            List<Procedimento> procedimentos
+            List<Procedimento> procedimentos,
+            Agenda agenda
     ) {
         this.dataHora = dataHora;
         this.observacoes = observacoes;
@@ -66,6 +71,7 @@ public class Consulta implements Serializable {
         this.medico = medico;
         this.enfermeira = enfermeira;
         this.procedimentos = procedimentos;
+        this.agenda = agenda;
         this.status = "AGENDADA";
     }
     

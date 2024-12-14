@@ -1,87 +1,61 @@
 package com.ifcolab.estetify.controller;
 
-import com.ifcolab.estetify.controller.tablemodel.TMViewConsulta;
+import com.ifcolab.estetify.controller.tablemodel.TMViewAgenda;
 import com.ifcolab.estetify.model.Agenda;
-import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Medico;
-import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.dao.AgendaDAO;
 import com.ifcolab.estetify.model.exceptions.AgendaException;
 import com.ifcolab.estetify.model.valid.ValidateAgenda;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import javax.swing.JTable;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import com.ifcolab.estetify.model.Paciente;
+import com.ifcolab.estetify.model.Enfermeira;
+import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.Consulta;
+import com.ifcolab.estetify.model.HorarioDisponivel;
+import java.time.LocalDateTime;
 
 public class AgendaController {
     
     private AgendaDAO repositorio;
-    private ValidateAgenda validator;
+    private ValidateAgenda validador;
     
     public AgendaController() {
         repositorio = new AgendaDAO();
-        validator = new ValidateAgenda();
+        validador = new ValidateAgenda();
     }
     
-    public void atualizarTabelaPorData(JTable grd, LocalDate data) {
-        validator.validaData(data);
-        List<Consulta> consultas = repositorio.findConsultasByData(data);
-        TMViewConsulta tmConsulta = new TMViewConsulta(consultas);
-        grd.setModel(tmConsulta);
-    }
-    
-    public void filtrarPorPeriodo(JTable grd, LocalDate dataInicio, LocalDate dataFim) {
-        validator.validaPeriodo(dataInicio, dataFim);
-        List<Consulta> consultas = repositorio.findConsultasByPeriodo(dataInicio, dataFim);
-        TMViewConsulta tmConsulta = new TMViewConsulta(consultas);
-        grd.setModel(tmConsulta);
-    }
-    
-    public void filtrarPorProfissional(JTable grd, Medico medico, Enfermeira enfermeira, LocalDate data) {
-        validator.validaProfissional(medico, enfermeira);
-        validator.validaData(data);
+    public void cadastrar(Medico medico, String data, Set<LocalTime> horariosDisponiveis) {
+        LocalDate dataAgenda = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         
-        List<Consulta> consultas;
-        if (medico != null) {
-            consultas = repositorio.findConsultasPorProfissionalEData(medico.getId(), true, data);
-        } else {
-            consultas = repositorio.findConsultasPorProfissionalEData(enfermeira.getId(), false, data);
+        Agenda agenda = validador.validaCamposEntrada(
+            medico,
+            dataAgenda,
+            horariosDisponiveis
+        );
+        
+        repositorio.save(agenda);
+    }
+    
+    public void cadastrarComHorariosDefault(Medico medico, String data) {
+        LocalDate dataAgenda = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        Agenda agenda = new Agenda(medico, dataAgenda);
+        repositorio.save(agenda);
+        
+        // Adiciona horários default
+        LocalTime horarioInicial = LocalTime.of(8, 0);
+        LocalTime horarioFinal = LocalTime.of(18, 0);
+        
+        LocalTime horarioAtual = horarioInicial;
+        while (!horarioAtual.isAfter(horarioFinal)) {
+            liberarHorario(agenda, horarioAtual);
+            horarioAtual = horarioAtual.plusMinutes(30);
         }
-        
-        TMViewConsulta tmConsulta = new TMViewConsulta(consultas);
-        grd.setModel(tmConsulta);
-    }
-    
-    public List<LocalDateTime> getHorariosDisponiveis(LocalDate data, int medicoId, int enfermeiraId) {
-        validator.validaData(data);
-        return repositorio.getHorariosDisponiveis(data, medicoId, enfermeiraId);
-    }
-    
-    public void verificarDisponibilidadeHorario(LocalDateTime horario, int medicoId, int enfermeiraId) {
-        validator.validaHorarioDisponivel(horario, medicoId, enfermeiraId);
-    }
-    
-    public void verificarLimiteConsultasDia(LocalDate data) {
-        List<Consulta> consultasDoDia = repositorio.findConsultasByData(data);
-        validator.validaQuantidadeConsultasDia(data, consultasDoDia);
-    }
-    
-    public void verificarConsultasSimultaneas(LocalDateTime horario) {
-        List<Consulta> consultasHorario = repositorio.findConsultasByData(horario.toLocalDate())
-            .stream()
-            .filter(c -> c.getDataHora().equals(horario))
-            .toList();
-            
-        validator.validaConsultasSimultaneas(consultasHorario);
-    }
-    
-    public LocalDateTime validarFormatoDataHora(String dataHora) {
-        return validator.validaFormatoDataHora(dataHora);
-    }
-    
-    public List<Consulta> getConsultasAgendadasPorData(LocalDate data) {
-        validator.validaData(data);
-        return repositorio.findConsultasAgendadasPorData(data);
     }
     
     public void excluir(Agenda agenda) {
@@ -92,7 +66,86 @@ public class AgendaController {
         }
     }
     
+    public void ocuparHorario(Agenda agenda, LocalTime horario) {
+        List<HorarioDisponivel> horarios = repositorio.buscarHorarios(agenda);
+        horarios.stream()
+            .filter(h -> h.getHorario().equals(horario))
+            .findFirst()
+            .ifPresent(h -> repositorio.removerHorario(h));
+    }
+    
+    public void liberarHorario(Agenda agenda, LocalTime horario) {
+        List<HorarioDisponivel> horarios = repositorio.buscarHorarios(agenda);
+        boolean horarioJaExiste = horarios.stream()
+            .anyMatch(h -> h.getHorario().equals(horario));
+            
+        if (!horarioJaExiste) {
+            HorarioDisponivel novoHorario = new HorarioDisponivel(horario, agenda);
+            repositorio.salvarHorario(novoHorario);
+        }
+    }
+    
+    public Agenda buscarPorMedicoEData(Medico medico, LocalDate data) {
+        return repositorio.findByMedicoAndData(medico, data);
+    }
+    
+    public List<Agenda> buscarPorMedico(Medico medico) {
+        return repositorio.findByMedico(medico);
+    }
+    
+    public List<Agenda> buscarPorData(LocalDate data) {
+        return repositorio.findByData(data);
+    }
+    
+    public void atualizarTabela(JTable grd) {
+        TMViewAgenda tmAgenda = new TMViewAgenda(repositorio.findAll());
+        grd.setModel(tmAgenda);
+    }
+    
+    public void filtrarTabelaPorData(JTable grd, LocalDate data) {
+        TMViewAgenda tmAgenda = new TMViewAgenda(repositorio.findByData(data));
+        grd.setModel(tmAgenda);
+    }
+    
+    public void filtrarTabelaPorMedico(JTable grd, Medico medico) {
+        TMViewAgenda tmAgenda = new TMViewAgenda(repositorio.findByMedico(medico));
+        grd.setModel(tmAgenda);
+    }
+    
     public List<Agenda> findAll() {
         return repositorio.findAll();
+    }
+    
+    public List<LocalTime> getHorariosDisponiveis(Agenda agenda) {
+        return repositorio.buscarHorarios(agenda).stream()
+            .map(HorarioDisponivel::getHorario)
+            .collect(Collectors.toList());
+    }
+    
+    public void cadastrarConsulta(
+            Agenda agenda,
+            LocalTime horario,
+            Paciente paciente,
+            Enfermeira enfermeira,
+            List<Procedimento> procedimentos,
+            String observacoes
+    ) {
+        LocalDateTime dataHora = LocalDateTime.of(agenda.getData(), horario);
+        
+        ConsultaController consultaController = new ConsultaController();
+        consultaController.cadastrar(
+            dataHora,
+            observacoes,
+            paciente,
+            enfermeira,
+            procedimentos,
+            agenda
+        );
+        
+        ocuparHorario(agenda, horario);
+    }
+    
+    public List<Consulta> listarConsultasDoDia(Agenda agenda) {
+        return repositorio.buscarConsultas(agenda);
     }
 }

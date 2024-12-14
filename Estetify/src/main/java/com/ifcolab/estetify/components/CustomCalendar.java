@@ -6,6 +6,8 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import java.lang.reflect.Field;
 import javax.swing.JButton;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class CustomCalendar extends JCalendar {
     
@@ -81,5 +83,33 @@ public class CustomCalendar extends JCalendar {
                 e.printStackTrace();
             }
         });
+    }
+    
+    /**
+     * Retorna a data selecionada no calendário como LocalDate
+     * @return LocalDate selecionada ou null se nenhuma data estiver selecionada
+     */
+    public LocalDate getSelectedDate() {
+        if (getDate() == null) {
+            return null;
+        }
+        return getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+    
+    /**
+     * Define a data selecionada no calendário a partir de um LocalDate
+     * @param date LocalDate a ser definida no calendário
+     */
+    public void setSelectedDate(LocalDate date) {
+        if (date == null) {
+            return;
+        }
+        setDate(java.util.Date.from(
+            date.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+        ));
     }
 }
