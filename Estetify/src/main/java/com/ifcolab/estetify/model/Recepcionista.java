@@ -3,6 +3,7 @@ package com.ifcolab.estetify.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import com.ifcolab.estetify.model.enums.TipoUsuario;
 import javax.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +29,7 @@ public class Recepcionista extends Pessoa implements Serializable {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              "RECEPCIONISTA");
+              TipoUsuario.RECEPCIONISTA);
         
         this.dataContratacao = LocalDate.parse(dataContratacao, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }

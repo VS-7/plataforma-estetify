@@ -3,6 +3,7 @@ package com.ifcolab.estetify.model.valid;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.dao.ProcedimentoDAO;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
+import com.ifcolab.estetify.model.enums.TipoProcedimento;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -20,7 +21,9 @@ public class ValidateProcedimento {
             String duracao,
             String valor,
             String requisitos,
-            String contraindicacoes
+            String contraindicacoes,
+            TipoProcedimento tipo,
+            int intervaloRetornoDias
     ) {
         if (descricao == null || descricao.isEmpty()) {
             throw new ProcedimentoException("Descrição não pode estar em branco.");
@@ -58,11 +61,13 @@ public class ValidateProcedimento {
         }
         
         return new Procedimento(
+                tipo,
                 descricao,
                 duracao,
                 valorNumerico,
                 requisitos,
-                contraindicacoes
+                contraindicacoes,
+                intervaloRetornoDias
         );
     }
     

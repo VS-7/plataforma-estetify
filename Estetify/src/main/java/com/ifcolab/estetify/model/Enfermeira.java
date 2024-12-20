@@ -5,10 +5,9 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import com.ifcolab.estetify.model.enums.TipoUsuario;
 
 @Getter
 @Setter
@@ -33,7 +32,7 @@ public class Enfermeira extends Pessoa implements Serializable {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              "ENFERMEIRA");
+              TipoUsuario.ENFERMEIRA);
         this.coren = coren;
     }
     

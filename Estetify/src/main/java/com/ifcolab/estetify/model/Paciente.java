@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
+import com.ifcolab.estetify.model.enums.TipoUsuario;
 @Getter
 @Setter
 @Entity
@@ -36,7 +36,7 @@ public class Paciente extends Pessoa {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              "PACIENTE");
+              TipoUsuario.PACIENTE);
         this.historicoMedico = historicoMedico;
     }
     

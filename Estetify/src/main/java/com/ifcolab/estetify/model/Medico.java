@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import com.ifcolab.estetify.model.enums.TipoUsuario;
 
 @Getter
 @Setter
@@ -37,7 +38,7 @@ public class Medico extends Pessoa implements Serializable {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              "MEDICO");
+              TipoUsuario.MEDICO);  
         this.crm = crm;
         this.especializacao = especializacao;
     }

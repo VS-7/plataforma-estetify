@@ -1,6 +1,5 @@
 package com.ifcolab.estetify;
 
-import com.ifcolab.estetify.view.FrAgenda;
 import com.ifcolab.estetify.view.FrLogin;
 
 public class Estetify {
