@@ -25,16 +25,14 @@ public class ConsultaController {
             String observacoes,
             Paciente paciente,
             Enfermeira enfermeira,
-            List<Procedimento> procedimentos,
-            Agenda agenda
+            List<Procedimento> procedimentos
     ) {
         Consulta consulta = validador.validaCamposEntrada(
             dataHora,
             observacoes,
             paciente,
             enfermeira,
-            procedimentos,
-            agenda
+            procedimentos
         );
         
         repositorio.save(consulta);

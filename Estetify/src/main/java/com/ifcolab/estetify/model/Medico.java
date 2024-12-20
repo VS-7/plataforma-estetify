@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Getter
 @Setter
@@ -23,8 +22,6 @@ public class Medico extends Pessoa implements Serializable {
     @OneToMany(mappedBy = "medico")
     private List<Consulta> consultas;
     
-    @OneToOne(mappedBy = "medico")
-    private Agenda agenda;
     
     public Medico() {
         super();

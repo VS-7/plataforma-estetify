@@ -1,8 +1,8 @@
 package com.ifcolab.estetify.model.valid;
 
-import com.ifcolab.estetify.model.Agenda;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
+import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
@@ -16,9 +16,9 @@ public class ValidateConsulta {
             LocalDateTime dataHora,
             String observacoes,
             Paciente paciente,
+            Medico medico,
             Enfermeira enfermeira,
-            List<Procedimento> procedimentos,
-            Agenda agenda
+            List<Procedimento> procedimentos
     ) {
         if (dataHora == null) {
             throw new ConsultaException("Data/hora não pode estar em branco.");
@@ -36,9 +36,6 @@ public class ValidateConsulta {
             throw new ConsultaException("Selecione pelo menos um procedimento.");
         }
         
-        if (agenda == null) {
-            throw new ConsultaException("Agenda não pode estar em branco.");
-        }
         
         // Validar se o horário está dentro do expediente
         LocalTime horario = dataHora.toLocalTime();
@@ -50,10 +47,9 @@ public class ValidateConsulta {
             dataHora,
             observacoes,
             paciente,
-            agenda.getMedico(),
+            medico,
             enfermeira,
-            procedimentos,
-            agenda
+            procedimentos
         );
     }
 }
