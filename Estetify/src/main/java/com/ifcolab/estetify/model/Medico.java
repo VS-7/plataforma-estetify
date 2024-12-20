@@ -27,18 +27,8 @@ public class Medico extends Pessoa implements Serializable {
         super();
     }
     
-    public Medico(
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            String sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String crm,
-            String especializacao
-    ) {
+    public Medico(String nome, String email, String senha, String cpf, String sexo, String dataNascimento, String telefone, String endereco, String crm, String especializacao) {
+
         super(nome, 
               email, 
               senha, 

@@ -1,8 +1,8 @@
 package com.ifcolab.estetify.controller;
 
-import com.ifcolab.estetify.model.Agenda;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
+import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.dao.ConsultaDAO;
@@ -24,6 +24,7 @@ public class ConsultaController {
             LocalDateTime dataHora,
             String observacoes,
             Paciente paciente,
+            Medico medico,
             Enfermeira enfermeira,
             List<Procedimento> procedimentos
     ) {
@@ -31,6 +32,7 @@ public class ConsultaController {
             dataHora,
             observacoes,
             paciente,
+            medico,
             enfermeira,
             procedimentos
         );

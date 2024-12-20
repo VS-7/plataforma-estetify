@@ -26,17 +26,8 @@ public class Paciente extends Pessoa {
         super();
     }
     
-    public Paciente(
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            String sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String historicoMedico
-    ) {
+    public Paciente(String nome, String email, String senha, String cpf, String sexo, String dataNascimento, String telefone, String endereco, String historicoMedico) {
+
         super(nome, 
               email, 
               senha, 

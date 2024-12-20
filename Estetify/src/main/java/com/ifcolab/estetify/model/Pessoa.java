@@ -42,17 +42,8 @@ public class Pessoa implements Serializable {
     protected String tipoUsuario;
     
     /* Construtor sem o atributo ID */
-    public Pessoa(
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            String sexo,
-            LocalDate dataNascimento,
-            String telefone,
-            String endereco,
-            String tipoUsuario
-    ) {
+    public Pessoa(String nome, String email, String senha, String cpf, String sexo, LocalDate dataNascimento, String telefone, String endereco, String tipoUsuario) {
+
         this.nome = nome;
         this.email = email;
         this.senha = senha;

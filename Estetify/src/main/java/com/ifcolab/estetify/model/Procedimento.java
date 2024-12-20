@@ -35,13 +35,7 @@ public class Procedimento implements Serializable {
     public Procedimento() {
     }
     
-    public Procedimento(
-            String descricao,
-            String duracao,
-            double valor,
-            String requisitos,
-            String contraindicacoes
-    ) {
+    public Procedimento(String descricao, String duracao, double valor, String requisitos, String contraindicacoes) {
         this.descricao = descricao;
         this.duracaoEstimada = parseDuracao(duracao);
         this.valor = valor;

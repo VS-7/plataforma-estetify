@@ -18,17 +18,8 @@ public class Recepcionista extends Pessoa implements Serializable {
         super();
     }
     
-    public Recepcionista(
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            String sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String dataContratacao
-    ) {
+    public Recepcionista(String nome, String email, String senha, String cpf, String sexo, String dataNascimento, String telefone, String endereco, String dataContratacao) {
+
         super(nome, 
               email, 
               senha, 
