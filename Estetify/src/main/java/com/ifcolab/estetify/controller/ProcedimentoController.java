@@ -5,6 +5,7 @@ import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.dao.ProcedimentoDAO;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
 import com.ifcolab.estetify.model.valid.ValidateProcedimento;
+import com.ifcolab.estetify.model.enums.TipoProcedimento;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JTable;
@@ -22,7 +23,9 @@ public class ProcedimentoController {
             String duracao,
             String valor,
             String requisitos,
-            String contraindicacoes
+            String contraindicacoes,
+            TipoProcedimento tipo,
+            int intervaloRetornoDias
     ) {
         ValidateProcedimento valid = new ValidateProcedimento();
         Procedimento procedimento = valid.validaCamposEntrada(
@@ -30,7 +33,9 @@ public class ProcedimentoController {
                 duracao,
                 valor,
                 requisitos,
-                contraindicacoes
+                contraindicacoes,
+                tipo,
+                intervaloRetornoDias
         );
         
         repositorio.save(procedimento);
@@ -42,7 +47,9 @@ public class ProcedimentoController {
             String duracao,
             String valor,
             String requisitos,
-            String contraindicacoes
+            String contraindicacoes,
+            TipoProcedimento tipo,
+            int intervaloRetornoDias
     ) {
         ValidateProcedimento valid = new ValidateProcedimento();
         Procedimento procedimento = valid.validaCamposEntrada(
@@ -50,7 +57,9 @@ public class ProcedimentoController {
                 duracao,
                 valor,
                 requisitos,
-                contraindicacoes
+                contraindicacoes,
+                tipo,
+                intervaloRetornoDias
         );
         
         procedimento.setId(id);
