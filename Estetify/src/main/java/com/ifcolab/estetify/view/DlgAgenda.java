@@ -22,21 +22,12 @@ public class DlgAgenda extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        controller = new MedicoController();
-        idMedicoEditando = -1;
- 
-        this.adicionarMascaraNosCampos();
-        this.habilitarFormulario(false);
-        this.limparFormulario();
+        consultaController = new ConsultaController();
+        medicoController = new MedicoController();
+        enfermeiraController = new EnfermeiraController();
         
-        // Adicionar listener de duplo clique
-        grdMedicos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                grdMedicosMouseClicked(evt);
-            }
-        });
-        
-        controller.atualizarTabela(grdMedicos);
+        configurarComponentes();
+        carregarDados();
     }
 
 
@@ -81,9 +72,9 @@ public class DlgAgenda extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
-        btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
-        customCalendar1 = new com.ifcolab.estetify.components.CustomCalendar();
+        consultaCalendar1 = new com.ifcolab.estetify.components.ConsultaCalendar();
+        btnNovaConsulta = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        btnAtualizar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
         lblTitleGerenciaMedicos = new javax.swing.JLabel();
         lblBackgroundCadastro = new javax.swing.JLabel();
@@ -93,28 +84,28 @@ public class DlgAgenda extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1350, 850));
         getContentPane().setLayout(null);
+        getContentPane().add(consultaCalendar1);
+        consultaCalendar1.setBounds(50, 80, 1260, 420);
 
-        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
-        btnAdicionar.setText(" Adicionar");
-        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+        btnNovaConsulta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
+        btnNovaConsulta.setText(" Nova Consulta");
+        btnNovaConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarActionPerformed(evt);
+                btnNovaConsultaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAdicionar);
-        btnAdicionar.setBounds(60, 550, 170, 30);
+        getContentPane().add(btnNovaConsulta);
+        btnNovaConsulta.setBounds(60, 550, 170, 30);
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/editsquare.png"))); // NOI18N
-        btnEditar.setText(" Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+        btnAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/editsquare.png"))); // NOI18N
+        btnAtualizar.setText(" Atualizar");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
+                btnAtualizarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEditar);
-        btnEditar.setBounds(250, 550, 170, 30);
-        getContentPane().add(customCalendar1);
-        customCalendar1.setBounds(50, 70, 1260, 430);
+        getContentPane().add(btnAtualizar);
+        btnAtualizar.setBounds(250, 550, 170, 30);
 
         lblSubtituloGerenciaMedicos.setFont(new java.awt.Font("Fira Sans Medium", 0, 13)); // NOI18N
         lblSubtituloGerenciaMedicos.setForeground(new java.awt.Color(102, 102, 102));
@@ -144,12 +135,12 @@ public class DlgAgenda extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+    private void btnNovaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovaConsultaActionPerformed
         this.limparFormulario();
         this.habilitarFormulario(true);
-    }//GEN-LAST:event_btnAdicionarActionPerformed
+    }//GEN-LAST:event_btnNovaConsultaActionPerformed
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         Medico medicoEditando = (Medico) this.getObjetoSelecionadoNaGrid();
 
         if (medicoEditando == null)
@@ -160,14 +151,14 @@ public class DlgAgenda extends javax.swing.JDialog {
             this.preencherFormulario(medicoEditando);
             this.idMedicoEditando = medicoEditando.getId();
         }        
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }//GEN-LAST:event_btnAtualizarActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
-    private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
-    private com.ifcolab.estetify.components.CustomCalendar customCalendar1;
+    private com.ifcolab.estetify.components.SecondaryCustomButton btnAtualizar;
+    private com.ifcolab.estetify.components.PrimaryCustomButton btnNovaConsulta;
+    private com.ifcolab.estetify.components.ConsultaCalendar consultaCalendar1;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
