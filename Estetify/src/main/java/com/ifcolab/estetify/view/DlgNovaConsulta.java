@@ -29,6 +29,8 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     private ProcedimentoController procedimentoController;
     private List<Procedimento> procedimentosSelecionados;
     private int idConsultaEditando;
+    private boolean consultaAlterada;
+    private boolean consultaCadastrada;
     
     public DlgNovaConsulta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -42,11 +44,22 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         procedimentosSelecionados = new ArrayList<>(); 
         idConsultaEditando = -1;
         
+        consultaAlterada = false;
+        consultaCadastrada = false;
+        
         this.adicionarMascaraNosCampos();
         this.preencherComboBoxes();
         this.habilitarFormulario(false);
         this.limparFormulario();
         
+    }
+    
+    public boolean isConsultaCadastrada() {
+        return consultaCadastrada;
+    }
+    
+    public boolean isConsultaAlterada() {
+        return consultaAlterada;
     }
     
     private void adicionarMascaraNosCampos() {
@@ -125,7 +138,10 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         atualizarListaProcedimentos();
     }
     
-    private void preencherFormulario(Consulta consulta) {
+    public void preencherFormulario(Consulta consulta) {
+        if (consulta == null) return;
+        
+        this.idConsultaEditando = consulta.getId();
         cbxSelecionarPaciente.setSelectedItem(consulta.getPaciente());
         cbxSelecionarMedico.setSelectedItem(consulta.getMedico());
         cbxSelecionarEnfermeira.setSelectedItem(consulta.getEnfermeira());
@@ -136,6 +152,9 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         
         txtObeservacoes.setText(consulta.getObservacoes());
         procedimentosSelecionados = new ArrayList<>(consulta.getProcedimentos());
+        atualizarListaProcedimentos();
+        
+        this.habilitarFormulario(true);
     }
     
     private Object getObjetoSelecionadoNaGrid() {
@@ -416,7 +435,43 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
- 
+        try {
+           if (idConsultaEditando > 0) {
+               controller.atualizar(
+                   idConsultaEditando,
+                   (Paciente) cbxSelecionarPaciente.getSelectedItem(),
+                   (Medico) cbxSelecionarMedico.getSelectedItem(),
+                   (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem(),
+                   fEdtData.getText(),
+                   fEdtHora.getText(),
+                   procedimentosSelecionados,
+                   txtObeservacoes.getText()
+               );
+               consultaAlterada = true;
+           } else {
+               controller.cadastrar(
+                   (Paciente) cbxSelecionarPaciente.getSelectedItem(),
+                   (Medico) cbxSelecionarMedico.getSelectedItem(),
+                   (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem(),
+                   fEdtData.getText(),
+                   fEdtHora.getText(),
+                   procedimentosSelecionados,
+                   txtObeservacoes.getText()
+               );
+               consultaCadastrada = true;
+           }
+
+           this.idConsultaEditando = -1;
+           controller.atualizarTabela(grdConsultas);
+           this.habilitarFormulario(false);
+           this.limparFormulario();
+
+           dispose();
+
+       } catch (ConsultaException e) {
+           System.err.println(e.getMessage());
+           JOptionPane.showMessageDialog(this, e.getMessage());
+       }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAdicionarProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarProcedimentoActionPerformed

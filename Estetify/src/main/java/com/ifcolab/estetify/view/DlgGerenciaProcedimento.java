@@ -2,6 +2,7 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.ProcedimentoController;
 import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.enums.TipoProcedimento;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
 import java.text.DecimalFormat;
@@ -50,6 +51,9 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
             maskValor.setPlaceholderCharacter('_');
             maskValor.install(fEdtValor);
             
+            cboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(TipoProcedimento.values()));
+            spnIntervaloRetorno.setModel(new javax.swing.SpinnerNumberModel(0, 0, 365, 1));
+            
         } catch (ParseException ex) {
             Logger.getLogger(DlgGerenciaPaciente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,6 +66,8 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
         edtRequisitos.setEnabled(habilitar);
         edtContraIndicacoes.setEnabled(habilitar);
         btnSalvar.setEnabled(habilitar);
+        cboTipo.setEnabled(habilitar);
+        spnIntervaloRetorno.setEnabled(habilitar);
     }
 
     private void limparFormulario() {
@@ -70,6 +76,8 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
         fEdtValor.setText("");
         edtRequisitos.setText("");
         edtContraIndicacoes.setText("");
+        cboTipo.setSelectedIndex(0);
+        spnIntervaloRetorno.setValue(0);
     }
 
     private void preencherFormulario(Procedimento procedimento) {
@@ -87,6 +95,9 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
         
         edtRequisitos.setText(procedimento.getRequisitos());
         edtContraIndicacoes.setText(procedimento.getContraindicacoes());
+        
+        cboTipo.setSelectedItem(procedimento.getTipo());
+        spnIntervaloRetorno.setValue(procedimento.getIntervaloRetornoDias());
     }
 
     private Object getObjetoSelecionadoNaGrid() {
@@ -108,7 +119,7 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
     private void initComponents() {
 
         lblDuracaoEstimada = new javax.swing.JLabel();
-        lblDescricao = new javax.swing.JLabel();
+        lblIntervalo = new javax.swing.JLabel();
         lblRequisitos = new javax.swing.JLabel();
         lblValor = new javax.swing.JLabel();
         fEdtDuracaoEstimada = new com.ifcolab.estetify.components.CustomFormattedTextField();
@@ -119,8 +130,12 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         edtRequisitos = new com.ifcolab.estetify.components.CustomTextField();
+        lblDescricao1 = new javax.swing.JLabel();
+        lblProcedimento = new javax.swing.JLabel();
+        spnIntervaloRetorno = new javax.swing.JSpinner();
         edtContraIndicacoes = new com.ifcolab.estetify.components.CustomTextField();
         lblContraIndicacoes = new javax.swing.JLabel();
+        cboTipo = new com.ifcolab.estetify.components.CustomComboBox<>();
         tmProcedimentos = new javax.swing.JScrollPane();
         grdProcedimentos = new com.ifcolab.estetify.components.CustomTable();
         lblBackgroundTabela = new javax.swing.JLabel();
@@ -135,30 +150,30 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
         lblDuracaoEstimada.setForeground(new java.awt.Color(51, 51, 51));
         lblDuracaoEstimada.setText("Duração Estimada");
         getContentPane().add(lblDuracaoEstimada);
-        lblDuracaoEstimada.setBounds(700, 140, 190, 17);
+        lblDuracaoEstimada.setBounds(710, 200, 190, 17);
 
-        lblDescricao.setForeground(new java.awt.Color(51, 51, 51));
-        lblDescricao.setText("Descrição");
-        getContentPane().add(lblDescricao);
-        lblDescricao.setBounds(70, 140, 310, 17);
+        lblIntervalo.setForeground(new java.awt.Color(51, 51, 51));
+        lblIntervalo.setText("Intervalo");
+        getContentPane().add(lblIntervalo);
+        lblIntervalo.setBounds(710, 130, 310, 17);
 
         lblRequisitos.setForeground(new java.awt.Color(51, 51, 51));
         lblRequisitos.setText("Requisitos");
         getContentPane().add(lblRequisitos);
-        lblRequisitos.setBounds(60, 210, 200, 17);
+        lblRequisitos.setBounds(70, 270, 200, 17);
 
         lblValor.setForeground(new java.awt.Color(51, 51, 51));
         lblValor.setText("Valor");
         getContentPane().add(lblValor);
-        lblValor.setBounds(980, 140, 230, 17);
+        lblValor.setBounds(990, 200, 230, 17);
 
         fEdtDuracaoEstimada.setText("Duração Estimada");
         getContentPane().add(fEdtDuracaoEstimada);
-        fEdtDuracaoEstimada.setBounds(690, 160, 260, 38);
+        fEdtDuracaoEstimada.setBounds(700, 220, 260, 38);
 
         fEdtValor.setText("Valor");
         getContentPane().add(fEdtValor);
-        fEdtValor.setBounds(970, 160, 290, 38);
+        fEdtValor.setBounds(980, 220, 290, 38);
 
         edtDescricao.setText("Descrição");
         edtDescricao.addActionListener(new java.awt.event.ActionListener() {
@@ -167,7 +182,7 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
             }
         });
         getContentPane().add(edtDescricao);
-        edtDescricao.setBounds(50, 160, 610, 40);
+        edtDescricao.setBounds(60, 220, 610, 40);
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addsquare.png"))); // NOI18N
         btnAdicionar.setText(" Adicionar");
@@ -211,16 +226,30 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
 
         edtRequisitos.setText("Requisitos");
         getContentPane().add(edtRequisitos);
-        edtRequisitos.setBounds(50, 230, 610, 38);
+        edtRequisitos.setBounds(60, 290, 610, 38);
+
+        lblDescricao1.setForeground(new java.awt.Color(51, 51, 51));
+        lblDescricao1.setText("Descrição");
+        getContentPane().add(lblDescricao1);
+        lblDescricao1.setBounds(80, 200, 310, 17);
+
+        lblProcedimento.setForeground(new java.awt.Color(51, 51, 51));
+        lblProcedimento.setText("Procedimento");
+        getContentPane().add(lblProcedimento);
+        lblProcedimento.setBounds(80, 130, 310, 17);
+        getContentPane().add(spnIntervaloRetorno);
+        spnIntervaloRetorno.setBounds(700, 150, 560, 27);
 
         edtContraIndicacoes.setText("Contraindicações");
         getContentPane().add(edtContraIndicacoes);
-        edtContraIndicacoes.setBounds(690, 230, 570, 38);
+        edtContraIndicacoes.setBounds(700, 290, 570, 38);
 
         lblContraIndicacoes.setForeground(new java.awt.Color(51, 51, 51));
         lblContraIndicacoes.setText("Contraindicações");
         getContentPane().add(lblContraIndicacoes);
-        lblContraIndicacoes.setBounds(700, 210, 400, 17);
+        lblContraIndicacoes.setBounds(710, 270, 400, 17);
+        getContentPane().add(cboTipo);
+        cboTipo.setBounds(60, 150, 610, 44);
 
         grdProcedimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -249,7 +278,7 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
 
         lblSubtituloGerenciaMedicos.setFont(new java.awt.Font("Fira Sans Medium", 0, 13)); // NOI18N
         lblSubtituloGerenciaMedicos.setForeground(new java.awt.Color(102, 102, 102));
-        lblSubtituloGerenciaMedicos.setText("Configure e mantenha a lista de procedimentos disponíveis, detalhando preços, duração, requisitos outros.");
+        lblSubtituloGerenciaMedicos.setText("Configure e mantenha a lista de procedimentos disponíveis, detalhando preços, duração, requisitos entre outros.");
         getContentPane().add(lblSubtituloGerenciaMedicos);
         lblSubtituloGerenciaMedicos.setBounds(30, 40, 750, 17);
 
@@ -289,7 +318,9 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
                     fEdtDuracaoEstimada.getText(),
                     fEdtValor.getText(),
                     edtRequisitos.getText(),
-                    edtContraIndicacoes.getText()
+                    edtContraIndicacoes.getText(),
+                    (TipoProcedimento) cboTipo.getSelectedItem(),
+                    (Integer) spnIntervaloRetorno.getValue()
                 );
             } else {
                 controller.cadastrar(
@@ -297,7 +328,9 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
                     fEdtDuracaoEstimada.getText(),
                     fEdtValor.getText(),
                     edtRequisitos.getText(),
-                    edtContraIndicacoes.getText()
+                    edtContraIndicacoes.getText(),
+                    (TipoProcedimento) cboTipo.getSelectedItem(),
+                    (Integer) spnIntervaloRetorno.getValue()
                 );
             }
 
@@ -362,6 +395,7 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
+    private com.ifcolab.estetify.components.CustomComboBox<TipoProcedimento> cboTipo;
     private com.ifcolab.estetify.components.CustomTextField edtContraIndicacoes;
     private com.ifcolab.estetify.components.CustomTextField edtDescricao;
     private com.ifcolab.estetify.components.CustomTextField edtRequisitos;
@@ -372,12 +406,15 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblBackgroundTabela;
     private javax.swing.JLabel lblContraIndicacoes;
-    private javax.swing.JLabel lblDescricao;
+    private javax.swing.JLabel lblDescricao1;
     private javax.swing.JLabel lblDuracaoEstimada;
+    private javax.swing.JLabel lblIntervalo;
+    private javax.swing.JLabel lblProcedimento;
     private javax.swing.JLabel lblRequisitos;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
     private javax.swing.JLabel lblValor;
+    private javax.swing.JSpinner spnIntervaloRetorno;
     private javax.swing.JScrollPane tmProcedimentos;
     // End of variables declaration//GEN-END:variables
 }
