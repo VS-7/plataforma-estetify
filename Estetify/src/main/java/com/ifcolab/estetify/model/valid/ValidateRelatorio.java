@@ -34,10 +34,6 @@ public class ValidateRelatorio {
             throw new RelatorioException("Caminho do PDF não pode estar em branco.");
         }
         
-        if (caminhoPdf.length() > 255) {
-            throw new RelatorioException("Caminho do PDF não pode ter mais que 255 caracteres.");
-        }
-        
         if (consulta == null) {
             throw new RelatorioException("Consulta não pode estar em branco.");
         }
