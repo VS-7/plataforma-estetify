@@ -4,6 +4,7 @@ import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.util.List;
+import javax.persistence.TypedQuery;
 
 public class ConsultaDAO extends Dao<Consulta> {
     
@@ -34,9 +35,13 @@ public class ConsultaDAO extends Dao<Consulta> {
     @Override
     public List<Consulta> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
-        jpql = "SELECT c FROM Consulta c";
-        qry = this.entityManager.createQuery(jpql, Consulta.class);
-        List<Consulta> lst = qry.getResultList();
+        jpql = "SELECT DISTINCT c FROM Consulta c " +
+               "LEFT JOIN FETCH c.procedimentos " +
+               "LEFT JOIN FETCH c.paciente " +
+               "LEFT JOIN FETCH c.medico " +
+               "LEFT JOIN FETCH c.enfermeira";
+        TypedQuery<Consulta> query = this.entityManager.createQuery(jpql, Consulta.class);
+        List<Consulta> lst = query.getResultList();
         this.entityManager.close();
         return lst;
     }

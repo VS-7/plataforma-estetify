@@ -17,9 +17,11 @@ import javax.swing.JTable;
 public class ConsultaController {
     
     private ConsultaDAO repositorio;
+    private ValidateConsulta validate;
     
     public ConsultaController() {
         repositorio = new ConsultaDAO();
+        validate = new ValidateConsulta();
     }
     
     public void cadastrar(
@@ -34,15 +36,17 @@ public class ConsultaController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         LocalDateTime dataHora = LocalDateTime.parse(data + " " + hora, formatter);
         
-        Consulta consulta = new Consulta();
-        consulta.setPaciente(paciente);
-        consulta.setMedico(medico);
-        consulta.setEnfermeira(enfermeira);
-        consulta.setDataHora(dataHora);
-        consulta.setProcedimentos(procedimentos);
-        consulta.setObservacoes(observacoes);
+        Consulta consulta = validate.validaCamposEntrada(
+            dataHora,
+            observacoes,
+            paciente,
+            medico,
+            enfermeira,
+            procedimentos
+        );
+        
         consulta.setStatus("AGENDADA");
-
+        repositorio.save(consulta);
     }
     
     public void atualizar(
@@ -58,18 +62,17 @@ public class ConsultaController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         LocalDateTime dataHora = LocalDateTime.parse(data + " " + hora, formatter);
         
-        Consulta consulta = repositorio.find(id);
-        if (consulta == null) {
-            throw new ConsultaException("Consulta não encontrada");
-        }
+        Consulta consulta = validate.validaCamposEntrada(
+            dataHora,
+            observacoes,
+            paciente,
+            medico,
+            enfermeira,
+            procedimentos
+        );
         
-        consulta.setPaciente(paciente);
-        consulta.setMedico(medico);
-        consulta.setEnfermeira(enfermeira);
-        consulta.setDataHora(dataHora);
-        consulta.setProcedimentos(procedimentos);
-        consulta.setObservacoes(observacoes);
-        
+        consulta.setId(id);
+        consulta.setStatus("AGENDADA");
         repositorio.update(consulta);
     }
     
