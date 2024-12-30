@@ -1,5 +1,6 @@
 package com.ifcolab.estetify.controller;
 
+import com.ifcolab.estetify.controller.tablemodel.TMViewRelatorio;
 import com.ifcolab.estetify.model.Relatorio;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.dao.RelatorioDAO;
@@ -62,10 +63,10 @@ public class RelatorioController {
     public List<Relatorio> findAll() {
         return repositorio.findAll();
     }
- /*   
+
     public void atualizarTabela(JTable grd) {
-        List<Relatorio> lst = dao.findAll();
-        TMRelatorio tableModel = new TMRelatorio(lst);
+        List<Relatorio> lst = repositorio.findAll();
+        TMViewRelatorio tableModel = new TMViewRelatorio(lst);
         grd.setModel(tableModel);
-    }*/
+    }
 }
