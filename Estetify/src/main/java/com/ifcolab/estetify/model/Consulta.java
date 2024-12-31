@@ -15,6 +15,10 @@ import javax.persistence.ManyToMany;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import javax.persistence.JoinTable;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import com.ifcolab.estetify.model.enums.StatusConsulta;
 
 @Data
 @NoArgsConstructor
@@ -28,11 +32,11 @@ public class Consulta implements Serializable {
     
     private LocalDateTime dataHora;
     
-    @Column(length = 1000)
+    @Column(length = 500)
     private String observacoes;
     
-    @Column(length = 20)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusConsulta status;
     
     @ManyToOne
     @JoinColumn(name = "paciente_id")
@@ -47,6 +51,11 @@ public class Consulta implements Serializable {
     private Enfermeira enfermeira;
     
     @ManyToMany
+    @JoinTable(
+        name = "Consulta_Procedimento",
+        joinColumns = @JoinColumn(name = "Consulta_id"),
+        inverseJoinColumns = @JoinColumn(name = "procedimentos_id")
+    )
     private List<Procedimento> procedimentos;
     
     @OneToOne(mappedBy = "consulta")
@@ -67,23 +76,23 @@ public class Consulta implements Serializable {
         this.medico = medico;
         this.enfermeira = enfermeira;
         this.procedimentos = procedimentos;
-        this.status = "AGENDADA";
+        this.status = StatusConsulta.AGENDADA;
     }
     
     public boolean isAgendada() {
-        return "AGENDADA".equals(status);
+        return StatusConsulta.AGENDADA.equals(status);
     }
     
     public boolean isConfirmada() {
-        return "CONFIRMADA".equals(status);
+        return StatusConsulta.CONFIRMADA.equals(status);
     }
     
     public boolean isCancelada() {
-        return "CANCELADA".equals(status);
+        return StatusConsulta.CANCELADA.equals(status);
     }
     
     public boolean isConcluida() {
-        return "CONCLUIDA".equals(status);
+        return StatusConsulta.CONCLUIDA.equals(status);
     }
     
     public double getValorTotal() {

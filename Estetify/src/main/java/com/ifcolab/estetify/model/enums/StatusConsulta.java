@@ -2,8 +2,7 @@ package com.ifcolab.estetify.model.enums;
 
 public enum StatusConsulta {
     AGENDADA,
-    EM_ANDAMENTO,
+    CONFIRMADA,
     CONCLUIDA,
     CANCELADA,
-    REMARCADA
 } 
