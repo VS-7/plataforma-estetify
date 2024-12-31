@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.model.Feedback;
@@ -10,15 +6,15 @@ import com.ifcolab.estetify.model.dao.FeedbackDAO;
 import com.ifcolab.estetify.model.exceptions.FeedbackException;
 import com.ifcolab.estetify.model.valid.ValidateFeedback;
 import java.util.List;
-import javax.swing.JTable;
+
 
 public class FeedbackController {
     
-    private FeedbackDAO dao;
+    private FeedbackDAO repositorio;
     private ValidateFeedback validate;
     
     public FeedbackController() {
-        dao = new FeedbackDAO();
+        repositorio = new FeedbackDAO();
         validate = new ValidateFeedback();
     }
     
@@ -35,7 +31,7 @@ public class FeedbackController {
             consulta
         );
         
-        dao.save(feedback);
+        repositorio.save(feedback);
     }
     
     public void atualizar(
@@ -53,20 +49,15 @@ public class FeedbackController {
         );
         
         feedback.setId(id);
-        dao.update(feedback);
+        repositorio.update(feedback);
     }
     
     public void excluir(Feedback feedback) throws FeedbackException {
-        dao.delete(feedback.getId());
+        repositorio.delete(feedback.getId());
     }
     
     public List<Feedback> findAll() {
-        return dao.findAll();
+        return repositorio.findAll();
     }
     
-    public void atualizarTabela(JTable grd) {
-        List<Feedback> lst = dao.findAll();
-        TMFeedback tableModel = new TMFeedback(lst);
-        grd.setModel(tableModel);
-    }
 }

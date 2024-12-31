@@ -10,8 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import com.ifcolab.estetify.model.enums.StatusPagamento;
+import com.ifcolab.estetify.model.enums.MetodoPagamento;
 
 @Data
 @NoArgsConstructor
@@ -24,18 +28,27 @@ public class Pagamento implements Serializable {
     private int id;
     
     private double valor;
-    private String status;
-    private String metodoPagamento;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusPagamento status;
+    
+    @Enumerated(EnumType.STRING)
+    private MetodoPagamento metodoPagamento;
+    
     private LocalDateTime dataPagamento;
     
     @Column(length = 500)
     private String detalhes;
     
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "consulta_id")
     private Consulta consulta;
     
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "procedimento_id")
     private Procedimento procedimento;
+    
+    @ManyToOne
+    @JoinColumn(name = "registrador_id")
+    private Pessoa registrador;
 }
