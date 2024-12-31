@@ -62,21 +62,17 @@ public class Consulta implements Serializable {
     private Pagamento pagamento;
 
     
-    public Consulta(
-            LocalDateTime dataHora,
-            String observacoes,
-            Paciente paciente,
-            Medico medico,
-            Enfermeira enfermeira,
-            List<Procedimento> procedimentos
-    ) {
+    public Consulta(int id, LocalDateTime dataHora, String observacoes, StatusConsulta status, 
+                   Enfermeira enfermeira, Medico medico, Paciente paciente, 
+                   List<Procedimento> procedimentos) {
+        this.id = id;
         this.dataHora = dataHora;
         this.observacoes = observacoes;
-        this.paciente = paciente;
-        this.medico = medico;
+        this.status = status;
         this.enfermeira = enfermeira;
+        this.medico = medico;
+        this.paciente = paciente;
         this.procedimentos = procedimentos;
-        this.status = StatusConsulta.AGENDADA;
     }
     
     public boolean isAgendada() {

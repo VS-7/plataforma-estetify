@@ -6,8 +6,8 @@ import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
+import com.ifcolab.estetify.model.enums.StatusConsulta;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 public class ValidateConsulta {
@@ -15,41 +15,40 @@ public class ValidateConsulta {
     public Consulta validaCamposEntrada(
             LocalDateTime dataHora,
             String observacoes,
-            Paciente paciente,
-            Medico medico,
             Enfermeira enfermeira,
+            Medico medico,
+            Paciente paciente,
             List<Procedimento> procedimentos
     ) {
         if (dataHora == null) {
-            throw new ConsultaException("Data/hora não pode estar em branco.");
+            throw new ConsultaException("Data e hora não podem estar em branco.");
         }
         
-        if (paciente == null) {
-            throw new ConsultaException("Paciente não pode estar em branco.");
+        if (dataHora.isBefore(LocalDateTime.now())) {
+            throw new ConsultaException("Data e hora não podem ser anteriores ao momento atual.");
+        }
+        
+        if (observacoes != null && observacoes.length() > 500) {
+            throw new ConsultaException("Observações não podem ter mais que 500 caracteres.");
         }
         
         if (enfermeira == null) {
             throw new ConsultaException("Enfermeira não pode estar em branco.");
         }
         
+        if (medico == null) {
+            throw new ConsultaException("Médico não pode estar em branco.");
+        }
+        
+        if (paciente == null) {
+            throw new ConsultaException("Paciente não pode estar em branco.");
+        }
+        
         if (procedimentos == null || procedimentos.isEmpty()) {
-            throw new ConsultaException("Selecione pelo menos um procedimento.");
+            throw new ConsultaException("É necessário selecionar pelo menos um procedimento.");
         }
         
-        
-        // Validar se o horário está dentro do expediente
-        LocalTime horario = dataHora.toLocalTime();
-        if (horario.isBefore(LocalTime.of(8, 0)) || horario.isAfter(LocalTime.of(18, 0))) {
-            throw new ConsultaException("Horário fora do expediente (8:00 - 18:00)");
-        }
-        
-        return new Consulta(
-            dataHora,
-            observacoes,
-            paciente,
-            medico,
-            enfermeira,
-            procedimentos
-        );
+        return new Consulta(0, dataHora, observacoes, StatusConsulta.AGENDADA, 
+                          enfermeira, medico, paciente, procedimentos);
     }
 }
