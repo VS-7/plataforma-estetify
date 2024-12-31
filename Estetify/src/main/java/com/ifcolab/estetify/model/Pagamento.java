@@ -49,6 +49,6 @@ public class Pagamento implements Serializable {
     private Procedimento procedimento;
     
     @ManyToOne
-    @JoinColumn(name = "registrador_id")
-    private Pessoa registrador;
+    @JoinColumn(name = "registradopor_id")
+    private Pessoa registradoPor;
 }
