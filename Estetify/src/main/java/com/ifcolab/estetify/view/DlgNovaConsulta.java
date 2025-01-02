@@ -11,8 +11,11 @@ import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.enums.StatusConsulta;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -435,31 +438,41 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-           if (idConsultaEditando > 0) {
-               controller.atualizar(
-                   idConsultaEditando,
-                   (Paciente) cbxSelecionarPaciente.getSelectedItem(),
-                   (Medico) cbxSelecionarMedico.getSelectedItem(),
-                   (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem(),
-                   fEdtData.getText(),
-                   fEdtHora.getText(),
-                   procedimentosSelecionados,
-                   txtObeservacoes.getText()
-               );
-               consultaAlterada = true;
-           } else {
-               controller.cadastrar(
-                   (Paciente) cbxSelecionarPaciente.getSelectedItem(),
-                   (Medico) cbxSelecionarMedico.getSelectedItem(),
-                   (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem(),
-                   fEdtData.getText(),
-                   fEdtHora.getText(),
-                   procedimentosSelecionados,
-                   txtObeservacoes.getText()
-               );
-               consultaCadastrada = true;
-           }
+    try {
+        // Converte data e hora para LocalDateTime
+        String dataHoraStr = fEdtData.getText() + " " + fEdtHora.getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
+        
+        // Obtém os itens selecionados
+        Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
+        Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
+        Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
+        String observacoes = txtObeservacoes.getText();
+        
+        if (idConsultaEditando > 0) {
+            controller.atualizar(
+                idConsultaEditando,
+                dataHora,
+                observacoes,
+                paciente,
+                medico,
+                enfermeira,
+                procedimentosSelecionados,
+                StatusConsulta.AGENDADA
+            );
+            consultaAlterada = true;
+        } else {
+            controller.cadastrar(
+                dataHora,
+                observacoes,
+                paciente,
+                medico,
+                enfermeira,
+                procedimentosSelecionados
+            );
+            consultaCadastrada = true;
+        }
 
            this.idConsultaEditando = -1;
            controller.atualizarTabela(grdConsultas);

@@ -3,6 +3,7 @@ package com.ifcolab.estetify.model.valid;
 import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.dao.MedicoDAO;
 import com.ifcolab.estetify.model.exceptions.MedicoException;
+import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,7 +28,7 @@ public class ValidateMedico {
             String telefone,
             String endereco,
             String crm,
-            String especializacao
+            EspecializacaoMedico especializacao
     ) {
         if (nome == null || nome.isEmpty()) {
             throw new MedicoException("Nome não pode estar em branco.");
@@ -91,7 +92,7 @@ public class ValidateMedico {
             throw new MedicoException("CRM inválido.");
         }
         
-        if (especializacao == null || especializacao.isEmpty()) {
+        if (especializacao == null) {
             throw new MedicoException("Especialização não pode estar em branco.");
         }
 

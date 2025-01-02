@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JButton;
 import java.lang.reflect.Field;
+import com.ifcolab.estetify.model.enums.StatusConsulta;
 
 public class ConsultaCalendar extends CustomCalendar {
     
@@ -110,13 +111,18 @@ public class ConsultaCalendar extends CustomCalendar {
         }
     }
     
-    private Color getStatusColor(String status) {
-        return switch (status) {
-            case "AGENDADA" -> new Color(255, 193, 7);  // Amarelo
-            case "CONFIRMADA" -> new Color(40, 167, 69); // Verde
-            case "CANCELADA" -> new Color(220, 53, 69);  // Vermelho
-            case "CONCLUIDA" -> new Color(0, 123, 255);  // Azul
-            default -> Color.GRAY;
-        };
+    private Color getStatusColor(StatusConsulta status) {
+        switch (status) {
+            case AGENDADA:
+                return new Color(204, 255, 204); // Verde claro
+            case CONFIRMADA:
+                return new Color(255, 255, 204); // Amarelo claro
+            case CONCLUIDA:
+                return new Color(204, 204, 255); // Azul claro
+            case CANCELADA:
+                return new Color(255, 204, 204); // Vermelho claro
+            default:
+                return Color.WHITE;
+        }
     }
 }

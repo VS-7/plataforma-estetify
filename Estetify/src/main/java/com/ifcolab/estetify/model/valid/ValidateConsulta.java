@@ -15,9 +15,9 @@ public class ValidateConsulta {
     public Consulta validaCamposEntrada(
             LocalDateTime dataHora,
             String observacoes,
-            Enfermeira enfermeira,
-            Medico medico,
             Paciente paciente,
+            Medico medico,
+            Enfermeira enfermeira,
             List<Procedimento> procedimentos
     ) {
         if (dataHora == null) {

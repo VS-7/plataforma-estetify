@@ -7,6 +7,7 @@ import com.ifcolab.estetify.model.exceptions.MedicoException;
 import com.ifcolab.estetify.model.valid.ValidateMedico;
 import javax.swing.JTable;
 import java.util.List;
+import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 
 public class MedicoController {
     
@@ -27,7 +28,7 @@ public class MedicoController {
             String telefone,
             String endereco,
             String crm,
-            String especializacao
+            EspecializacaoMedico especializacao
     ) {
         ValidateMedico valid = new ValidateMedico();
         Medico medico = valid.validaCamposEntrada(
@@ -63,7 +64,7 @@ public class MedicoController {
             String telefone,
             String endereco,
             String crm,
-            String especializacao
+            EspecializacaoMedico especializacao
     ) {
         ValidateMedico valid = new ValidateMedico();
         Medico medico = valid.validaCamposEntrada(
