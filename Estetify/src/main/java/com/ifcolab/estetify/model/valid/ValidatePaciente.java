@@ -2,6 +2,7 @@ package com.ifcolab.estetify.model.valid;
 
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.dao.PacienteDAO;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class ValidatePaciente {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,
@@ -65,12 +66,8 @@ public class ValidatePaciente {
             throw new PacienteException("Telefone inválido.");
         }
 
-        if (sexo == null || sexo.isEmpty()) {
+        if (sexo == null) {
             throw new PacienteException("Sexo não pode estar em branco.");
-        }
-
-        if (!sexo.equalsIgnoreCase("M") && !sexo.equalsIgnoreCase("F")) {
-            throw new PacienteException("Sexo inválido.");
         }
 
         if (dataNascimento == null || dataNascimento.isEmpty()) {

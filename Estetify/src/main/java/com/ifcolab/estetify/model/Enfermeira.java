@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import com.ifcolab.estetify.model.enums.TipoUsuario;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 
 @Getter
 @Setter
@@ -22,13 +23,13 @@ public class Enfermeira extends Pessoa implements Serializable {
         super();
     }
     
-    public Enfermeira(String nome, String email, String senha, String cpf, String sexo, String dataNascimento, String telefone, String endereco, String coren) {
+    public Enfermeira(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren) {
         
         super(nome, 
               email, 
               senha, 
               cpf, 
-              sexo, 
+              sexo,
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 

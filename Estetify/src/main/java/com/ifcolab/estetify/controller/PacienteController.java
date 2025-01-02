@@ -1,12 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.controller.tablemodel.TMViewPaciente;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.dao.PacienteDAO;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import com.ifcolab.estetify.model.valid.ValidatePaciente;
 import javax.swing.JTable;
@@ -30,7 +27,7 @@ public class PacienteController {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,
@@ -64,7 +61,7 @@ public class PacienteController {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,

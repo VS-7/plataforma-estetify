@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.ifcolab.estetify.model.enums.TipoUsuario;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class Paciente extends Pessoa {
         super();
     }
     
-    public Paciente(String nome, String email, String senha, String cpf, String sexo, String dataNascimento, String telefone, String endereco, String historicoMedico) {
+    public Paciente(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String historicoMedico) {
         super(nome, 
               email, 
               senha, 

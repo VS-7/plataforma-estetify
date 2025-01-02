@@ -3,6 +3,7 @@ package com.ifcolab.estetify.view;
 import com.ifcolab.estetify.controller.MedicoController;
 import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.MedicoException;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import java.text.ParseException;
@@ -46,6 +47,12 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         for (EspecializacaoMedico esp : EspecializacaoMedico.values()) {
             cboEspecializacao.addItem(esp);
         }
+        
+        // Configurar ComboBox de Sexo
+        cboSexo.removeAllItems();
+        for (TipoSexo s : TipoSexo.values()) {
+            cboSexo.addItem(s);
+        }
     }
     
     private void adicionarMascaraNosCampos() {
@@ -74,7 +81,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         edtNome.setEnabled(habilitar);
         edtEmail.setEnabled(habilitar);
         fEdtCPF.setEnabled(habilitar);
-        edtSexo.setEnabled(habilitar);
+        cboSexo.setEnabled(habilitar);
         fEdtDataNascimento.setEnabled(habilitar);
         fEdtTelefone.setEnabled(habilitar);
         edtEndereco.setEnabled(habilitar);
@@ -87,7 +94,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         edtNome.setText("");
         edtEmail.setText("");
         fEdtCPF.setText("");
-        edtSexo.setText("");
+        cboSexo.setSelectedItem(null);
         fEdtDataNascimento.setText("");
         fEdtTelefone.setText("");
         edtEndereco.setText("");
@@ -101,7 +108,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         edtNome.setText(medico.getNome());
         edtEmail.setText(medico.getEmail());
         fEdtCPF.setText(medico.getCpf());
-        edtSexo.setText(medico.getSexo());
+        cboSexo.setSelectedItem(medico.getSexo());
         fEdtDataNascimento.setText(medico.getDataNascimento().format(formatter));
         fEdtTelefone.setText(medico.getTelefone());
         edtEndereco.setText(medico.getEndereco());
@@ -137,7 +144,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         fEdtCPF = new com.ifcolab.estetify.components.CustomFormattedTextField();
         fEdtDataNascimento = new com.ifcolab.estetify.components.CustomFormattedTextField();
         fEdtTelefone = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        edtSexo = new com.ifcolab.estetify.components.CustomTextField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
         edtNome = new com.ifcolab.estetify.components.CustomTextField();
         edtCRM = new com.ifcolab.estetify.components.CustomTextField();
@@ -147,6 +153,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         cboEspecializacao = new com.ifcolab.estetify.components.CustomComboBox();
+        cboSexo = new com.ifcolab.estetify.components.CustomComboBox();
         tmMedicos = new javax.swing.JScrollPane();
         grdMedicos = new com.ifcolab.estetify.components.CustomTable();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
@@ -215,15 +222,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         fEdtTelefone.setText("Telefone");
         getContentPane().add(fEdtTelefone);
         fEdtTelefone.setBounds(710, 210, 280, 38);
-
-        edtSexo.setText("Sexo");
-        edtSexo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtSexoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtSexo);
-        edtSexo.setBounds(1130, 140, 150, 40);
 
         edtEmail.setText("E-mail");
         edtEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -302,6 +300,8 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         btnRemover.setBounds(480, 80, 170, 30);
         getContentPane().add(cboEspecializacao);
         cboEspecializacao.setBounds(60, 280, 330, 44);
+        getContentPane().add(cboSexo);
+        cboSexo.setBounds(1130, 140, 160, 44);
 
         grdMedicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -352,10 +352,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtSexoActionPerformed
-
     private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEmailActionPerformed
@@ -387,7 +383,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
                     "123456", // senha
                     "123456", // confirmar senha
                     fEdtCPF.getText(),
-                    edtSexo.getText(),
+                    (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
@@ -401,7 +397,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
                     "123456", // senha padrão
                     "123456", // confirmar senha
                     fEdtCPF.getText(),
-                    edtSexo.getText(),
+                    (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
@@ -473,11 +469,11 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
     private com.ifcolab.estetify.components.CustomComboBox cboEspecializacao;
+    private com.ifcolab.estetify.components.CustomComboBox cboSexo;
     private com.ifcolab.estetify.components.CustomTextField edtCRM;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
     private com.ifcolab.estetify.components.CustomTextField edtNome;
-    private com.ifcolab.estetify.components.CustomTextField edtSexo;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;

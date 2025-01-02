@@ -8,6 +8,7 @@ import com.ifcolab.estetify.model.valid.ValidateMedico;
 import javax.swing.JTable;
 import java.util.List;
 import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 
 public class MedicoController {
     
@@ -23,7 +24,7 @@ public class MedicoController {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,
@@ -59,7 +60,7 @@ public class MedicoController {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,

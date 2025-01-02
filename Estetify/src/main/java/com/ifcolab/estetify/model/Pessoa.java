@@ -9,10 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import com.ifcolab.estetify.model.enums.TipoUsuario;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,15 +39,18 @@ public class Pessoa implements Serializable {
     @Column(unique = true)
     protected String cpf;
     
-    protected String sexo;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    protected TipoSexo sexo;
+    
     protected LocalDate dataNascimento;
     protected String telefone;
     protected String endereco;
     @Enumerated(EnumType.STRING)
-    private TipoUsuario tipoUsuario;
+    protected TipoUsuario tipoUsuario;
     
     /* Construtor sem o atributo ID */
-    public Pessoa(String nome, String email, String senha, String cpf, String sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipoUsuario) {
+    public Pessoa(String nome, String email, String senha, String cpf, TipoSexo sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipoUsuario) {
 
         this.nome = nome;
         this.email = email;

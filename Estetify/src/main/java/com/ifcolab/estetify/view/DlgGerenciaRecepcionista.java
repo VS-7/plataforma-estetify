@@ -2,6 +2,8 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.RecepcionistaController;
 import com.ifcolab.estetify.model.Recepcionista;
+import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.RecepcionistaException;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +29,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         controller = new RecepcionistaController();
         idRecepcionistaEditando = -1;
  
+        this.configurarComboBoxes();
         this.adicionarMascaraNosCampos();
         this.habilitarFormulario(false);
         this.limparFormulario();
@@ -39,6 +42,13 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         });
         
         controller.atualizarTabela(grdRecepcionistas);
+    }
+    
+    private void configurarComboBoxes() {
+        cboSexo.removeAllItems();
+        for (TipoSexo s : TipoSexo.values()) {
+            cboSexo.addItem(s);
+        }
     }
 
     private void adicionarMascaraNosCampos() {
@@ -68,7 +78,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         edtNome.setEnabled(habilitar);
         edtEmail.setEnabled(habilitar);
         fEdtCPF.setEnabled(habilitar);
-        edtSexo.setEnabled(habilitar);
+        cboSexo.setEnabled(habilitar);
         fEdtDataNascimento.setEnabled(habilitar);
         fEdtTelefone.setEnabled(habilitar);
         edtEndereco.setEnabled(habilitar);
@@ -80,7 +90,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         edtNome.setText("");
         edtEmail.setText("");
         fEdtCPF.setText("");
-        edtSexo.setText("");
+        cboSexo.setSelectedItem(null);
         fEdtDataNascimento.setText("");
         fEdtTelefone.setText("");
         edtEndereco.setText("");
@@ -93,7 +103,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         edtNome.setText(recepcionista.getNome());
         edtEmail.setText(recepcionista.getEmail());
         fEdtCPF.setText(recepcionista.getCpf());
-        edtSexo.setText(recepcionista.getSexo());
+        cboSexo.setSelectedItem(recepcionista.getSexo());
         fEdtDataNascimento.setText(recepcionista.getDataNascimento().format(formatter));
         fEdtTelefone.setText(recepcionista.getTelefone());
         edtEndereco.setText(recepcionista.getEndereco());
@@ -135,7 +145,6 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         fEdtTelefone = new com.ifcolab.estetify.components.CustomFormattedTextField();
         fEdtDataNascimento = new com.ifcolab.estetify.components.CustomFormattedTextField();
         fEdtCPF = new com.ifcolab.estetify.components.CustomFormattedTextField();
-        edtSexo = new com.ifcolab.estetify.components.CustomTextField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
         edtNome = new com.ifcolab.estetify.components.CustomTextField();
         fEdtDataContratacao = new com.ifcolab.estetify.components.CustomFormattedTextField();
@@ -145,6 +154,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         lblHistoricoMedico = new javax.swing.JLabel();
+        cboSexo = new com.ifcolab.estetify.components.CustomComboBox();
         tmRecepcionistas = new javax.swing.JScrollPane();
         grdRecepcionistas = new com.ifcolab.estetify.components.CustomTable();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
@@ -203,15 +213,6 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         fEdtCPF.setText("CPF");
         getContentPane().add(fEdtCPF);
         fEdtCPF.setBounds(880, 160, 230, 38);
-
-        edtSexo.setText("Sexo");
-        edtSexo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edtSexoActionPerformed(evt);
-            }
-        });
-        getContentPane().add(edtSexo);
-        edtSexo.setBounds(1130, 160, 150, 40);
 
         edtEmail.setText("E-mail");
         edtEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -288,6 +289,8 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         lblHistoricoMedico.setText("Data de Contratação");
         getContentPane().add(lblHistoricoMedico);
         lblHistoricoMedico.setBounds(1030, 210, 140, 17);
+        getContentPane().add(cboSexo);
+        cboSexo.setBounds(1130, 160, 160, 44);
 
         grdRecepcionistas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -333,10 +336,6 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void edtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtSexoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_edtSexoActionPerformed
-
     private void edtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEmailActionPerformed
@@ -363,7 +362,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
                     "123456", // senha
                     "123456", // confirmar senha
                     fEdtCPF.getText(),
-                    edtSexo.getText(),
+                    (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
@@ -376,7 +375,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
                     "123456", // senha padrão
                     "123456", // confirmar senha
                     fEdtCPF.getText(),
-                    edtSexo.getText(),
+                    (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
@@ -439,10 +438,10 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnEditar;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnRemover;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSalvar;
+    private com.ifcolab.estetify.components.CustomComboBox cboSexo;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
     private com.ifcolab.estetify.components.CustomTextField edtNome;
-    private com.ifcolab.estetify.components.CustomTextField edtSexo;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataContratacao;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;

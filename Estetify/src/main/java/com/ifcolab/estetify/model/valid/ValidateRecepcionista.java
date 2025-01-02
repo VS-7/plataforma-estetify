@@ -2,6 +2,7 @@ package com.ifcolab.estetify.model.valid;
 
 import com.ifcolab.estetify.model.Recepcionista;
 import com.ifcolab.estetify.model.dao.RecepcionistaDAO;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.RecepcionistaException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class ValidateRecepcionista {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,
@@ -65,13 +66,10 @@ public class ValidateRecepcionista {
             throw new RecepcionistaException("Telefone inválido.");
         }
 
-        if (sexo == null || sexo.isEmpty()) {
+        if (sexo == null) {
             throw new RecepcionistaException("Sexo não pode estar em branco.");
         }
 
-        if (!sexo.equalsIgnoreCase("M") && !sexo.equalsIgnoreCase("F")) {
-            throw new RecepcionistaException("Sexo inválido.");
-        }
 
         if (dataNascimento == null || dataNascimento.isEmpty()) {
             throw new RecepcionistaException("Data de Nascimento não pode estar em branco.");

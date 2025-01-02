@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
 import com.ifcolab.estetify.model.enums.TipoUsuario;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 
 @Getter
@@ -32,7 +33,7 @@ public class Medico extends Pessoa implements Serializable {
         super();
     }
     
-    public Medico(String nome, String email, String senha, String cpf, String sexo, 
+    public Medico(String nome, String email, String senha, String cpf, TipoSexo sexo, 
                  String dataNascimento, String telefone, String endereco, 
                  String crm, EspecializacaoMedico especializacao) {
         super(nome, 

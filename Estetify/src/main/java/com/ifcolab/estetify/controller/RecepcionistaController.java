@@ -3,6 +3,7 @@ package com.ifcolab.estetify.controller;
 import com.ifcolab.estetify.controller.tablemodel.TMViewRecepcionista;
 import com.ifcolab.estetify.model.Recepcionista;
 import com.ifcolab.estetify.model.dao.RecepcionistaDAO;
+import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.RecepcionistaException;
 import com.ifcolab.estetify.model.valid.ValidateRecepcionista;
 import javax.swing.JTable;
@@ -21,7 +22,7 @@ public class RecepcionistaController {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,
@@ -55,7 +56,7 @@ public class RecepcionistaController {
             String senha,
             String confirmarSenha,
             String cpf,
-            String sexo,
+            TipoSexo sexo,
             String dataNascimento,
             String telefone,
             String endereco,
