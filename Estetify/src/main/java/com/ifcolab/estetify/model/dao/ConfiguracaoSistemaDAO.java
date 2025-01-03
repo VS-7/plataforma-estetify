@@ -34,11 +34,18 @@ public class ConfiguracaoSistemaDAO extends Dao<ConfiguracaoSistema> {
     }
     
     public ConfiguracaoSistema getConfiguracao() {
-        List<ConfiguracaoSistema> configs = findAll();
-        if (configs.isEmpty()) {
-            return criarConfiguracaoPadrao();
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            ConfiguracaoSistema config = this.entityManager.find(ConfiguracaoSistema.class, 1);
+            
+            if (config == null) {
+                config = criarConfiguracaoPadrao();
+            }
+            
+            return config;
+        } finally {
+            this.entityManager.close();
         }
-        return configs.get(0);
     }
     
     private ConfiguracaoSistema criarConfiguracaoPadrao() {
@@ -57,7 +64,20 @@ public class ConfiguracaoSistemaDAO extends Dao<ConfiguracaoSistema> {
         config.setTempoMinimoAntecedenciaMinutos(60);
         config.setTempoMaximoAgendamentoDias(60);
         
-        save(config);
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            this.entityManager.getTransaction().begin();
+            this.entityManager.persist(config);
+            this.entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (this.entityManager.getTransaction().isActive()) {
+                this.entityManager.getTransaction().rollback();
+            }
+            throw new ConfiguracaoException("Erro ao criar configuração padrão: " + e.getMessage());
+        } finally {
+            this.entityManager.close();
+        }
+        
         return config;
     }
 } 

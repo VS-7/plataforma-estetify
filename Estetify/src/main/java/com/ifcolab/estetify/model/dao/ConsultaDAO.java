@@ -5,6 +5,7 @@ import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.util.List;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 
 public class ConsultaDAO extends Dao<Consulta> {
     
@@ -44,5 +45,18 @@ public class ConsultaDAO extends Dao<Consulta> {
         List<Consulta> lst = query.getResultList();
         this.entityManager.close();
         return lst;
+    }
+    
+    public List<Consulta> buscarConsultasNoPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            jpql = "SELECT c FROM Consulta c WHERE c.dataHora BETWEEN :inicio AND :fim";
+            qry = this.entityManager.createQuery(jpql, Consulta.class);
+            qry.setParameter("inicio", inicio);
+            qry.setParameter("fim", fim);
+            return qry.getResultList();
+        } finally {
+            this.entityManager.close();
+        }
     }
 }

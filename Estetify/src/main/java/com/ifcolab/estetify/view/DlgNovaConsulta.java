@@ -6,18 +6,23 @@ import com.ifcolab.estetify.controller.MedicoController;
 import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.controller.ProcedimentoController;
 import com.ifcolab.estetify.controller.tablemodel.TMViewConsulta;
+import com.ifcolab.estetify.model.ConfiguracaoSistema;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -25,36 +30,52 @@ import javax.swing.text.MaskFormatter;
 
 public class DlgNovaConsulta extends javax.swing.JDialog {
 
-    private ConsultaController controller;
-    private PacienteController pacienteController;
-    private MedicoController medicoController;
-    private EnfermeiraController enfermeiraController;
-    private ProcedimentoController procedimentoController;
-    private List<Procedimento> procedimentosSelecionados;
+    private final ConsultaController controller;
+    private final PacienteController pacienteController;
+    private final MedicoController medicoController;
+    private final EnfermeiraController enfermeiraController;
+    private final ProcedimentoController procedimentoController;
+    private ConfiguracaoSistema config;
     private int idConsultaEditando;
-    private boolean consultaAlterada;
     private boolean consultaCadastrada;
+    private boolean consultaAlterada;
+    private List<Procedimento> procedimentosSelecionados;
     
     public DlgNovaConsulta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
+        // Inicializa os controllers
         controller = new ConsultaController();
         pacienteController = new PacienteController();
         medicoController = new MedicoController();
         enfermeiraController = new EnfermeiraController();
         procedimentoController = new ProcedimentoController();
-        procedimentosSelecionados = new ArrayList<>(); 
+        
+        // Inicializa a configuração primeiro
+        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
+        config = configDAO.getConfiguracao();
+        
+        if (config == null) {
+            JOptionPane.showMessageDialog(this,
+                "Erro ao carregar configurações do sistema",
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            return;
+        }
+        
+        // Inicializa as outras variáveis
         idConsultaEditando = -1;
-        
-        consultaAlterada = false;
         consultaCadastrada = false;
+        consultaAlterada = false;
+        procedimentosSelecionados = new ArrayList<>();
         
-        this.adicionarMascaraNosCampos();
-        this.preencherComboBoxes();
+        // Configura os componentes depois de ter a configuração
+        this.configurarComponentes();
+        this.carregarCombos();
+        this.configurarHorarioInicial();
         this.habilitarFormulario(false);
-        this.limparFormulario();
-        
     }
     
     public boolean isConsultaCadastrada() {
@@ -64,56 +85,103 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     public boolean isConsultaAlterada() {
         return consultaAlterada;
     }
-    
-    private void adicionarMascaraNosCampos() {
+
+        private void configurarComponentes() {
         try {
-            // Máscara para data: dd/MM/yyyy
+            // Configurar máscara da data
             MaskFormatter maskData = new MaskFormatter("##/##/####");
             maskData.setPlaceholderCharacter('_');
             maskData.install(fEdtData);
-            
-            // Máscara para hora: HH:mm
+
+            // Configurar máscara da hora
             MaskFormatter maskHora = new MaskFormatter("##:##");
             maskHora.setPlaceholderCharacter('_');
             maskHora.install(fEdtHora);
-            
+
+            // Configurar tooltip com horário de funcionamento
+            String tooltip = String.format("Horário de funcionamento: %s às %s", 
+                config.getHorarioAbertura().format(DateTimeFormatter.ofPattern("HH:mm")),
+                config.getHorarioFechamento().format(DateTimeFormatter.ofPattern("HH:mm")));
+            fEdtHora.setToolTipText(tooltip);
+
         } catch (ParseException ex) {
-            System.err.println("Erro ao criar máscaras: " + ex.getMessage());
+            Logger.getLogger(DlgNovaConsulta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    private void preencherComboBoxes() {
-        try {
-            // Preenche ComboBox de Pacientes
-            DefaultComboBoxModel<Paciente> modelPaciente = new DefaultComboBoxModel<>();
-            modelPaciente.addElement(null); // Adiciona item vazio
-            pacienteController.findAll().forEach(modelPaciente::addElement);
-            cbxSelecionarPaciente.setModel(modelPaciente);
+    
+    private void carregarCombos() {
+        // Carregar médicos
+        cbxSelecionarMedico.removeAllItems();
+        medicoController.findAll().forEach(medico -> {
+            cbxSelecionarMedico.addItem(medico);
+        });
+        
+        // Carregar enfermeiras
+        cbxSelecionarEnfermeira.removeAllItems();
+        enfermeiraController.findAll().forEach(enfermeira -> {
+            cbxSelecionarEnfermeira.addItem(enfermeira);
+        });
+        
+        // Carregar pacientes
+        cbxSelecionarPaciente.removeAllItems();
+        pacienteController.findAll().forEach(paciente -> {
+            cbxSelecionarPaciente.addItem(paciente);
+        });
+        
+        // Carregar procedimentos disponíveis
+        cbxSelecionarProcedimento.removeAllItems();
+        procedimentoController.findAll().forEach(procedimento -> {
+            cbxSelecionarProcedimento.addItem(procedimento);
+        });
+    }
 
-            // Preenche ComboBox de Médicos
-            DefaultComboBoxModel<Medico> modelMedico = new DefaultComboBoxModel<>();
-            modelMedico.addElement(null); // Adiciona item vazio
-            medicoController.findAll().forEach(modelMedico::addElement);
-            cbxSelecionarMedico.setModel(modelMedico);
+    private void configurarHorarioInicial() {
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime proximaData = agora;
 
-            // Preenche ComboBox de Enfermeiras
-            DefaultComboBoxModel<Enfermeira> modelEnfermeira = new DefaultComboBoxModel<>();
-            modelEnfermeira.addElement(null); // Adiciona item vazio
-            enfermeiraController.findAll().forEach(modelEnfermeira::addElement);
-            cbxSelecionarEnfermeira.setModel(modelEnfermeira);
-
-            // Preenche ComboBox de Procedimentos
-            DefaultComboBoxModel<Procedimento> modelProcedimento = new DefaultComboBoxModel<>();
-            modelProcedimento.addElement(null); // Adiciona item vazio
-            procedimentoController.findAll().forEach(modelProcedimento::addElement);
-            cbxSelecionarProcedimento.setModel(modelProcedimento);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao carregar dados: " + ex.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
+        // Encontra o próximo dia útil
+        while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
+            proximaData = proximaData.plusDays(1);
         }
+
+        // Configura o horário
+        LocalTime horario;
+        if (proximaData.toLocalDate().equals(agora.toLocalDate())) {
+            // Se for hoje, pega o próximo horário disponível
+            horario = agora.toLocalTime();
+
+            if (horario.isBefore(config.getHorarioAbertura())) {
+                horario = config.getHorarioAbertura();
+            } else if (horario.isAfter(config.getHorarioFechamento())) {
+                // Se passou do horário, vai para o próximo dia
+                proximaData = proximaData.plusDays(1);
+                while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
+                    proximaData = proximaData.plusDays(1);
+                }
+                horario = config.getHorarioAbertura();
+            } else {
+                // Ajusta para o próximo intervalo disponível
+                horario = config.proximoHorarioDisponivel(horario);
+
+                if (horario.isAfter(config.getHorarioFechamento())) {
+                    proximaData = proximaData.plusDays(1);
+                    while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
+                        proximaData = proximaData.plusDays(1);
+                    }
+                    horario = config.getHorarioAbertura();
+                }
+            }
+        } else {
+            horario = config.getHorarioAbertura();
+        }
+
+        // Formata e define os valores
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter horaFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        fEdtData.setText(proximaData.format(dataFormatter));
+        fEdtHora.setText(horario.format(horaFormatter));
     }
     
     private void habilitarFormulario(boolean habilitar) {
@@ -125,7 +193,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         fEdtHora.setEnabled(habilitar);
         txtObeservacoes.setEnabled(habilitar);
         btnAdicionarProcedimento.setEnabled(habilitar);
-        listProcedimentosSelecionados.setEnabled(habilitar);
+        lstProcedimentos.setEnabled(habilitar);
         btnSalvar.setEnabled(habilitar);
     }
     
@@ -160,13 +228,13 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         this.habilitarFormulario(true);
     }
     
-    private Object getObjetoSelecionadoNaGrid() {
+    private Consulta getObjetoSelecionadoNaGrid() {
         int rowCliked = grdConsultas.getSelectedRow();
-        Object obj = null;
         if (rowCliked >= 0) {
-            obj = grdConsultas.getModel().getValueAt(rowCliked, -1);
+            // Pega o objeto Consulta que está associado à linha
+            return (Consulta) grdConsultas.getModel().getValueAt(rowCliked, 0);
         }
-        return obj;
+        return null;
     }    
     
     private void atualizarListaProcedimentos() {
@@ -174,7 +242,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         for (Procedimento proc : procedimentosSelecionados) {
             model.addElement(proc);
         }
-        listProcedimentosSelecionados.setModel(model);
+        lstProcedimentos.setModel(model);
     }
 
 
@@ -203,7 +271,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         scrollProcedimentos = new javax.swing.JScrollPane();
-        listProcedimentosSelecionados = new javax.swing.JList<>();
+        lstProcedimentos = new javax.swing.JList<>();
         tmConsultas = new javax.swing.JScrollPane();
         grdConsultas = new com.ifcolab.estetify.components.CustomTable();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
@@ -351,13 +419,13 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(500, 80, 170, 30);
 
-        listProcedimentosSelecionados.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listProcedimentosSelecionados.addKeyListener(new java.awt.event.KeyAdapter() {
+        lstProcedimentos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstProcedimentos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                listProcedimentosSelecionadosKeyPressed(evt);
+                lstProcedimentosKeyPressed(evt);
             }
         });
-        scrollProcedimentos.setViewportView(listProcedimentosSelecionados);
+        scrollProcedimentos.setViewportView(lstProcedimentos);
 
         getContentPane().add(scrollProcedimentos);
         scrollProcedimentos.setBounds(980, 200, 300, 130);
@@ -458,8 +526,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
                 paciente,
                 medico,
                 enfermeira,
-                procedimentosSelecionados,
-                StatusConsulta.AGENDADA
+                procedimentosSelecionados
             );
             consultaAlterada = true;
         } else {
@@ -502,15 +569,15 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnAdicionarProcedimentoActionPerformed
 
-    private void listProcedimentosSelecionadosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listProcedimentosSelecionadosKeyPressed
+    private void lstProcedimentosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstProcedimentosKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) {
-            int index = listProcedimentosSelecionados.getSelectedIndex();
+            int index = lstProcedimentos.getSelectedIndex();
             if (index != -1) {
                 procedimentosSelecionados.remove(index);
                 atualizarListaProcedimentos();
             }
         }
-    }//GEN-LAST:event_listProcedimentosSelecionadosKeyPressed
+    }//GEN-LAST:event_lstProcedimentosKeyPressed
 
     private void fEdtDataPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_fEdtDataPropertyChange
 
@@ -557,7 +624,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     private javax.swing.JLabel lblObservacoes;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
-    private javax.swing.JList<Procedimento> listProcedimentosSelecionados;
+    private javax.swing.JList<Procedimento> lstProcedimentos;
     private javax.swing.JScrollPane scrollProcedimentos;
     private javax.swing.JScrollPane tmConsultas;
     private com.ifcolab.estetify.components.CustomTextArea txtObeservacoes;

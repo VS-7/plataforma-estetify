@@ -155,7 +155,7 @@ public class FrLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_customTextField2ActionPerformed
 
     private void primaryCustomButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_primaryCustomButton1ActionPerformed
-        DlgConfiguracaoSistema dlgAgenda = new DlgConfiguracaoSistema(this, true);
+        DlgAgenda dlgAgenda = new DlgAgenda(this, true);
         
         // Configura o posicionamento relativo, faz o dialgo aparecer na mesma tela que o pai(qdo estamos mais de uma tela)
         dlgAgenda.setLocationRelativeTo(this);

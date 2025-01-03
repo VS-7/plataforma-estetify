@@ -17,7 +17,6 @@ public class ValidateConfiguracao {
             boolean funcionaSexta,
             boolean funcionaSabado,
             boolean funcionaDomingo,
-            int tamanhoMaximoObservacoes,
             int tempoMinimoAntecedenciaMinutos,
             int tempoMaximoAgendamentoDias
     ) {
@@ -40,10 +39,6 @@ public class ValidateConfiguracao {
         if (!funcionaSegunda && !funcionaTerca && !funcionaQuarta && 
             !funcionaQuinta && !funcionaSexta && !funcionaSabado && !funcionaDomingo) {
             throw new ConfiguracaoException("Pelo menos um dia da semana deve estar selecionado.");
-        }
-        
-        if (tamanhoMaximoObservacoes < 100 || tamanhoMaximoObservacoes > 1000) {
-            throw new ConfiguracaoException("Tamanho máximo de observações deve estar entre 100 e 1000 caracteres.");
         }
         
         if (tempoMinimoAntecedenciaMinutos < 0 || tempoMinimoAntecedenciaMinutos > 1440) {

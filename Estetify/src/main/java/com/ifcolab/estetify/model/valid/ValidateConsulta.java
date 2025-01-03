@@ -7,6 +7,7 @@ import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
+import com.ifcolab.estetify.model.dao.ConsultaDAO;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
 import java.time.LocalDateTime;
@@ -15,14 +16,49 @@ import java.util.List;
 
 public class ValidateConsulta {
     
-    private final ConfiguracaoSistema config;
+    private final ConsultaDAO repositorio;
     
     public ValidateConsulta() {
-        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
-        this.config = configDAO.getConfiguracao();
+        this.repositorio = new ConsultaDAO();
     }
     
-    public Consulta validaCamposEntrada(
+    private void validarHorariosConflitantes(
+            LocalDateTime dataHora,
+            Medico medico,
+            Enfermeira enfermeira,
+            Paciente paciente,
+            Integer idConsultaAtual
+    ) {
+        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
+        ConfiguracaoSistema config = configDAO.getConfiguracao();
+        int duracaoConsulta = config.getIntervaloConsultaMinutos();
+        
+        // Define o período da consulta
+        LocalDateTime fimConsulta = dataHora.plusMinutes(duracaoConsulta);
+        
+        List<Consulta> consultasConflitantes = repositorio.buscarConsultasNoPeriodo(
+            dataHora, 
+            fimConsulta
+        );
+        
+        if (idConsultaAtual != null) {
+            consultasConflitantes.removeIf(c -> c.getId() == idConsultaAtual);
+        }
+        
+        if (consultasConflitantes.stream().anyMatch(c -> c.getMedico().equals(medico))) {
+            throw new ConsultaException("Médico já possui consulta agendada neste horário");
+        }
+        
+        if (consultasConflitantes.stream().anyMatch(c -> c.getEnfermeira().equals(enfermeira))) {
+            throw new ConsultaException("Enfermeira já possui consulta agendada neste horário");
+        }
+
+        if (consultasConflitantes.stream().anyMatch(c -> c.getPaciente().equals(paciente))) {
+            throw new ConsultaException("Paciente já possui consulta agendada neste horário");
+        }
+    }
+    
+    public void validaCamposEntrada(
             LocalDateTime dataHora,
             String observacoes,
             Paciente paciente,
@@ -30,74 +66,41 @@ public class ValidateConsulta {
             Enfermeira enfermeira,
             List<Procedimento> procedimentos
     ) {
-        // Validação da data e hora
+        
         if (dataHora == null) {
-            throw new ConsultaException("Data e hora não podem estar em branco.");
-        }
-        
-        LocalDateTime agora = LocalDateTime.now();
-        LocalTime horario = dataHora.toLocalTime();
-        
-        // Valida se está no passado
-        if (dataHora.isBefore(agora)) {
-            throw new ConsultaException("Data e hora não podem ser anteriores ao momento atual.");
-        }
-        
-        // Valida antecedência mínima
-        if (dataHora.isBefore(agora.plusMinutes(config.getTempoMinimoAntecedenciaMinutos()))) {
-            throw new ConsultaException(String.format(
-                "A consulta deve ser agendada com pelo menos %d minutos de antecedência.",
-                config.getTempoMinimoAntecedenciaMinutos()));
-        }
-        
-        // Valida período máximo de agendamento
-        if (dataHora.isAfter(agora.plusDays(config.getTempoMaximoAgendamentoDias()))) {
-            throw new ConsultaException(String.format(
-                "Não é possível agendar consultas com mais de %d dias de antecedência.",
-                config.getTempoMaximoAgendamentoDias()));
-        }
-        
-        // Valida dia de funcionamento
-        if (!config.isDiaFuncionamento(dataHora.getDayOfWeek())) {
-            throw new ConsultaException("Não é possível agendar consultas neste dia da semana.");
-        }
-        
-        // Valida horário de funcionamento
-        if (horario.isBefore(config.getHorarioAbertura()) || 
-            horario.isAfter(config.getHorarioFechamento())) {
-            throw new ConsultaException(String.format(
-                "Horário deve estar entre %s e %s.",
-                config.getHorarioAbertura(),
-                config.getHorarioFechamento()));
-        }
-        
-        // Valida intervalo de consulta
-        long minutos = horario.getHour() * 60L + horario.getMinute();
-        if (minutos % config.getIntervaloConsultaMinutos() != 0) {
-            throw new ConsultaException(String.format(
-                "Os horários devem ser agendados em intervalos de %d minutos.",
-                config.getIntervaloConsultaMinutos()));
-        }
-        
-        
-        // Outras validações
-        if (enfermeira == null) {
-            throw new ConsultaException("Enfermeira não pode estar em branco.");
-        }
-        
-        if (medico == null) {
-            throw new ConsultaException("Médico não pode estar em branco.");
+            throw new ConsultaException("Data e hora não podem estar em branco");
         }
         
         if (paciente == null) {
-            throw new ConsultaException("Paciente não pode estar em branco.");
+            throw new ConsultaException("Paciente não selecionado");
+        }
+        
+        if (medico == null) {
+            throw new ConsultaException("Médico não selecionado");
+        }
+        
+        if (enfermeira == null) {
+            throw new ConsultaException("Enfermeira não selecionada");
         }
         
         if (procedimentos == null || procedimentos.isEmpty()) {
-            throw new ConsultaException("É necessário selecionar pelo menos um procedimento.");
+            throw new ConsultaException("Selecione pelo menos um procedimento");
         }
         
-        return new Consulta(0, dataHora, observacoes, StatusConsulta.AGENDADA, 
-                          enfermeira, medico, paciente, procedimentos);
+        validarHorariosConflitantes(dataHora, medico, enfermeira, paciente, null);
+    }
+    
+    public void validaCamposEntrada(
+            int id,
+            LocalDateTime dataHora,
+            String observacoes,
+            Paciente paciente,
+            Medico medico,
+            Enfermeira enfermeira,
+            List<Procedimento> procedimentos
+    ) {
+        validaCamposEntrada(dataHora, observacoes, paciente, medico, enfermeira, procedimentos);
+        
+        validarHorariosConflitantes(dataHora, medico, enfermeira, paciente, id);
     }
 }

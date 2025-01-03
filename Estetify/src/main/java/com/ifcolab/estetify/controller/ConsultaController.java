@@ -1,6 +1,7 @@
 package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.controller.tablemodel.TMViewConsulta;
+import com.ifcolab.estetify.controller.tablemodel.TMViewEnfermeira;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
@@ -13,15 +14,16 @@ import com.ifcolab.estetify.model.enums.StatusConsulta;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 public class ConsultaController {
     
-    private ConsultaDAO dao;
-    private ValidateConsulta validate;
+    private final ConsultaDAO repositorio;
+    private final ValidateConsulta validador;
     
     public ConsultaController() {
-        dao = new ConsultaDAO();
-        validate = new ValidateConsulta();
+        this.repositorio = new ConsultaDAO();
+        this.validador = new ValidateConsulta();
     }
     
     public void cadastrar(
@@ -30,9 +32,10 @@ public class ConsultaController {
             Paciente paciente,
             Medico medico,
             Enfermeira enfermeira,
-            List<Procedimento> procedimentos) throws ConsultaException {
-            
-        Consulta consulta = validate.validaCamposEntrada(
+            List<Procedimento> procedimentos
+    ) {
+        // Valida os campos incluindo verificação de conflitos
+        validador.validaCamposEntrada(
             dataHora,
             observacoes,
             paciente,
@@ -41,7 +44,19 @@ public class ConsultaController {
             procedimentos
         );
         
-        dao.save(consulta);
+        // Cria e salva a consulta
+        Consulta consulta = new Consulta(
+            0,
+            dataHora,
+            observacoes,
+            StatusConsulta.AGENDADA,
+            enfermeira,
+            medico,
+            paciente,
+            procedimentos
+        );
+        
+        repositorio.save(consulta);
     }
     
     public void atualizar(
@@ -51,10 +66,11 @@ public class ConsultaController {
             Paciente paciente,
             Medico medico,
             Enfermeira enfermeira,
-            List<Procedimento> procedimentos,
-            StatusConsulta status) throws ConsultaException {
-            
-        Consulta consulta = validate.validaCamposEntrada(
+            List<Procedimento> procedimentos
+    ) {
+        // Valida os campos incluindo verificação de conflitos, considerando o ID da consulta atual
+        validador.validaCamposEntrada(
+            id,
             dataHora,
             observacoes,
             paciente,
@@ -63,22 +79,31 @@ public class ConsultaController {
             procedimentos
         );
         
-        consulta.setId(id);
-        consulta.setStatus(status);
-        dao.update(consulta);
+        // Atualiza a consulta
+        Consulta consulta = new Consulta(
+            id,
+            dataHora,
+            observacoes,
+            StatusConsulta.AGENDADA,
+            enfermeira,
+            medico,
+            paciente,
+            procedimentos
+        );
+        
+        repositorio.update(consulta);
     }
     
-    public void excluir(Consulta consulta) throws ConsultaException {
-        dao.delete(consulta.getId());
+    public void excluir(int id) {
+        repositorio.delete(id);
     }
     
     public List<Consulta> findAll() {
-        return dao.findAll();
+        return repositorio.findAll();
     }
     
     public void atualizarTabela(JTable grd) {
-        List<Consulta> lst = dao.findAll();
-        TMViewConsulta tableModel = new TMViewConsulta(lst);
-        grd.setModel(tableModel);
+        TMViewConsulta tmConsulta = new TMViewConsulta(repositorio.findAll());
+        grd.setModel(tmConsulta);
     }
 }
