@@ -32,7 +32,6 @@ public class Consulta implements Serializable {
     
     private LocalDateTime dataHora;
     
-    @Column(length = 500)
     private String observacoes;
     
     @Enumerated(EnumType.STRING)

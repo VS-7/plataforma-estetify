@@ -66,9 +66,9 @@ public class ValidateConfiguracao {
             funcionaSexta,
             funcionaSabado,
             funcionaDomingo,
-            tamanhoMaximoObservacoes,
             tempoMinimoAntecedenciaMinutos,
             tempoMaximoAgendamentoDias
         );
     }
+
 } 

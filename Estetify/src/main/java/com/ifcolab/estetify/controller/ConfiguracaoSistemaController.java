@@ -26,7 +26,6 @@ public class ConfiguracaoSistemaController {
             boolean funcionaSexta,
             boolean funcionaSabado,
             boolean funcionaDomingo,
-            int tamanhoMaximoObservacoes,
             int tempoMinimoAntecedenciaMinutos,
             int tempoMaximoAgendamentoDias
     ) {
@@ -41,7 +40,6 @@ public class ConfiguracaoSistemaController {
             funcionaSexta,
             funcionaSabado,
             funcionaDomingo,
-            tamanhoMaximoObservacoes,
             tempoMinimoAntecedenciaMinutos,
             tempoMaximoAgendamentoDias
         );

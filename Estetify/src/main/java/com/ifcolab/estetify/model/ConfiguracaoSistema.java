@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.time.DayOfWeek;
 
 @Data
 @NoArgsConstructor
@@ -49,11 +50,36 @@ public class ConfiguracaoSistema implements Serializable {
     private boolean funcionaDomingo;
     
     @Column
-    private int tamanhoMaximoObservacoes;
-    
-    @Column
     private int tempoMinimoAntecedenciaMinutos;
     
     @Column
     private int tempoMaximoAgendamentoDias;
+    
+    public boolean isDiaFuncionamento(DayOfWeek dia) {
+        return switch (dia) {
+            case MONDAY -> funcionaSegunda;
+            case TUESDAY -> funcionaTerca;
+            case WEDNESDAY -> funcionaQuarta;
+            case THURSDAY -> funcionaQuinta;
+            case FRIDAY -> funcionaSexta;
+            case SATURDAY -> funcionaSabado;
+            case SUNDAY -> funcionaDomingo;
+        };
+    }
+    
+    public boolean isHorarioFuncionamento(LocalTime horario) {
+        return !horario.isBefore(horarioAbertura) && !horario.isAfter(horarioFechamento);
+    }
+    
+    public boolean isHorarioValido(LocalTime horario) {
+        long minutos = horario.getHour() * 60L + horario.getMinute();
+        return minutos % intervaloConsultaMinutos == 0;
+    }
+    
+    public LocalTime proximoHorarioDisponivel(LocalTime horario) {
+        long minutos = horario.getHour() * 60L + horario.getMinute();
+        long intervalo = intervaloConsultaMinutos;
+        minutos = ((minutos + intervalo - 1) / intervalo) * intervalo;
+        return LocalTime.of((int)(minutos / 60), (int)(minutos % 60));
+    }
 } 

@@ -54,7 +54,6 @@ public class ConfiguracaoSistemaDAO extends Dao<ConfiguracaoSistema> {
         config.setFuncionaSexta(true);
         config.setFuncionaSabado(false);
         config.setFuncionaDomingo(false);
-        config.setTamanhoMaximoObservacoes(500);
         config.setTempoMinimoAntecedenciaMinutos(60);
         config.setTempoMaximoAgendamentoDias(60);
         
