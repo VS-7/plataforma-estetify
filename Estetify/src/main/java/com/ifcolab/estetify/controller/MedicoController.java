@@ -22,7 +22,7 @@ public class MedicoController {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
+            
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -36,7 +36,7 @@ public class MedicoController {
                 nome,
                 email,
                 senha,
-                confirmarSenha,
+                
                 cpf,
                 sexo,
                 dataNascimento,
@@ -58,7 +58,7 @@ public class MedicoController {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
+
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -72,7 +72,7 @@ public class MedicoController {
                 nome,
                 email,
                 senha,
-                confirmarSenha,
+                
                 cpf,
                 sexo,
                 dataNascimento,

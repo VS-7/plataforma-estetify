@@ -6,6 +6,7 @@ import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.MedicoException;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
+import com.ifcolab.estetify.utils.GerenciadorCriptografia;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -18,12 +19,14 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
 
     private MedicoController controller;
     private int idMedicoEditando;
+    private final GerenciadorCriptografia gerenciadorCriptografia;
     
     public DlgGerenciaMedico(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
         controller = new MedicoController();
+        gerenciadorCriptografia = new GerenciadorCriptografia();
         idMedicoEditando = -1;
         
         this.configurarComboBoxes();
@@ -146,6 +149,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         fEdtTelefone = new com.ifcolab.estetify.components.CustomFormattedTextField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
         edtNome = new com.ifcolab.estetify.components.CustomTextField();
+        txtSenha = new javax.swing.JPasswordField();
         edtCRM = new com.ifcolab.estetify.components.CustomTextField();
         edtEndereco = new com.ifcolab.estetify.components.CustomTextField();
         btnAdicionar = new com.ifcolab.estetify.components.PrimaryCustomButton();
@@ -240,6 +244,10 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         });
         getContentPane().add(edtNome);
         edtNome.setBounds(60, 140, 430, 40);
+
+        txtSenha.setText("jPasswordField1");
+        getContentPane().add(txtSenha);
+        txtSenha.setBounds(430, 280, 260, 27);
 
         edtCRM.setText("CRM");
         edtCRM.addActionListener(new java.awt.event.ActionListener() {
@@ -375,13 +383,14 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
+            String senha = new String(txtSenha.getPassword());
+            String senhaHash = gerenciadorCriptografia.criptografarSenha(senha);
             if (idMedicoEditando > 0) {
                 controller.atualizar(
                     idMedicoEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
-                    "123456", // senha
-                    "123456", // confirmar senha
+                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -394,8 +403,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    "123456", // senha padrão
-                    "123456", // confirmar senha
+                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -493,5 +501,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
     private javax.swing.JLabel lblTelefone;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
     private javax.swing.JScrollPane tmMedicos;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

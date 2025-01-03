@@ -105,6 +105,7 @@ public class DlgConfiguracaoSistema extends javax.swing.JDialog {
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(690, 800));
         getContentPane().setLayout(null);
 
         lblMin.setForeground(new java.awt.Color(51, 51, 51));
