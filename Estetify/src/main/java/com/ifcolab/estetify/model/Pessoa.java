@@ -2,6 +2,7 @@ package com.ifcolab.estetify.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Pessoa implements Serializable {
+public abstract class Pessoa implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,7 @@ public class Pessoa implements Serializable {
     @Column(unique = true)
     protected String email;
     
+    @Column
     protected String senha;
     
     @Column(unique = true)
@@ -49,7 +51,15 @@ public class Pessoa implements Serializable {
     @Enumerated(EnumType.STRING)
     protected TipoUsuario tipoUsuario;
     
-    /* Construtor sem o atributo ID */
+    @Column
+    private String codigoRecuperacao;
+    
+    @Column
+    private LocalDateTime validadeCodigoRecuperacao;
+    
+    @Enumerated(EnumType.STRING)
+    private TipoUsuario tipo;
+    
     public Pessoa(String nome, String email, String senha, String cpf, TipoSexo sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipoUsuario) {
 
         this.nome = nome;
