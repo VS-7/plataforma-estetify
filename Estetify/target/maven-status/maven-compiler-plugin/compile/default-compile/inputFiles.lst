@@ -1,4 +1,5 @@
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/Procedimento.java
+/home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/utils/INotificador.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/valid/ValidatePaciente.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/controller/tablemodel/TMViewRecepcionista.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/dao/PacienteDAO.java
@@ -28,6 +29,7 @@
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/components/RatingStars.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/controller/tablemodel/TMViewEnfermeira.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/view/DlgNovaConsulta.java
+/home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/utils/NotificadorEmail.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/exceptions/RecepcionistaException.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/view/FrMenu.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/view/DlgGerenciaPaciente.java
@@ -104,6 +106,7 @@
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/exceptions/RelatorioException.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTextArea.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTextField.java
+/home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/utils/GeradorSenha.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/controller/ConfiguracaoSistemaController.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/dao/ConfiguracaoSistemaDAO.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/exceptions/AgendaException.java
