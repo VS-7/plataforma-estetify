@@ -25,7 +25,7 @@ public class PacienteController {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
+            
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -39,7 +39,7 @@ public class PacienteController {
                 nome,
                 email,
                 senha,
-                confirmarSenha,
+                
                 cpf,
                 sexo,
                 dataNascimento,
@@ -61,7 +61,7 @@ public class PacienteController {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
+            
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -75,7 +75,7 @@ public class PacienteController {
                 nome,
                 email,
                 senha,
-                confirmarSenha,
+                
                 cpf,
                 sexo,
                 dataNascimento,

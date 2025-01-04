@@ -85,4 +85,24 @@ public class ConsultaDAO extends Dao<Consulta> {
             this.entityManager.close();
         }
     }
+    
+    public List<Consulta> buscarConsultasPorPaciente(int idPaciente) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        try {
+            jpql = "SELECT DISTINCT c FROM Consulta c " +
+                   "LEFT JOIN FETCH c.procedimentos " +
+                   "LEFT JOIN FETCH c.paciente " +
+                   "LEFT JOIN FETCH c.medico " +
+                   "LEFT JOIN FETCH c.enfermeira " +
+                   "WHERE c.paciente.id = :idPaciente " +
+                   "ORDER BY c.dataHora DESC";
+            
+            TypedQuery<Consulta> query = this.entityManager.createQuery(jpql, Consulta.class);
+            query.setParameter("idPaciente", idPaciente);
+            
+            return query.getResultList();
+        } finally {
+            this.entityManager.close();
+        }
+    }
 }

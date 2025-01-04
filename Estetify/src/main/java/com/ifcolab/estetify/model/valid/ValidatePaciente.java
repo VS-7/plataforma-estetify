@@ -22,7 +22,7 @@ public class ValidatePaciente {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
+            
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -51,9 +51,7 @@ public class ValidatePaciente {
             throw new PacienteException("Senha não pode estar em branco.");
         }
 
-        if (!senha.equals(confirmarSenha)) {
-            throw new PacienteException("Confirmação de senha incorreta.");
-        }
+
 
         if (cpf == null || !isValidCPF(cpf)) {
             throw new PacienteException("CPF inválido.");

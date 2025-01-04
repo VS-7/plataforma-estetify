@@ -136,7 +136,7 @@ public class FrLogin extends javax.swing.JFrame {
         dlgAgenda.setLocationRelativeTo(this);
         dlgAgenda.setVisible(true);
         
-        */       try {
+        */try {
             String email = edtEmail.getText().trim();
             String senha = new String(edtSenha.getPassword());
             

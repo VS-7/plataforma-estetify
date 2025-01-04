@@ -166,6 +166,11 @@ public class CustomSidebar extends javax.swing.JPanel {
 
         btnMinhasConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/calendar.png"))); // NOI18N
         btnMinhasConsultas.setText("Minhas Consultas");
+        btnMinhasConsultas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMinhasConsultasActionPerformed(evt);
+            }
+        });
         add(btnMinhasConsultas);
         btnMinhasConsultas.setBounds(10, 90, 230, 50);
 
@@ -261,6 +266,12 @@ public class CustomSidebar extends javax.swing.JPanel {
         dialog.setLocationRelativeTo(parentFrame);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnGerenciarRecepcionistasActionPerformed
+
+    private void btnMinhasConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinhasConsultasActionPerformed
+        if (parentFrame instanceof FrMenu) {
+            ((FrMenu) parentFrame).mostrarMinhasConsultas();
+        }
+    }//GEN-LAST:event_btnMinhasConsultasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

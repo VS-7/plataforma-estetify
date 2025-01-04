@@ -2,6 +2,7 @@ package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.controller.tablemodel.TMViewConsulta;
 import com.ifcolab.estetify.controller.tablemodel.TMViewEnfermeira;
+import com.ifcolab.estetify.controller.tablemodel.TMViewMinhasConsultas;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
@@ -113,5 +114,16 @@ public class ConsultaController {
             throw new ConsultaException("Data não pode ser nula");
         }
         return repositorio.buscarPorData(data);
+    }
+    
+    public List<Consulta> buscarConsultasPorPaciente(int idPaciente) {
+        return repositorio.buscarConsultasPorPaciente(idPaciente);
+    }
+    
+    public void atualizarTabelaMinhasConsultas(JTable grd, int idPaciente) {
+        TMViewMinhasConsultas tmMinhasConsultas = new TMViewMinhasConsultas(
+            repositorio.buscarConsultasPorPaciente(idPaciente)
+        );
+        grd.setModel(tmMinhasConsultas);
     }
 }

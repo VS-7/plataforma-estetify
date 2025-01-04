@@ -57,12 +57,9 @@ public abstract class Pessoa implements Serializable {
     @Column
     private LocalDateTime validadeCodigoRecuperacao;
     
-    @Enumerated(EnumType.STRING)
-    private TipoUsuario tipo;
-    
     private int avatar = 1;
     
-    public Pessoa(String nome, String email, String senha, String cpf, TipoSexo sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipo, int avatar) {
+    public Pessoa(String nome, String email, String senha, String cpf, TipoSexo sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipoUsuario, int avatar) {
 
         this.nome = nome;
         this.email = email;
@@ -72,7 +69,7 @@ public abstract class Pessoa implements Serializable {
         this.dataNascimento = dataNascimento;
         this.telefone = telefone;
         this.endereco = endereco;
-        this.tipo = tipo;
+        this.tipoUsuario = tipoUsuario;
         this.avatar = avatar;
     }   
 }

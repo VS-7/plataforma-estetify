@@ -2,28 +2,56 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.AutenticacaoController;
 import com.ifcolab.estetify.components.AgendaPanel;
+import com.ifcolab.estetify.model.Paciente;
+import com.ifcolab.estetify.model.enums.TipoUsuario;
 
 public class FrMenu extends javax.swing.JFrame {
 
-    private final AutenticacaoController authController;
+    private final AutenticacaoController autenticacaoController;
     
     public FrMenu() {
         initComponents();
         this.setLocationRelativeTo(null);
         
-        authController = new AutenticacaoController();
+        autenticacaoController = new AutenticacaoController();
         agendaPanel = new AgendaPanel();
         
         pnlConfiguracaoSistema.setParentFrame(this);
         // Configurar a sidebar
         pnlSidebar.setParentFrame(this);
         
-        mostrarAgenda();
+        if (autenticacaoController.getUsuarioLogado() instanceof Paciente) {
+            mostrarMinhasConsultas();
+        } else {
+            mostrarAgenda();
+        }
         
     }
     
+    public final void mostrarMinhasConsultas() {
+        // Limpar o conteúdo atual
+        getContentPane().removeAll();
         
-    public void mostrarAgenda() {
+        // Adicionar componentes na ordem correta
+        getContentPane().add(pnlAppBar);
+        getContentPane().add(pnlSidebar);
+        getContentPane().add(pnlMinhasConsultas);
+        
+        
+        // Adicionar o background por último
+        getContentPane().add(lblBackground);
+        
+        // Atualizar a tela
+        revalidate();
+        repaint();
+    }
+        
+    public final void mostrarAgenda() {
+        
+        if (autenticacaoController.getUsuarioLogado() instanceof Paciente) {
+            mostrarMinhasConsultas();
+            return;
+        }
         // Limpar o conteúdo atual
         getContentPane().removeAll();
 
@@ -58,6 +86,7 @@ public class FrMenu extends javax.swing.JFrame {
         revalidate();
         repaint();
     }
+    
     
     public void mostrarConfiguracoes() {
         // Limpar o conteúdo atual
@@ -103,6 +132,7 @@ public class FrMenu extends javax.swing.JFrame {
         pnlAppBar = new com.ifcolab.estetify.components.AppBar();
         pnlSidebar = new com.ifcolab.estetify.components.CustomSidebar();
         agendaPanel = new com.ifcolab.estetify.components.AgendaPanel();
+        pnlMinhasConsultas = new com.ifcolab.estetify.view.pnlMinhasConsultas();
         lblBackground = new javax.swing.JLabel();
         jLabel4.setText("jLabel4");
 
@@ -114,6 +144,8 @@ public class FrMenu extends javax.swing.JFrame {
         pnlPerfil.setBounds(280, 80, 1040, 730);
         getContentPane().add(pnlConfiguracaoSistema);
         pnlConfiguracaoSistema.setBounds(280, 80, 1040, 730);
+        getContentPane().add(pnlMinhasConsultas);
+        pnlMinhasConsultas.setBounds(280, 80, 1040, 730);
         getContentPane().add(pnlAppBar);
         pnlAppBar.setBounds(250, 0, 1100, 50);
         getContentPane().add(pnlSidebar);
@@ -135,6 +167,7 @@ public class FrMenu extends javax.swing.JFrame {
     private com.ifcolab.estetify.components.AppBar pnlAppBar;
     private com.ifcolab.estetify.view.pnlPerfil pnlPerfil;
     private com.ifcolab.estetify.view.pnlConfiguracaoSistema pnlConfiguracaoSistema;
+    private com.ifcolab.estetify.view.pnlMinhasConsultas pnlMinhasConsultas;
     private com.ifcolab.estetify.components.AgendaPanel agendaPanel;
     private com.ifcolab.estetify.components.CustomSidebar pnlSidebar;
     // End of variables declaration//GEN-END:variables
