@@ -1,270 +1,242 @@
 package com.ifcolab.estetify.components;
 
+import com.ifcolab.estetify.controller.ConsultaController;
 import com.ifcolab.estetify.model.Consulta;
+import com.ifcolab.estetify.model.ConfiguracaoSistema;
+import com.ifcolab.estetify.model.Procedimento;
+import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
 import com.ifcolab.estetify.view.DlgNovaConsulta;
 import java.awt.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AgendaPanel extends javax.swing.JPanel {
-
+    private final ConsultaController consultaController;
+    private ConfiguracaoSistema config;
     private LocalDate dataAtual;
-    private final List<Consulta> consultas;
-    private final int HORA_INICIO = 8;
-    private final int HORA_FIM = 18;
-    private final Color COR_CONSULTA = new Color(66, 133, 244);
-    private final Color COR_GRADE = new Color(218, 220, 224);
-    private final DateTimeFormatter DATA_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private final DateTimeFormatter HORA_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-
+    private JPanel pnlHeader;
+    private JPanel pnlAgenda;
+    private JLabel lblMes;
+    private SecondaryCustomButton btnAnterior;
+    private SecondaryCustomButton btnProximo;
+    
     public AgendaPanel() {
+        consultaController = new ConsultaController();
+        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
+        config = configDAO.getConfiguracao();
+        dataAtual = LocalDate.now();
+        
         initComponents();
-        dataAtual = LocalDate.now();
-        consultas = new ArrayList<>();
-        configurarComponentes();
     }
-
-    private void configurarComponentes() {
-        // Configurar painel de controles
-        pnlControles.setBackground(Color.WHITE);
-        lblMesAno.setFont(new Font("Fira Sans", Font.BOLD, 16));
-        
-        // Configurar painel de grade
-        pnlGrade.setBackground(Color.WHITE);
-        pnlGrade.setLayout(null); // Importante: layout nulo para posicionamento absoluto
-        
-        // Configurar scroll
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.setBorder(null);
-        scrollPane.setViewportView(pnlGrade);
-        
-        // Atualizar label do mês/ano
-        atualizarLabelMesAno();
-        
-        // Adicionar listener de redimensionamento
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                atualizarAgenda();
-            }
-        });
-    }
-
-    private void atualizarLabelMesAno() {
-        lblMesAno.setText(dataAtual.format(
-            DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("pt", "BR"))));
-    }
-
-    private void atualizarAgenda() {
-        pnlGrade.removeAll();
-        
-        String dataAtualStr = dataAtual.format(DATA_FORMATTER);
-        System.out.println("\nAtualizando agenda para: " + dataAtualStr);
-        System.out.println("Total de consultas carregadas: " + consultas.size());
-        
-        // Filtrar consultas do dia atual
-        List<Consulta> consultasDoDia = new ArrayList<>();
-        for (Consulta consulta : consultas) {
-            String dataConsultaStr = consulta.getDataHora().format(DATA_FORMATTER);
-            System.out.println("Comparando datas - Consulta: " + dataConsultaStr 
-                + " com Atual: " + dataAtualStr + " = " + dataConsultaStr.equals(dataAtualStr));
-            
-            if (dataConsultaStr.equals(dataAtualStr)) {
-                consultasDoDia.add(consulta);
-            }
-        }
-        
-        System.out.println("Consultas encontradas para " + dataAtualStr + ": " + consultasDoDia.size());
-        
-        // Configurar tamanho do painel
-        int alturaHora = 60;
-        int larguraTotal = scrollPane.getViewport().getWidth();
-        if (larguraTotal < 500) larguraTotal = 500;
-        int alturaTotal = (HORA_FIM - HORA_INICIO + 1) * alturaHora;
-        
-        pnlGrade.setPreferredSize(new Dimension(larguraTotal, alturaTotal));
-        
-        // Desenhar linhas de hora
-        for (int hora = HORA_INICIO; hora <= HORA_FIM; hora++) {
-            JLabel lblHora = new JLabel(String.format("%02d:00", hora));
-            lblHora.setBounds(10, (hora - HORA_INICIO) * alturaHora, 50, 20);
-            lblHora.setForeground(Color.GRAY);
-            pnlGrade.add(lblHora);
-            
-            JSeparator sep = new JSeparator();
-            sep.setBounds(60, (hora - HORA_INICIO) * alturaHora, larguraTotal - 70, 1);
-            sep.setForeground(COR_GRADE);
-            pnlGrade.add(sep);
-        }
-        
-        // Adicionar consultas do dia
-        for (Consulta consulta : consultasDoDia) {
-            System.out.println("Adicionando consulta à grade:");
-            System.out.println("Data/Hora: " + consulta.getDataHora().format(DATA_FORMATTER) 
-                + " " + consulta.getDataHora().format(HORA_FORMATTER));
-            System.out.println("Paciente: " + consulta.getPaciente().getNome());
-            adicionarCardConsulta(consulta);
-        }
-        
-        pnlGrade.revalidate();
-        pnlGrade.repaint();
-    }
-
-    private void adicionarCardConsulta(Consulta consulta) {
-        try {
-            LocalDateTime dataHora = consulta.getDataHora();
-            int hora = dataHora.getHour();
-            int minuto = dataHora.getMinute();
-            
-            // Calcular posição Y
-            int alturaHora = 60;
-            int y = (hora - HORA_INICIO) * alturaHora + (minuto * alturaHora / 60);
-            
-            // Criar card
-            JPanel card = new JPanel();
-            card.setLayout(new BorderLayout());
-            card.setBackground(COR_CONSULTA);
-            
-            // Ajustar posição e tamanho do card
-            int larguraCard = pnlGrade.getWidth() - 90; // Margem de 70 + 20
-            if (larguraCard < 400) larguraCard = 400; // Largura mínima
-            
-            card.setBounds(70, y, larguraCard, 50);
-            
-            // Título do card
-            String horaFormatada = dataHora.format(HORA_FORMATTER);
-            String titulo = horaFormatada + " - " + consulta.getPaciente().getNome();
-            
-            JLabel lblTitulo = new JLabel(titulo);
-            lblTitulo.setForeground(Color.WHITE);
-            lblTitulo.setBorder(new EmptyBorder(5, 10, 5, 10));
-            card.add(lblTitulo, BorderLayout.CENTER);
-            
-            // Adicionar hover effect
-            card.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    card.setBackground(COR_CONSULTA.brighter());
-                }
-                
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    card.setBackground(COR_CONSULTA);
-                }
-                
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    System.out.println("Consulta selecionada: " + consulta.getId());
-                    // Aqui você pode abrir o DlgNovaConsulta para edição
-                    if (evt.getClickCount() == 2) { // Duplo clique
-                        DlgNovaConsulta dialog = new DlgNovaConsulta(null, true);
-                        dialog.preencherFormulario(consulta);
-                        dialog.setVisible(true);
-                    }
-                }
-            });
-            
-            pnlGrade.add(card);
-            card.setVisible(true); // Garantir que o card está visível
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao adicionar card da consulta: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    public void setConsultas(List<Consulta> novasConsultas) {
-        if (novasConsultas != null) {
-            this.consultas.clear();
-            this.consultas.addAll(novasConsultas);
-            System.out.println("\nNovas consultas recebidas: " + consultas.size());
-            for (Consulta c : consultas) {
-                System.out.println("Consulta: " + c.getDataHora().format(DATA_FORMATTER) 
-                    + " " + c.getDataHora().format(HORA_FORMATTER) 
-                    + " - " + c.getPaciente().getNome());
-            }
-        }
-        atualizarAgenda();
-    }
-
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
     private void initComponents() {
-        pnlControles = new javax.swing.JPanel();
-        btnHoje = new javax.swing.JButton();
-        btnAnterior = new javax.swing.JButton();
-        btnProximo = new javax.swing.JButton();
-        lblMesAno = new javax.swing.JLabel();
-        scrollPane = new javax.swing.JScrollPane();
-        pnlGrade = new javax.swing.JPanel();
-
-        setLayout(new BorderLayout());
-
-        pnlControles.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        btnHoje.setText("Hoje");
-        btnHoje.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHojeActionPerformed(evt);
-            }
+        // Configurar o layout principal
+        setLayout(null);
+        setBackground(Color.WHITE);
+        setBounds(0, 0, 1040, 730);
+        
+        // Adicionar título
+        JLabel lblTitle = new JLabel("Agenda");
+        lblTitle.setFont(new Font("Fira Sans SemiBold", Font.PLAIN, 18));
+        lblTitle.setForeground(new Color(51, 51, 51));
+        lblTitle.setBounds(30, 20, 210, 22);
+        add(lblTitle);
+        
+        // Adicionar subtítulo
+        JLabel lblSubtitle = new JLabel("Visualize e gerencie as consultas agendadas.");
+        lblSubtitle.setFont(new Font("Fira Sans Medium", Font.PLAIN, 13));
+        lblSubtitle.setForeground(new Color(102, 102, 102));
+        lblSubtitle.setBounds(30, 40, 720, 17);
+        add(lblSubtitle);
+        
+        // Adicionar botão Nova Consulta
+        PrimaryCustomButton btnNovaConsulta = new PrimaryCustomButton("Nova Consulta");
+        btnNovaConsulta.setBounds(810, 30, 200, 30);
+        btnNovaConsulta.addActionListener(e -> abrirDialogNovaConsulta());
+        add(btnNovaConsulta);
+        
+        // Configurar cabeçalho com fundo branco e borda inferior
+        pnlHeader = new JPanel();
+        pnlHeader.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        pnlHeader.setBounds(30, 80, 980, 50); // Ajustado para ficar abaixo do título
+        pnlHeader.setBackground(Color.WHITE);
+        pnlHeader.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
+        
+        // Configurar botões e label
+        btnAnterior = new SecondaryCustomButton("←");
+        btnProximo = new SecondaryCustomButton("→");
+        lblMes = new JLabel();
+        lblMes.setFont(new Font("Fira Sans", Font.BOLD, 16));
+        
+        // Adicionar ações aos botões
+        btnAnterior.addActionListener(e -> {
+            dataAtual = dataAtual.minusDays(1);
+            atualizarAgenda();
         });
-        pnlControles.add(btnHoje);
-
-        btnAnterior.setText("<");
-        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAnteriorActionPerformed(evt);
-            }
+        
+        btnProximo.addActionListener(e -> {
+            dataAtual = dataAtual.plusDays(1);
+            atualizarAgenda();
         });
-        pnlControles.add(btnAnterior);
-
-        btnProximo.setText(">");
-        btnProximo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProximoActionPerformed(evt);
-            }
-        });
-        pnlControles.add(btnProximo);
-
-        lblMesAno.setText("Mês Ano");
-        pnlControles.add(lblMesAno);
-
-        add(pnlControles, BorderLayout.NORTH);
-
-        pnlGrade.setLayout(null);
-        scrollPane.setViewportView(pnlGrade);
-
-        add(scrollPane, BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnHojeActionPerformed(java.awt.event.ActionEvent evt) {
-        dataAtual = LocalDate.now();
-        atualizarLabelMesAno();
+        
+        // Adicionar componentes ao header
+        pnlHeader.add(btnAnterior);
+        pnlHeader.add(lblMes);
+        pnlHeader.add(btnProximo);
+        
+        // Configurar painel da agenda com margens
+        pnlAgenda = new JPanel();
+        pnlAgenda.setLayout(new BoxLayout(pnlAgenda, BoxLayout.Y_AXIS));
+        pnlAgenda.setBackground(Color.WHITE);
+        
+        // Criar ScrollPane para a agenda com margens
+        JScrollPane scrollPane = new JScrollPane(pnlAgenda);
+        scrollPane.setBounds(30, 150, 980, 550); // Ajustado para nova posição
+        scrollPane.setBorder(null);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        
+        // Adicionar componentes ao painel principal
+        add(pnlHeader);
+        add(scrollPane);
+        
+        // Atualizar a agenda inicialmente
         atualizarAgenda();
     }
-
-    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {
-        dataAtual = dataAtual.minusDays(1);
-        atualizarLabelMesAno();
+    
+    private void atualizarAgenda() {
+        // Atualizar label do mês
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy");
+        lblMes.setText(dataAtual.format(formatter));
+        
+        // Limpar agenda
+        pnlAgenda.removeAll();
+        
+        // Buscar consultas do dia
+        List<Consulta> consultas = consultaController.buscarPorData(dataAtual);
+        
+        // Organizar consultas por hora
+        Map<LocalTime, JPanel> horarios = new TreeMap<>();
+        
+        // Criar slots de horário
+        LocalTime hora = config.getHorarioAbertura();
+        while (!hora.isAfter(config.getHorarioFechamento())) {
+            JPanel pnlHorario = criarPainelHorario(hora);
+            horarios.put(hora, pnlHorario);
+            hora = hora.plusMinutes(config.getIntervaloConsultaMinutos());
+        }
+        
+        // Adicionar consultas nos horários
+        for (Consulta consulta : consultas) {
+            LocalTime horaConsulta = consulta.getDataHora().toLocalTime();
+            JPanel pnlHorario = horarios.get(horaConsulta);
+            
+            if (pnlHorario != null) {
+                pnlHorario.add(criarPainelConsulta(consulta));
+            }
+        }
+        
+        // Adicionar todos os horários na agenda
+        horarios.values().forEach(pnlAgenda::add);
+        
+        // Atualizar interface
+        pnlAgenda.revalidate();
+        pnlAgenda.repaint();
+    }
+    
+    private JPanel criarPainelHorario(LocalTime hora) {
+        JPanel panel = new JPanel(new BorderLayout(10, 0));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
+        panel.setMaximumSize(new Dimension(980, 80)); // Ajustado para a nova largura
+        panel.setPreferredSize(new Dimension(980, 80));
+        
+        // Label da hora
+        JLabel lblHora = new JLabel(hora.format(DateTimeFormatter.ofPattern("HH:mm")));
+        lblHora.setFont(new Font("Fira Sans", Font.BOLD, 14));
+        lblHora.setPreferredSize(new Dimension(80, 30));
+        lblHora.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        
+        // Painel para consultas
+        JPanel pnlConsultas = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        pnlConsultas.setBackground(Color.WHITE);
+        
+        panel.add(lblHora, BorderLayout.WEST);
+        panel.add(pnlConsultas, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    private JPanel criarPainelConsulta(Consulta consulta) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(240, 247, 255));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 220, 255), 1),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        
+        // Ajustar tamanho do painel de consulta
+        panel.setPreferredSize(new Dimension(200, 100)); // Reduzido para caber melhor
+        
+        // Informações da consulta com fonte e espaçamento adequados
+        JLabel lblPaciente = new JLabel("Paciente: " + consulta.getPaciente().getNome());
+        JLabel lblMedico = new JLabel("Médico: " + consulta.getMedico().getNome());
+        JLabel lblEnfermeira = new JLabel("Enfermeira: " + consulta.getEnfermeira().getNome());
+        
+        // Configurar fonte
+        Font labelFont = new Font("Fira Sans", Font.PLAIN, 12);
+        lblPaciente.setFont(labelFont);
+        lblMedico.setFont(labelFont);
+        lblEnfermeira.setFont(labelFont);
+        
+        // Adicionar componentes com espaçamento
+        panel.add(lblPaciente);
+        panel.add(Box.createRigidArea(new Dimension(0, 4)));
+        panel.add(lblMedico);
+        panel.add(Box.createRigidArea(new Dimension(0, 4)));
+        panel.add(lblEnfermeira);
+        
+        // Adicionar procedimentos se houver
+        if (!consulta.getProcedimentos().isEmpty()) {
+            panel.add(Box.createRigidArea(new Dimension(0, 4)));
+            JLabel lblProcedimentos = new JLabel("<html>Procedimentos: " + 
+                String.join(", ", consulta.getProcedimentos().stream()
+                    .map(Procedimento::getNome)
+                    .toArray(String[]::new)) + "</html>");
+            lblProcedimentos.setFont(labelFont);
+            panel.add(lblProcedimentos);
+        }
+        
+        return panel;
+    }
+    
+    // Método público para forçar atualização
+    public void atualizarVisualizacao() {
+        // Recarregar a configuração do sistema
+        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
+        config = configDAO.getConfiguracao();
+        
+        // Atualizar a agenda com a nova configuração
         atualizarAgenda();
     }
-
-    private void btnProximoActionPerformed(java.awt.event.ActionEvent evt) {
-        dataAtual = dataAtual.plusDays(1);
-        atualizarLabelMesAno();
-        atualizarAgenda();
+    
+    // Método para abrir o diálogo de nova consulta
+    private void abrirDialogNovaConsulta() {
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof JFrame) {
+            DlgNovaConsulta dialog = new DlgNovaConsulta((JFrame) window, true);
+            dialog.setLocationRelativeTo(window);
+            dialog.setVisible(true);
+            
+            // Atualizar a agenda após fechar o diálogo
+            if (dialog.isConsultaCadastrada() || dialog.isConsultaAlterada()) {
+                atualizarVisualizacao();
+            }
+        }
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnterior;
-    private javax.swing.JButton btnHoje;
-    private javax.swing.JButton btnProximo;
-    private javax.swing.JLabel lblMesAno;
-    private javax.swing.JPanel pnlControles;
-    private javax.swing.JPanel pnlGrade;
-    private javax.swing.JScrollPane scrollPane;
-    // End of variables declaration//GEN-END:variables
 }

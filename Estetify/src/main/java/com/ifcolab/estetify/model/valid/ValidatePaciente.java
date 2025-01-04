@@ -81,6 +81,9 @@ public class ValidatePaciente {
             throw new PacienteException("Endereço não pode estar em branco.");
         }
 
+        uniqueEmail(email);
+        uniqueCPF(cpf);
+
         return new Paciente(
                 nome,
                 email,
@@ -165,6 +168,20 @@ public class ValidatePaciente {
         Paciente aux = repositorio.findByEmail(email);
         if (aux != null) {
             throw new PacienteException("Email já está sendo usado.");
+        }
+    }
+    
+    public void uniqueCPF(String cpf) {
+        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
+        String cpfFormatado = String.format("%s.%s.%s-%s",
+            cpfLimpo.substring(0, 3),
+            cpfLimpo.substring(3, 6),
+            cpfLimpo.substring(6, 9),
+            cpfLimpo.substring(9, 11));
+        
+        Paciente aux = repositorio.findByCPF(cpfFormatado);
+        if (aux != null) {
+            throw new PacienteException("CPF já está sendo usado.");
         }
     }
 }

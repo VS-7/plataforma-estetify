@@ -11,6 +11,7 @@ import com.ifcolab.estetify.model.dao.ConsultaDAO;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import com.ifcolab.estetify.model.valid.ValidateConsulta;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.JTable;
@@ -105,5 +106,12 @@ public class ConsultaController {
     public void atualizarTabela(JTable grd) {
         TMViewConsulta tmConsulta = new TMViewConsulta(repositorio.findAll());
         grd.setModel(tmConsulta);
+    }
+    
+    public List<Consulta> buscarPorData(LocalDate data) {
+        if (data == null) {
+            throw new ConsultaException("Data não pode ser nula");
+        }
+        return repositorio.buscarPorData(data);
     }
 }

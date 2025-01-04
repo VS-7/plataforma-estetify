@@ -14,6 +14,7 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
 
     private final ConfiguracaoSistemaController controller;
     private ConfiguracaoSistema config;
+    private FrMenu parentFrame;
     
     public pnlConfiguracaoSistema() {
         initComponents();
@@ -21,6 +22,10 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         controller = new ConfiguracaoSistemaController();
         this.configurarComponentes();
         this.carregarConfiguracao();
+    }
+
+    public void setParentFrame(FrMenu parent) {
+        this.parentFrame = parent;
     }
 
     private void configurarComponentes() {
@@ -232,6 +237,12 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
                 "Configurações salvas com sucesso!",
                 "Sucesso",
                 JOptionPane.INFORMATION_MESSAGE);
+                
+            if (parentFrame != null) {
+                parentFrame.atualizarAgenda();
+                // Forçar a exibição da agenda atualizada
+                parentFrame.mostrarAgenda();
+            }
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,

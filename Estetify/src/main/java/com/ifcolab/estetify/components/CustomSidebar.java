@@ -242,9 +242,12 @@ public class CustomSidebar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGerenciarEnfermeirasActionPerformed
 
     private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaActionPerformed
-        DlgAgenda dialog = new DlgAgenda(null, true);
+       /* DlgAgenda dialog = new DlgAgenda(null, true);
         dialog.setLocationRelativeTo(parentFrame);
-        dialog.setVisible(true);
+        dialog.setVisible(true);*/
+        if (parentFrame instanceof FrMenu) {
+            ((FrMenu) parentFrame).mostrarAgenda();
+        }
     }//GEN-LAST:event_btnAgendaActionPerformed
 
     private void btnFeedbacksAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedbacksAdminActionPerformed

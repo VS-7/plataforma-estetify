@@ -67,4 +67,8 @@ public class Procedimento implements Serializable {
     public String toString() {
         return this.getDescricao();
     }
+
+    public String getNome() {
+        return this.tipo.toString();
+    }
 }
