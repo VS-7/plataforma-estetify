@@ -37,6 +37,23 @@ public class FrMenu extends javax.swing.JFrame {
         repaint();
     }
     
+    public void mostrarConfiguracoes() {
+        // Limpar o conteúdo atual
+        getContentPane().removeAll();
+
+        // Adicionar componentes na ordem correta
+        getContentPane().add(pnlAppBar);
+        getContentPane().add(pnlSidebar);
+        getContentPane().add(pnlConfiguracaoSistema);
+
+        // Adicionar o background por último
+        getContentPane().add(lblBackground);
+
+        // Atualizar a tela
+        revalidate();
+        repaint();
+    }
+    
     public void atualizarAppBar() {
         if (pnlAppBar != null) {
             pnlAppBar.atualizarInterface();
@@ -51,6 +68,7 @@ public class FrMenu extends javax.swing.JFrame {
 
         jLabel4 = new javax.swing.JLabel();
         pnlPerfil = new com.ifcolab.estetify.view.pnlPerfil();
+        pnlConfiguracaoSistema = new com.ifcolab.estetify.view.pnlConfiguracaoSistema();
         pnlAppBar = new com.ifcolab.estetify.components.AppBar();
         pnlSidebar = new com.ifcolab.estetify.components.CustomSidebar();
         lblBackground = new javax.swing.JLabel();
@@ -63,6 +81,8 @@ public class FrMenu extends javax.swing.JFrame {
         getContentPane().setLayout(null);
         getContentPane().add(pnlPerfil);
         pnlPerfil.setBounds(280, 80, 1040, 730);
+        getContentPane().add(pnlConfiguracaoSistema);
+        pnlConfiguracaoSistema.setBounds(280, 80, 1040, 730);
         getContentPane().add(pnlAppBar);
         pnlAppBar.setBounds(250, 0, 1100, 50);
         getContentPane().add(pnlSidebar);
@@ -81,6 +101,7 @@ public class FrMenu extends javax.swing.JFrame {
     private javax.swing.JLabel lblBackground;
     private com.ifcolab.estetify.components.AppBar pnlAppBar;
     private com.ifcolab.estetify.view.pnlPerfil pnlPerfil;
+    private com.ifcolab.estetify.view.pnlConfiguracaoSistema pnlConfiguracaoSistema;
     private com.ifcolab.estetify.components.CustomSidebar pnlSidebar;
     // End of variables declaration//GEN-END:variables
 }

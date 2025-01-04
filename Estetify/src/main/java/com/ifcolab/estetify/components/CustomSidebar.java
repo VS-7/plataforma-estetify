@@ -206,9 +206,9 @@ public class CustomSidebar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfiguracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiguracoesActionPerformed
-        DlgConfiguracaoSistema dialog = new DlgConfiguracaoSistema(null, true);
-        dialog.setLocationRelativeTo(parentFrame);
-        dialog.setVisible(true);
+        if (parentFrame instanceof FrMenu) {
+            ((FrMenu) parentFrame).mostrarConfiguracoes();
+        }
     }//GEN-LAST:event_btnConfiguracoesActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
