@@ -21,7 +21,6 @@ public class ValidateEnfermeira {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -50,9 +49,6 @@ public class ValidateEnfermeira {
             throw new EnfermeiraException("Senha não pode estar em branco.");
         }
 
-        if (!senha.equals(confirmarSenha)) {
-            throw new EnfermeiraException("Confirmação de senha incorreta.");
-        }
 
         if (cpf == null || !isValidCPF(cpf)) {
             throw new EnfermeiraException("CPF inválido.");

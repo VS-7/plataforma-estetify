@@ -5,6 +5,9 @@ import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.EnfermeiraException;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
+import com.ifcolab.estetify.utils.GeradorSenha;
+import com.ifcolab.estetify.utils.GerenciadorCriptografia;
+import com.ifcolab.estetify.utils.NotificadorEmail;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -20,11 +23,13 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
 
     private EnfermeiraController controller;
     private int idEnfermeiraEditando;
+    private final GerenciadorCriptografia gerenciadorCriptografia;
 
     public DlgGerenciaEnfermeira(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
+        gerenciadorCriptografia = new GerenciadorCriptografia();
         controller = new EnfermeiraController();
         idEnfermeiraEditando = -1;
  
@@ -400,8 +405,7 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
                     idEnfermeiraEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
-                    "123456", // senha
-                    "123456", // confirmar senha
+                    enfermeiraAtual.getSenha(),
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -411,11 +415,13 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
                     enfermeiraAtual.getAvatar()
                 );
             } else {
+                String senhaTemporaria = GeradorSenha.gerarSenha(8);
+                String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
+
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    "123456", // senha padrão
-                    "123456", // confirmar senha
+                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -424,6 +430,11 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
                     edtCOREN.getText(),
                     1
                 );
+
+                Enfermeira novaEnfermeira = controller.buscarPorCOREN(edtCOREN.getText());
+
+                NotificadorEmail notificador = new NotificadorEmail();
+                notificador.enviarCredenciais(novaEnfermeira, senhaTemporaria);
             }
 
             this.idEnfermeiraEditando = -1;

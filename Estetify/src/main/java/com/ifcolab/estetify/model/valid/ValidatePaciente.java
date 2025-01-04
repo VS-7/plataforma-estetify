@@ -22,7 +22,6 @@ public class ValidatePaciente {
             String nome,
             String email,
             String senha,
-            
             String cpf,
             TipoSexo sexo,
             String dataNascimento,

@@ -22,7 +22,6 @@ public class ValidateRecepcionista {
             String nome,
             String email,
             String senha,
-            String confirmarSenha,
             String cpf,
             TipoSexo sexo,
             String dataNascimento,
@@ -49,10 +48,6 @@ public class ValidateRecepcionista {
 
         if (senha == null || senha.isEmpty()) {
             throw new RecepcionistaException("Senha não pode estar em branco.");
-        }
-
-        if (!senha.equals(confirmarSenha)) {
-            throw new RecepcionistaException("Confirmação de senha incorreta.");
         }
 
         if (cpf == null || !isValidCPF(cpf)) {
