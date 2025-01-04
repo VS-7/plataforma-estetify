@@ -3,28 +3,30 @@ package com.ifcolab.estetify.model.valid;
 import com.ifcolab.estetify.model.Feedback;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.exceptions.FeedbackException;
+import java.time.LocalDateTime;
 
 public class ValidateFeedback {
     
     public Feedback validaCamposEntrada(
             String titulo,
-            String avaliacao,
-            int numAvaliacaoEstrela,
-            Consulta consulta
+            String descricao,
+            int avaliacao,
+            Consulta consulta,
+            LocalDateTime dataAvaliacao
     ) {
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new FeedbackException("Título não pode estar em branco.");
         }
         
-        if (avaliacao == null || avaliacao.trim().isEmpty()) {
+        if (descricao == null || descricao.trim().isEmpty()) {
             throw new FeedbackException("Avaliação não pode estar em branco.");
         }
         
-        if (avaliacao.length() > 1000) {
+        if (descricao.length() > 1000) {
             throw new FeedbackException("Avaliação não pode ter mais que 1000 caracteres.");
         }
         
-        if (numAvaliacaoEstrela < 1 || numAvaliacaoEstrela > 5) {
+        if (avaliacao < 1 || avaliacao > 5) {
             throw new FeedbackException("Número de estrelas deve estar entre 1 e 5.");
         }
         
@@ -32,6 +34,6 @@ public class ValidateFeedback {
             throw new FeedbackException("Consulta não pode estar em branco.");
         }
         
-        return new Feedback(0, titulo, avaliacao, numAvaliacaoEstrela, consulta);
+        return new Feedback(0, titulo, descricao , avaliacao, dataAvaliacao, consulta);
     }
 }

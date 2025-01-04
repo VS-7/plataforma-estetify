@@ -26,20 +26,19 @@ public class DlgFeedback extends javax.swing.JDialog {
         lblTituloFeedback = new javax.swing.JLabel();
         primaryCustomButton1 = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnSeusFeedbacks = new com.ifcolab.estetify.components.SecondaryCustomButton();
+        lblTituloFeedback1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
         ratingStars1 = new com.ifcolab.estetify.components.RatingStars();
         edtTitulo = new com.ifcolab.estetify.components.CustomTextField();
         btnEnviarFeedback = new com.ifcolab.estetify.components.PrimaryCustomButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        customTable1 = new com.ifcolab.estetify.components.CustomTable();
         lblLine = new javax.swing.JLabel();
         lblBackgrundFeedback = new javax.swing.JLabel();
         lblBackgrundFeedback1 = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1350, 850));
+        setMinimumSize(new java.awt.Dimension(1350, 870));
         getContentPane().setLayout(null);
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo100x88.png"))); // NOI18N
@@ -56,7 +55,7 @@ public class DlgFeedback extends javax.swing.JDialog {
         lblSubtitulo.setForeground(new java.awt.Color(0, 0, 0));
         lblSubtitulo.setText("Cadastre aqui seu feedback");
         getContentPane().add(lblSubtitulo);
-        lblSubtitulo.setBounds(70, 200, 660, 40);
+        lblSubtitulo.setBounds(70, 180, 660, 40);
 
         lblDescricaoFeedback.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
         lblDescricaoFeedback.setForeground(new java.awt.Color(51, 51, 51));
@@ -66,9 +65,9 @@ public class DlgFeedback extends javax.swing.JDialog {
 
         lblTituloFeedback.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
         lblTituloFeedback.setForeground(new java.awt.Color(51, 51, 51));
-        lblTituloFeedback.setText("Titulo");
+        lblTituloFeedback.setText("Avaliar");
         getContentPane().add(lblTituloFeedback);
-        lblTituloFeedback.setBounds(60, 290, 110, 16);
+        lblTituloFeedback.setBounds(60, 230, 110, 16);
 
         primaryCustomButton1.setText("Todos Feedbacks");
         getContentPane().add(primaryCustomButton1);
@@ -78,6 +77,12 @@ public class DlgFeedback extends javax.swing.JDialog {
         getContentPane().add(btnSeusFeedbacks);
         btnSeusFeedbacks.setBounds(920, 50, 200, 30);
 
+        lblTituloFeedback1.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        lblTituloFeedback1.setForeground(new java.awt.Color(51, 51, 51));
+        lblTituloFeedback1.setText("Titulo");
+        getContentPane().add(lblTituloFeedback1);
+        lblTituloFeedback1.setBounds(60, 290, 110, 16);
+
         customTextArea1.setColumns(20);
         customTextArea1.setRows(5);
         jScrollPane1.setViewportView(customTextArea1);
@@ -85,7 +90,7 @@ public class DlgFeedback extends javax.swing.JDialog {
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(60, 390, 450, 310);
         getContentPane().add(ratingStars1);
-        ratingStars1.setBounds(70, 240, 136, 24);
+        ratingStars1.setBounds(60, 250, 136, 24);
 
         edtTitulo.setText("Insira um titulo...");
         edtTitulo.addActionListener(new java.awt.event.ActionListener() {
@@ -99,22 +104,6 @@ public class DlgFeedback extends javax.swing.JDialog {
         btnEnviarFeedback.setText("Enviar Feedback");
         getContentPane().add(btnEnviarFeedback);
         btnEnviarFeedback.setBounds(160, 750, 230, 30);
-
-        customTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane2.setViewportView(customTable1);
-
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(690, 90, 610, 720);
 
         lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
         getContentPane().add(lblLine);
@@ -144,11 +133,9 @@ public class DlgFeedback extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnEnviarFeedback;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSeusFeedbacks;
-    private com.ifcolab.estetify.components.CustomTable customTable1;
     private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
     private com.ifcolab.estetify.components.CustomTextField edtTitulo;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgrundFeedback;
     private javax.swing.JLabel lblBackgrundFeedback1;
@@ -158,6 +145,7 @@ public class DlgFeedback extends javax.swing.JDialog {
     private javax.swing.JLabel lblSubtitulo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTituloFeedback;
+    private javax.swing.JLabel lblTituloFeedback1;
     private com.ifcolab.estetify.components.PrimaryCustomButton primaryCustomButton1;
     private com.ifcolab.estetify.components.RatingStars ratingStars1;
     // End of variables declaration//GEN-END:variables

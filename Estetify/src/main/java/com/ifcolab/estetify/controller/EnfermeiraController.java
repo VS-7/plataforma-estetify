@@ -27,7 +27,8 @@ public class EnfermeiraController {
             String dataNascimento,
             String telefone,
             String endereco,
-            String coren
+            String coren,
+            int avatar
     ) {
         ValidateEnfermeira valid = new ValidateEnfermeira();
         Enfermeira enfermeira = valid.validaCamposEntrada(
@@ -40,7 +41,8 @@ public class EnfermeiraController {
                 dataNascimento,
                 telefone,
                 endereco,
-                coren
+                coren,
+                avatar
         );
         
         if (repositorio.findByCOREN(coren) != null) {
@@ -61,7 +63,8 @@ public class EnfermeiraController {
             String dataNascimento,
             String telefone,
             String endereco,
-            String coren
+            String coren,
+            int avatar
     ) {
         ValidateEnfermeira valid = new ValidateEnfermeira();
         Enfermeira enfermeira = valid.validaCamposEntrada(
@@ -74,7 +77,8 @@ public class EnfermeiraController {
                 dataNascimento,
                 telefone,
                 endereco,
-                coren
+                coren,
+                avatar
         );
         
         enfermeira.setId(id);
@@ -101,6 +105,10 @@ public class EnfermeiraController {
     public void filtrarTabela(JTable grd, String nome) {
         TMViewEnfermeira tmEnfermeira = new TMViewEnfermeira(repositorio.filterByName(nome));
         grd.setModel(tmEnfermeira);
+    }
+
+    public Enfermeira find(int id) {
+        return repositorio.find(id);
     }
     
     public List<Enfermeira> findAll() {

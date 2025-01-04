@@ -23,7 +23,7 @@ public class Enfermeira extends Pessoa implements Serializable {
         super();
     }
     
-    public Enfermeira(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren) {
+    public Enfermeira(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren, int avatar) {
         
         super(nome, 
               email, 
@@ -33,7 +33,8 @@ public class Enfermeira extends Pessoa implements Serializable {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              TipoUsuario.ENFERMEIRA);
+              TipoUsuario.ENFERMEIRA,
+              avatar);
         this.coren = coren;
     }
     

@@ -39,7 +39,7 @@ public class FrLogin extends javax.swing.JFrame {
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1350, 850));
+        setMinimumSize(new java.awt.Dimension(1350, 870));
         setResizable(false);
         getContentPane().setLayout(null);
 

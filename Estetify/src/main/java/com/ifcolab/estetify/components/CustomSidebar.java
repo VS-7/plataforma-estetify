@@ -8,6 +8,7 @@ import com.ifcolab.estetify.view.DlgGerenciaEnfermeira;
 import com.ifcolab.estetify.view.DlgGerenciaMedico;
 import com.ifcolab.estetify.view.DlgGerenciaPaciente;
 import com.ifcolab.estetify.view.DlgGerenciaRecepcionista;
+import com.ifcolab.estetify.view.FrMenu;
 import javax.swing.JFrame;
 
 public class CustomSidebar extends javax.swing.JPanel {
@@ -33,16 +34,23 @@ public class CustomSidebar extends javax.swing.JPanel {
         btnGerenciarPacientes.setVisible(false);
         btnGerenciarRecepcionistas.setVisible(false);
         btnSair.setVisible(false);
+        btnConfiguracoes.setVisible(false);
         btnMinhasConsultas.setVisible(false);
+        btnFeedbacks.setVisible(false);
+        btnFeedbacksAdmin.setVisible(false);
         btnAgenda.setVisible(false);
         btnPerfil.setVisible(false);
         
         // Mostra botões baseado no tipo de usuário
         if (authController.isAdmin()) {
+            btnAgenda.setVisible(true);
+            btnPerfil.setVisible(true);
             btnGerenciarMedicos.setVisible(true);
             btnGerenciarEnfermeiras.setVisible(true);
             btnGerenciarPacientes.setVisible(true);
             btnGerenciarRecepcionistas.setVisible(true);
+            btnConfiguracoes.setVisible(true);
+            btnFeedbacksAdmin.setVisible(true);
             btnSair.setVisible(true);
         } 
         else if (authController.isPaciente()) {
@@ -54,12 +62,14 @@ public class CustomSidebar extends javax.swing.JPanel {
         else if (authController.isMedico() || authController.isEnfermeira()) {
             btnAgenda.setVisible(true);
             btnPerfil.setVisible(true);
+            btnFeedbacks.setVisible(true);
             btnSair.setVisible(true);
         }
         else if (authController.isRecepcionista()) {
             btnAgenda.setVisible(true);
             btnGerenciarPacientes.setVisible(true);
             btnPerfil.setVisible(true);
+            btnFeedbacks.setVisible(true);
             btnSair.setVisible(true);
         }
     }
@@ -78,6 +88,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         btnMinhasConsultas = new com.ifcolab.estetify.components.CustomButton();
         btnFeedbacks = new com.ifcolab.estetify.components.CustomButton();
         btnSair = new com.ifcolab.estetify.components.CustomButton();
+        btnFeedbacksAdmin = new com.ifcolab.estetify.components.CustomButton();
         btnGerenciarRecepcionistas = new com.ifcolab.estetify.components.CustomButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -93,6 +104,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(lblEstetify);
         lblEstetify.setBounds(70, 30, 130, 20);
 
+        btnAgenda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/calendar.png"))); // NOI18N
         btnAgenda.setText("Agenda");
         btnAgenda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,6 +114,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnAgenda);
         btnAgenda.setBounds(10, 90, 230, 50);
 
+        btnConfiguracoes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/config.png"))); // NOI18N
         btnConfiguracoes.setText("Configurações");
         btnConfiguracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,6 +124,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnConfiguracoes);
         btnConfiguracoes.setBounds(10, 210, 230, 50);
 
+        btnGerenciarPacientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/coracao.png"))); // NOI18N
         btnGerenciarPacientes.setText("Gerenciar Pacientes");
         btnGerenciarPacientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,6 +134,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnGerenciarPacientes);
         btnGerenciarPacientes.setBounds(10, 270, 230, 50);
 
+        btnGerenciarMedicos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/estetoscopio.png"))); // NOI18N
         btnGerenciarMedicos.setText("Gerenciar Medicos");
         btnGerenciarMedicos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,6 +144,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnGerenciarMedicos);
         btnGerenciarMedicos.setBounds(10, 330, 230, 50);
 
+        btnPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/perfil.png"))); // NOI18N
         btnPerfil.setText("Perfil");
         btnPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,6 +154,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnPerfil);
         btnPerfil.setBounds(10, 150, 230, 50);
 
+        btnGerenciarEnfermeiras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/seringa.png"))); // NOI18N
         btnGerenciarEnfermeiras.setText("Gerenciar Enfermeiras");
         btnGerenciarEnfermeiras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,10 +164,12 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnGerenciarEnfermeiras);
         btnGerenciarEnfermeiras.setBounds(10, 390, 230, 50);
 
+        btnMinhasConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/calendar.png"))); // NOI18N
         btnMinhasConsultas.setText("Minhas Consultas");
         add(btnMinhasConsultas);
         btnMinhasConsultas.setBounds(10, 90, 230, 50);
 
+        btnFeedbacks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/feedbacks.png"))); // NOI18N
         btnFeedbacks.setText("Feedbacks");
         btnFeedbacks.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,7 +184,23 @@ public class CustomSidebar extends javax.swing.JPanel {
         add(btnSair);
         btnSair.setBounds(10, 727, 230, 50);
 
+        btnFeedbacksAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/feedbacks.png"))); // NOI18N
+        btnFeedbacksAdmin.setText("Feedbacks");
+        btnFeedbacksAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFeedbacksAdminActionPerformed(evt);
+            }
+        });
+        add(btnFeedbacksAdmin);
+        btnFeedbacksAdmin.setBounds(10, 500, 230, 50);
+
+        btnGerenciarRecepcionistas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/recepcionista.png"))); // NOI18N
         btnGerenciarRecepcionistas.setText("Gerenciar Recepcionistas");
+        btnGerenciarRecepcionistas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerenciarRecepcionistasActionPerformed(evt);
+            }
+        });
         add(btnGerenciarRecepcionistas);
         btnGerenciarRecepcionistas.setBounds(10, 450, 230, 50);
     }// </editor-fold>//GEN-END:initComponents
@@ -177,7 +212,9 @@ public class CustomSidebar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnConfiguracoesActionPerformed
 
     private void btnPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerfilActionPerformed
-        // TODO add your handling code here:
+        if (parentFrame instanceof FrMenu) {
+            ((FrMenu) parentFrame).mostrarPerfil();
+        }
     }//GEN-LAST:event_btnPerfilActionPerformed
 
     private void btnFeedbacksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedbacksActionPerformed
@@ -210,11 +247,24 @@ public class CustomSidebar extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAgendaActionPerformed
 
+    private void btnFeedbacksAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedbacksAdminActionPerformed
+        DlgFeedback dialog = new DlgFeedback(null, true);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnFeedbacksAdminActionPerformed
+
+    private void btnGerenciarRecepcionistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarRecepcionistasActionPerformed
+        DlgGerenciaRecepcionista dialog = new DlgGerenciaRecepcionista(null, true);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnGerenciarRecepcionistasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.CustomButton btnAgenda;
     private com.ifcolab.estetify.components.CustomButton btnConfiguracoes;
     private com.ifcolab.estetify.components.CustomButton btnFeedbacks;
+    private com.ifcolab.estetify.components.CustomButton btnFeedbacksAdmin;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarEnfermeiras;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarMedicos;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarPacientes;

@@ -25,7 +25,7 @@ public class Paciente extends Pessoa {
         super();
     }
     
-    public Paciente(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String historicoMedico) {
+    public Paciente(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String historicoMedico, int avatar) {
         super(nome, 
               email, 
               senha, 
@@ -34,7 +34,8 @@ public class Paciente extends Pessoa {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              TipoUsuario.PACIENTE);
+              TipoUsuario.PACIENTE,
+              avatar);
         this.historicoMedico = historicoMedico;
     }
     

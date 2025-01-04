@@ -20,7 +20,7 @@ public class Recepcionista extends Pessoa implements Serializable {
         super();
     }
     
-    public Recepcionista(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String dataContratacao) {
+    public Recepcionista(String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String dataContratacao, int avatar) {
 
         super(nome, 
               email, 
@@ -30,7 +30,8 @@ public class Recepcionista extends Pessoa implements Serializable {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              TipoUsuario.RECEPCIONISTA);
+              TipoUsuario.RECEPCIONISTA,
+              avatar);
         
         this.dataContratacao = LocalDate.parse(dataContratacao, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }

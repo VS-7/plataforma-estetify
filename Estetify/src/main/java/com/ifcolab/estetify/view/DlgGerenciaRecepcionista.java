@@ -164,7 +164,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1350, 850));
+        setMinimumSize(new java.awt.Dimension(1350, 870));
         getContentPane().setLayout(null);
 
         lblCPF.setForeground(new java.awt.Color(51, 51, 51));
@@ -356,6 +356,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             if (idRecepcionistaEditando > 0) {
+                Recepcionista recepcionistaAtual = controller.find(idRecepcionistaEditando);
                 controller.atualizar(idRecepcionistaEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
@@ -366,7 +367,8 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
-                    fEdtDataContratacao.getText()
+                    fEdtDataContratacao.getText(),
+                    recepcionistaAtual.getAvatar()
                 );
             } else {
                 controller.cadastrar(
@@ -379,7 +381,8 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
                     fEdtDataNascimento.getText(),
                     fEdtTelefone.getText(),
                     edtEndereco.getText(),
-                    fEdtDataContratacao.getText()
+                    fEdtDataContratacao.getText(),
+                    1
                 );
             }
 

@@ -145,6 +145,7 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1350, 870));
         getContentPane().setLayout(null);
 
         lblDuracaoEstimada.setForeground(new java.awt.Color(51, 51, 51));

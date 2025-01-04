@@ -9,8 +9,11 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import java.awt.Font;
 
 public class CustomButton extends JButton {
+    
+
     
     private boolean hover;
     private Color backgroundColor = Color.WHITE;
@@ -43,6 +46,8 @@ public class CustomButton extends JButton {
                 repaint();
             }
         });
+        
+        setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
     }
     
     @Override

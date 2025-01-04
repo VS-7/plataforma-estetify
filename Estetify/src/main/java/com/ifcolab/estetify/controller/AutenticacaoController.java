@@ -74,23 +74,23 @@ public class AutenticacaoController {
     }
 
     public boolean isAdmin() {
-        return isUsuarioLogado() && autenticacao.getUsuario().getTipo() == TipoUsuario.ADMIN;
+        return isUsuarioLogado() && autenticacao.getUsuario().getTipoUsuario() == TipoUsuario.ADMIN;
     }
 
     public boolean isMedico() {
-        return isUsuarioLogado() && autenticacao.getUsuario() instanceof Medico;
+        return isUsuarioLogado() && autenticacao.getUsuario().getTipoUsuario() == TipoUsuario.MEDICO;
     }
 
     public boolean isEnfermeira() {
-        return isUsuarioLogado() && autenticacao.getUsuario() instanceof Enfermeira;
+        return isUsuarioLogado() && autenticacao.getUsuario().getTipoUsuario() == TipoUsuario.ENFERMEIRA;
     }
 
     public boolean isRecepcionista() {
-        return isUsuarioLogado() && autenticacao.getUsuario() instanceof Recepcionista;
+        return isUsuarioLogado() && autenticacao.getUsuario().getTipoUsuario() == TipoUsuario.RECEPCIONISTA;
     }
 
     public boolean isPaciente() {
-        return isUsuarioLogado() && autenticacao.getUsuario() instanceof Paciente;
+        return isUsuarioLogado() && autenticacao.getUsuario().getTipoUsuario() == TipoUsuario.PACIENTE;
     }
 
     public Medico getMedicoLogado() {
@@ -107,5 +107,37 @@ public class AutenticacaoController {
 
     public Paciente getPacienteLogado() {
         return isPaciente() ? (Paciente) autenticacao.getUsuario() : null;
+    }
+
+    public void atualizarDadosUsuario(Pessoa usuario, int novoAvatar) {
+        try {
+            // Atualiza o avatar se foi fornecido um novo
+            if (novoAvatar > 0) {
+                usuario.setAvatar(novoAvatar);
+            }
+            
+            // Atualiza no banco de dados apropriado
+            if (usuario instanceof Medico) {
+                medicoDAO.update((Medico) usuario);
+            } 
+            else if (usuario instanceof Enfermeira) {
+                enfermeiraDAO.update((Enfermeira) usuario);
+            }
+            else if (usuario instanceof Paciente) {
+                pacienteDAO.update((Paciente) usuario);
+            }
+            else if (usuario instanceof Recepcionista) {
+                recepcionistaDAO.update((Recepcionista) usuario);
+            }
+            else {
+                throw new RuntimeException("Tipo de usuário não suportado");
+            }
+            
+            // Atualiza o usuário na sessão
+            autenticacao.setUsuario(usuario);
+            
+        } catch (Exception ex) {
+            throw new RuntimeException("Erro ao atualizar dados: " + ex.getMessage());
+        }
     }
 } 

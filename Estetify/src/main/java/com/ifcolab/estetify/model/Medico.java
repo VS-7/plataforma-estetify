@@ -35,7 +35,7 @@ public class Medico extends Pessoa implements Serializable {
     
     public Medico(String nome, String email, String senha, String cpf, TipoSexo sexo, 
                  String dataNascimento, String telefone, String endereco, 
-                 String crm, EspecializacaoMedico especializacao) {
+                 String crm, EspecializacaoMedico especializacao, int avatar) {
         super(nome, 
               email, 
               senha, 
@@ -44,7 +44,8 @@ public class Medico extends Pessoa implements Serializable {
               LocalDate.parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
               telefone, 
               endereco, 
-              TipoUsuario.MEDICO);  
+              TipoUsuario.MEDICO,
+              avatar);  
         this.crm = crm;
         this.especializacao = especializacao;
     }

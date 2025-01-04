@@ -28,7 +28,8 @@ public class ValidatePaciente {
             String dataNascimento,
             String telefone,
             String endereco,
-            String historicoMedico
+            String historicoMedico,
+            int avatar
     ) {
         if (nome == null || nome.isEmpty()) {
             throw new PacienteException("Nome não pode estar em branco.");
@@ -89,7 +90,8 @@ public class ValidatePaciente {
                 dataNascimento,
                 telefone,
                 endereco,
-                historicoMedico
+                historicoMedico,
+                avatar
         );
     }
 

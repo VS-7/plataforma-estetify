@@ -28,7 +28,8 @@ public class ValidateRecepcionista {
             String dataNascimento,
             String telefone,
             String endereco,
-            String dataContratacao
+            String dataContratacao,
+            int avatar
     ) {
         if (nome == null || nome.isEmpty()) {
             throw new RecepcionistaException("Nome não pode estar em branco.");
@@ -96,7 +97,8 @@ public class ValidateRecepcionista {
                 dataNascimento,
                 telefone,
                 endereco,
-                dataContratacao
+                dataContratacao,
+                avatar
         );
     }
 

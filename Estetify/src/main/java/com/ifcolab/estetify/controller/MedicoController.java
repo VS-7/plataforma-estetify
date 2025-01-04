@@ -29,7 +29,8 @@ public class MedicoController {
             String telefone,
             String endereco,
             String crm,
-            EspecializacaoMedico especializacao
+            EspecializacaoMedico especializacao,
+            int avatar
     ) {
         ValidateMedico valid = new ValidateMedico();
         Medico medico = valid.validaCamposEntrada(
@@ -43,7 +44,8 @@ public class MedicoController {
                 telefone,
                 endereco,
                 crm,
-                especializacao
+                especializacao,
+                avatar
         );
         
         if (repositorio.findByCRM(crm) != null) {
@@ -65,7 +67,8 @@ public class MedicoController {
             String telefone,
             String endereco,
             String crm,
-            EspecializacaoMedico especializacao
+            EspecializacaoMedico especializacao,
+            int avatar
     ) {
         ValidateMedico valid = new ValidateMedico();
         Medico medico = valid.validaCamposEntrada(
@@ -79,7 +82,8 @@ public class MedicoController {
                 telefone,
                 endereco,
                 crm,
-                especializacao
+                especializacao,
+                avatar
         );
         
         medico.setId(id);
@@ -106,6 +110,10 @@ public class MedicoController {
     public void filtrarTabela(JTable grd, String nome) {
         TMViewMedico tmMedico = new TMViewMedico(repositorio.filterByName(nome));
         grd.setModel(tmMedico);
+    }
+    
+    public Medico find(int id) {
+        return repositorio.find(id);
     }
     
     public List<Medico> findAll() {

@@ -29,7 +29,8 @@ public class ValidateMedico {
             String telefone,
             String endereco,
             String crm,
-            EspecializacaoMedico especializacao
+            EspecializacaoMedico especializacao,
+            int avatar
     ) {
         if (nome == null || nome.isEmpty()) {
             throw new MedicoException("Nome não pode estar em branco.");
@@ -100,7 +101,8 @@ public class ValidateMedico {
                 telefone,
                 endereco,
                 crm,
-                especializacao
+                especializacao,
+                avatar
         );
     }
 

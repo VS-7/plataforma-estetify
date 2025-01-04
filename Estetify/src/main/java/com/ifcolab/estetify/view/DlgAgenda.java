@@ -113,7 +113,7 @@ public class DlgAgenda extends javax.swing.JDialog {
         lblBackground = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(1350, 850));
+        setMinimumSize(new java.awt.Dimension(1350, 870));
         getContentPane().setLayout(null);
 
         tblConsultas.setModel(new javax.swing.table.DefaultTableModel(

@@ -26,7 +26,8 @@ public class RecepcionistaController {
             String dataNascimento,
             String telefone,
             String endereco,
-            String dataContratacao
+            String dataContratacao,
+            int avatar
     ) {
         ValidateRecepcionista valid = new ValidateRecepcionista();
         Recepcionista recepcionista = valid.validaCamposEntrada(
@@ -39,7 +40,8 @@ public class RecepcionistaController {
                 dataNascimento,
                 telefone,
                 endereco,
-                dataContratacao
+                dataContratacao,
+                avatar
         );
         
         if (repositorio.findByCPF(cpf) != null) {
@@ -60,7 +62,8 @@ public class RecepcionistaController {
             String dataNascimento,
             String telefone,
             String endereco,
-            String dataContratacao
+            String dataContratacao,
+            int avatar
     ) {
         ValidateRecepcionista valid = new ValidateRecepcionista();
         Recepcionista recepcionista = valid.validaCamposEntrada(
@@ -73,7 +76,8 @@ public class RecepcionistaController {
                 dataNascimento,
                 telefone,
                 endereco,
-                dataContratacao
+                dataContratacao,
+                avatar
         );
         
         recepcionista.setId(id);
@@ -90,6 +94,10 @@ public class RecepcionistaController {
     
     public Recepcionista buscarPorCPF(String cpf) {
         return repositorio.findByCPF(cpf);
+    }
+    
+    public Recepcionista find(int id) {
+        return repositorio.find(id);
     }
     
     public void atualizarTabela(JTable grd) {

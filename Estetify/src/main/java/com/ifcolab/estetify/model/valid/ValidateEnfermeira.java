@@ -27,7 +27,8 @@ public class ValidateEnfermeira {
             String dataNascimento,
             String telefone,
             String endereco,
-            String coren
+            String coren,
+            int avatar
     ) {
         if (nome == null || nome.isEmpty()) {
             throw new EnfermeiraException("Nome não pode estar em branco.");
@@ -96,7 +97,8 @@ public class ValidateEnfermeira {
                 dataNascimento,
                 telefone,
                 endereco,
-                coren
+                coren,
+                avatar
         );
     }
 

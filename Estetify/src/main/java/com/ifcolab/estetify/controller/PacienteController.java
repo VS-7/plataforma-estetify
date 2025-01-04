@@ -31,7 +31,8 @@ public class PacienteController {
             String dataNascimento,
             String telefone,
             String endereco,
-            String historicoMedico
+            String historicoMedico,
+            int avatar
     ) {
         ValidatePaciente valid = new ValidatePaciente();
         Paciente paciente = valid.validaCamposEntrada(
@@ -44,7 +45,8 @@ public class PacienteController {
                 dataNascimento,
                 telefone,
                 endereco,
-                historicoMedico
+                historicoMedico,
+                avatar
         );
         
         if (repositorio.findByCPF(cpf) != null) {
@@ -65,7 +67,8 @@ public class PacienteController {
             String dataNascimento,
             String telefone,
             String endereco,
-            String historicoMedico
+            String historicoMedico,
+            int avatar
     ) {
         ValidatePaciente valid = new ValidatePaciente();
         Paciente paciente = valid.validaCamposEntrada(
@@ -78,7 +81,8 @@ public class PacienteController {
                 dataNascimento,
                 telefone,
                 endereco,
-                historicoMedico
+                historicoMedico,
+                avatar
         );
         
         paciente.setId(id);
@@ -99,6 +103,10 @@ public class PacienteController {
     
     public List<Paciente> findAll() {
         return repositorio.findAll();
+    }
+    
+    public Paciente find(int id) {
+        return repositorio.find(id);
     }
     
     public void atualizarTabela(JTable grd) {

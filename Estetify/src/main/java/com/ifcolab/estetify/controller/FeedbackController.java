@@ -5,6 +5,7 @@ import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.dao.FeedbackDAO;
 import com.ifcolab.estetify.model.exceptions.FeedbackException;
 import com.ifcolab.estetify.model.valid.ValidateFeedback;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -20,15 +21,17 @@ public class FeedbackController {
     
     public void cadastrar(
             String titulo,
-            String avaliacao,
-            int numAvaliacaoEstrela,
+            String descricao,
+            int avaliacao,
+            LocalDateTime dataAvaliacao,
             Consulta consulta) throws FeedbackException {
             
         Feedback feedback = validate.validaCamposEntrada(
             titulo,
+            descricao,
             avaliacao,
-            numAvaliacaoEstrela,
-            consulta
+            consulta,
+            dataAvaliacao
         );
         
         repositorio.save(feedback);
@@ -37,15 +40,17 @@ public class FeedbackController {
     public void atualizar(
             int id,
             String titulo,
-            String avaliacao,
-            int numAvaliacaoEstrela,
+            String descricao,
+            int avaliacao,
+            LocalDateTime dataAvaliacao,
             Consulta consulta) throws FeedbackException {
             
         Feedback feedback = validate.validaCamposEntrada(
             titulo,
+            descricao,
             avaliacao,
-            numAvaliacaoEstrela,
-            consulta
+            consulta,
+            dataAvaliacao
         );
         
         feedback.setId(id);
@@ -59,5 +64,7 @@ public class FeedbackController {
     public List<Feedback> findAll() {
         return repositorio.findAll();
     }
+    
+    
     
 }

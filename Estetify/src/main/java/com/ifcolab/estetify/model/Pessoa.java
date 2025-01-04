@@ -60,7 +60,9 @@ public abstract class Pessoa implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipo;
     
-    public Pessoa(String nome, String email, String senha, String cpf, TipoSexo sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipo) {
+    private int avatar = 1;
+    
+    public Pessoa(String nome, String email, String senha, String cpf, TipoSexo sexo, LocalDate dataNascimento, String telefone, String endereco, TipoUsuario tipo, int avatar) {
 
         this.nome = nome;
         this.email = email;
@@ -71,5 +73,6 @@ public abstract class Pessoa implements Serializable {
         this.telefone = telefone;
         this.endereco = endereco;
         this.tipo = tipo;
+        this.avatar = avatar;
     }   
 }

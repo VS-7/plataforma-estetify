@@ -53,6 +53,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnAgenda">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/calendar.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Agenda"/>
       </Properties>
       <Events>
@@ -66,6 +69,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnConfiguracoes">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/config.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Configura&#xe7;&#xf5;es"/>
       </Properties>
       <Events>
@@ -79,6 +85,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnGerenciarPacientes">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/coracao.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Gerenciar Pacientes"/>
       </Properties>
       <Events>
@@ -92,6 +101,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnGerenciarMedicos">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/estetoscopio.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Gerenciar Medicos"/>
       </Properties>
       <Events>
@@ -105,6 +117,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnPerfil">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/perfil.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Perfil"/>
       </Properties>
       <Events>
@@ -118,6 +133,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnGerenciarEnfermeiras">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/seringa.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Gerenciar Enfermeiras"/>
       </Properties>
       <Events>
@@ -131,6 +149,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnMinhasConsultas">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/calendar.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Minhas Consultas"/>
       </Properties>
       <Constraints>
@@ -141,6 +162,9 @@
     </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnFeedbacks">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/feedbacks.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Feedbacks"/>
       </Properties>
       <Events>
@@ -165,10 +189,32 @@
         </Constraint>
       </Constraints>
     </Component>
+    <Component class="com.ifcolab.estetify.components.CustomButton" name="btnFeedbacksAdmin">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/feedbacks.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Feedbacks"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFeedbacksAdminActionPerformed"/>
+      </Events>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="10" y="500" width="230" height="50"/>
+        </Constraint>
+      </Constraints>
+    </Component>
     <Component class="com.ifcolab.estetify.components.CustomButton" name="btnGerenciarRecepcionistas">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/icons/recepcionista.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Gerenciar Recepcionistas"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGerenciarRecepcionistasActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="450" width="230" height="50"/>
