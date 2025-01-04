@@ -16,9 +16,11 @@ public class pnlPerfil extends javax.swing.JPanel {
 
     private final AutenticacaoController autenticacaoController;
     private Pessoa usuario;
+
      
     public pnlPerfil() {
         initComponents();
+        
         
         autenticacaoController = new AutenticacaoController();
         configurarComboBoxes();
@@ -132,6 +134,8 @@ public class pnlPerfil extends javax.swing.JPanel {
         lblCPF = new javax.swing.JLabel();
         lblSexo = new javax.swing.JLabel();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
+        btnTrocarSenha = new com.ifcolab.estetify.components.SecondaryCustomButton();
+        lblAvatarTitle1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(null);
@@ -179,7 +183,7 @@ public class pnlPerfil extends javax.swing.JPanel {
             }
         });
         add(cboAvatar);
-        cboAvatar.setBounds(20, 390, 340, 44);
+        cboAvatar.setBounds(20, 390, 470, 44);
 
         lblAvatar.setForeground(new java.awt.Color(51, 51, 51));
         add(lblAvatar);
@@ -224,9 +228,9 @@ public class pnlPerfil extends javax.swing.JPanel {
         lblTitleGerenciaMedicos.setBounds(30, 20, 210, 22);
 
         lblAvatarTitle.setForeground(new java.awt.Color(51, 51, 51));
-        lblAvatarTitle.setText("Selecionar foto de perfil");
+        lblAvatarTitle.setText("Trocar senha");
         add(lblAvatarTitle);
-        lblAvatarTitle.setBounds(30, 370, 300, 17);
+        lblAvatarTitle.setBounds(520, 370, 300, 17);
 
         fEdtCPF.setText("CPF");
         add(fEdtCPF);
@@ -249,6 +253,20 @@ public class pnlPerfil extends javax.swing.JPanel {
         lblSubtituloGerenciaMedicos.setText("Personalize seu perfil ao seu gosto.");
         add(lblSubtituloGerenciaMedicos);
         lblSubtituloGerenciaMedicos.setBounds(30, 40, 550, 17);
+
+        btnTrocarSenha.setText("Trocar Senha");
+        btnTrocarSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTrocarSenhaActionPerformed(evt);
+            }
+        });
+        add(btnTrocarSenha);
+        btnTrocarSenha.setBounds(520, 390, 450, 38);
+
+        lblAvatarTitle1.setForeground(new java.awt.Color(51, 51, 51));
+        lblAvatarTitle1.setText("Selecionar foto de perfil");
+        add(lblAvatarTitle1);
+        lblAvatarTitle1.setBounds(30, 370, 300, 17);
     }// </editor-fold>//GEN-END:initComponents
 
     private void edtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtNomeActionPerformed
@@ -296,9 +314,15 @@ public class pnlPerfil extends javax.swing.JPanel {
         atualizarPreviewAvatar(selectedAvatar);
     }//GEN-LAST:event_cboAvatarActionPerformed
 
+    private void btnTrocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrocarSenhaActionPerformed
+        DlgTrocarSenha dialog = new DlgTrocarSenha(null, true);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnTrocarSenhaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
+    private com.ifcolab.estetify.components.SecondaryCustomButton btnTrocarSenha;
     private com.ifcolab.estetify.components.CustomComboBox cboAvatar;
     private com.ifcolab.estetify.components.CustomComboBox cboSexo;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
@@ -309,6 +333,7 @@ public class pnlPerfil extends javax.swing.JPanel {
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;
     private javax.swing.JLabel lblAvatar;
     private javax.swing.JLabel lblAvatarTitle;
+    private javax.swing.JLabel lblAvatarTitle1;
     private javax.swing.JLabel lblCPF;
     private javax.swing.JLabel lblDataNascimento;
     private javax.swing.JLabel lblEmail;

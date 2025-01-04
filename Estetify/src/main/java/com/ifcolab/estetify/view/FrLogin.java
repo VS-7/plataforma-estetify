@@ -31,10 +31,11 @@ public class FrLogin extends javax.swing.JFrame {
         edtSenha = new com.ifcolab.estetify.components.CustomPasswordField();
         edtEmail = new com.ifcolab.estetify.components.CustomTextField();
         btnEntrar = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        lblEsqueceuSenha = new javax.swing.JLabel();
         lblLine = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblEstetify = new javax.swing.JLabel();
+        lblBackgroundSidebar = new javax.swing.JLabel();
+        lblBackground = new javax.swing.JLabel();
 
         jLabel4.setText("jLabel4");
 
@@ -83,9 +84,8 @@ public class FrLogin extends javax.swing.JFrame {
         getContentPane().add(jLabel6);
         jLabel6.setBounds(900, 320, 110, 16);
         getContentPane().add(edtSenha);
-        edtSenha.setBounds(890, 410, 370, 38);
+        edtSenha.setBounds(890, 410, 360, 38);
 
-        edtEmail.setText("Insira seu e-mail");
         edtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 edtEmailActionPerformed(evt);
@@ -101,26 +101,36 @@ public class FrLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnEntrar);
-        btnEntrar.setBounds(1000, 480, 140, 30);
+        btnEntrar.setBounds(1000, 490, 140, 30);
+
+        lblEsqueceuSenha.setForeground(new java.awt.Color(51, 51, 51));
+        lblEsqueceuSenha.setText("Esqueceu sua senha?");
+        lblEsqueceuSenha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblEsqueceuSenhaMouseClicked(evt);
+            }
+        });
+        getContentPane().add(lblEsqueceuSenha);
+        lblEsqueceuSenha.setBounds(1120, 450, 200, 20);
 
         lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
         getContentPane().add(lblLine);
         lblLine.setBounds(880, 530, 390, 40);
 
-        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo30x25.png"))); // NOI18N
-        jLabel1.setText("Estetify");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(1030, 570, 90, 40);
+        lblEstetify.setForeground(new java.awt.Color(51, 51, 51));
+        lblEstetify.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo30x25.png"))); // NOI18N
+        lblEstetify.setText("Estetify");
+        getContentPane().add(lblEstetify);
+        lblEstetify.setBounds(1030, 570, 90, 40);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(710, 0, 660, 850);
+        lblBackgroundSidebar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
+        getContentPane().add(lblBackgroundSidebar);
+        lblBackgroundSidebar.setBounds(710, 0, 660, 870);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
-        jLabel3.setText("jLabel3");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(0, 0, 1350, 850);
+        lblBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/background.png"))); // NOI18N
+        lblBackground.setText("jLabel3");
+        getContentPane().add(lblBackground);
+        lblBackground.setBounds(0, 0, 1350, 870);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -188,18 +198,24 @@ public class FrLogin extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEntrarActionPerformed
 
+    private void lblEsqueceuSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblEsqueceuSenhaMouseClicked
+        DlgEsqueceuSenha dlg = new DlgEsqueceuSenha(null, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_lblEsqueceuSenhaMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnEntrar;
     private com.ifcolab.estetify.components.CustomTextField edtEmail;
     private com.ifcolab.estetify.components.CustomPasswordField edtSenha;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel lblBackground;
+    private javax.swing.JLabel lblBackgroundSidebar;
     private javax.swing.JLabel lblDescricao;
     private javax.swing.JLabel lblDescricaoPontos;
+    private javax.swing.JLabel lblEsqueceuSenha;
+    private javax.swing.JLabel lblEstetify;
     private javax.swing.JLabel lblLine;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblTitulo;

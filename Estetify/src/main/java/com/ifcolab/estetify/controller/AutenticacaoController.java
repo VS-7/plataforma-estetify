@@ -140,4 +140,60 @@ public class AutenticacaoController {
             throw new RuntimeException("Erro ao atualizar dados: " + ex.getMessage());
         }
     }
+
+    public void atualizarSenhaUsuario(int idUsuario, String novaSenhaHash) {
+        try {
+            Pessoa usuario = autenticacao.getUsuario();
+            
+            if (usuario == null || usuario.getId() != idUsuario) {
+                throw new AutenticacaoException("Usuário não autorizado para esta operação");
+            }
+            
+            // Atualiza a senha do usuário
+            usuario.setSenha(novaSenhaHash);
+            
+            // Limpa qualquer código de recuperação existente
+            usuario.setCodigoRecuperacao(null);
+            usuario.setValidadeCodigoRecuperacao(null);
+            
+            // Atualiza no banco de dados apropriado
+            if (usuario instanceof Medico) {
+                medicoDAO.update((Medico) usuario);
+            } 
+            else if (usuario instanceof Enfermeira) {
+                enfermeiraDAO.update((Enfermeira) usuario);
+            }
+            else if (usuario instanceof Paciente) {
+                pacienteDAO.update((Paciente) usuario);
+            }
+            else if (usuario instanceof Recepcionista) {
+                recepcionistaDAO.update((Recepcionista) usuario);
+            }
+            else {
+                throw new RuntimeException("Tipo de usuário não suportado");
+            }
+            
+            // Atualiza o usuário na sessão
+            autenticacao.setUsuario(usuario);
+            
+        } catch (Exception ex) {
+            throw new RuntimeException("Erro ao atualizar senha: " + ex.getMessage());
+        }
+    }
+
+    public Pessoa buscarUsuarioPorEmail(String email) {
+        // Tenta encontrar o usuário em cada repositório
+        Pessoa usuario = medicoDAO.findByEmail(email);
+        if (usuario == null) {
+            usuario = enfermeiraDAO.findByEmail(email);
+        }
+        if (usuario == null) {
+            usuario = pacienteDAO.findByEmail(email);
+        }
+        if (usuario == null) {
+            usuario = recepcionistaDAO.findByEmail(email);
+        }
+        
+        return usuario;
+    }
 } 

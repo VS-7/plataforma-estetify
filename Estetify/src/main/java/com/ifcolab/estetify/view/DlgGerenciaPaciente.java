@@ -360,13 +360,12 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             if (idPacienteEditando > 0) {
-                // Se estiver editando, não mexe na senha
                 Paciente pacienteAtual = controller.find(idPacienteEditando);
                 controller.atualizar(
                     idPacienteEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
-                    pacienteAtual.getSenha(), // mantém a senha atual
+                    pacienteAtual.getSenha(),
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -376,7 +375,7 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
                     pacienteAtual.getAvatar()
                 );
             } else {
-                // Se for novo cadastro, gera senha aleatória
+
                 String senhaTemporaria = GeradorSenha.gerarSenha(8);
                 String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
 
@@ -393,10 +392,8 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
                     1
                 );
 
-                // Busca o paciente recém-cadastrado pelo CPF
                 Paciente novoPaciente = controller.buscarPorCPF(fEdtCPF.getText());
 
-                // Envia email com as credenciais
                 NotificadorEmail notificador = new NotificadorEmail();
                 notificador.enviarCredenciais(novoPaciente, senhaTemporaria);
             }
