@@ -4,7 +4,9 @@ import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
+import com.ifcolab.estetify.utils.GeradorSenha;
 import com.ifcolab.estetify.utils.GerenciadorCriptografia;
+import com.ifcolab.estetify.utils.NotificadorEmail;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
     private PacienteController controller;
     private int idPacienteEditando;
     private final GerenciadorCriptografia gerenciadorCriptografia;
+    
 
     public DlgGerenciaPaciente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -356,15 +359,14 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
-            String senha = new String(edtSenha.getPassword());
-            String senhaHash = gerenciadorCriptografia.criptografarSenha(senha);
             if (idPacienteEditando > 0) {
+                // Se estiver editando, não mexe na senha
                 Paciente pacienteAtual = controller.find(idPacienteEditando);
                 controller.atualizar(
                     idPacienteEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
-                    senhaHash,  
+                    pacienteAtual.getSenha(), // mantém a senha atual
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -374,10 +376,14 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
                     pacienteAtual.getAvatar()
                 );
             } else {
+                // Se for novo cadastro, gera senha aleatória
+                String senhaTemporaria = GeradorSenha.gerarSenha(8);
+                String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
+
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    senhaHash, 
+                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -386,6 +392,13 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
                     edtHistoricoMedico.getText(),
                     1
                 );
+
+                // Busca o paciente recém-cadastrado pelo CPF
+                Paciente novoPaciente = controller.buscarPorCPF(fEdtCPF.getText());
+
+                // Envia email com as credenciais
+                NotificadorEmail notificador = new NotificadorEmail();
+                notificador.enviarCredenciais(novoPaciente, senhaTemporaria);
             }
 
             this.idPacienteEditando = -1;
