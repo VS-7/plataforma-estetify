@@ -17,6 +17,7 @@ import java.util.TreeMap;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import com.ifcolab.estetify.view.DlgOpcoesConsulta;
 
 public class AgendaPanel extends javax.swing.JPanel {
     private final ConsultaController consultaController;
@@ -349,13 +350,11 @@ public class AgendaPanel extends javax.swing.JPanel {
     private void abrirDetalhesConsulta(Consulta consulta) {
         Window window = SwingUtilities.getWindowAncestor(this);
         if (window instanceof JFrame) {
-            DlgNovaConsulta dialog = new DlgNovaConsulta((JFrame) window, true);
-            dialog.preencherFormulario(consulta);
-            dialog.setLocationRelativeTo(window);
+            DlgOpcoesConsulta dialog = new DlgOpcoesConsulta((JFrame) window, consulta);
             dialog.setVisible(true);
             
-            // Atualizar a agenda após fechar o diálogo
-            if (dialog.isConsultaCadastrada() || dialog.isConsultaAlterada()) {
+            // Atualizar a agenda se houve alteração
+            if (dialog.isAlteracaoRealizada()) {
                 atualizarVisualizacao();
             }
         }
