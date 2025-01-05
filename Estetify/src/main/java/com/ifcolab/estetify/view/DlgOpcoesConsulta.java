@@ -260,12 +260,12 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     }
     
     private void realizarPagamento() {
-      /*  DlgPagamento dialog = new DlgPagamento(null, true, consulta);
+       DlgPagamento dialog = new DlgPagamento(null, true, consulta);
         dialog.setVisible(true);
         if (dialog.isPagamentoRealizado()) {
             alteracaoRealizada = true;
             dispose();
-        } */
+        } 
     }
     
     private void emitirRelatorio() {
