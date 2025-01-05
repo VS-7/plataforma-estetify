@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 public class DlgEsqueceuSenha extends javax.swing.JDialog {
 
     private final AutenticacaoController autenticacaoController;
-    private final GerenciadorCriptografia gerenciadorCriptografia;
     
     public DlgEsqueceuSenha(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -22,7 +21,6 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
         
         this.setLocationRelativeTo(null);
         this.setTitle("Recuperar Senha");
-        gerenciadorCriptografia = new GerenciadorCriptografia();
         autenticacaoController = new AutenticacaoController();
     }
 
@@ -39,6 +37,10 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
         btnRecuperar = new com.ifcolab.estetify.components.PrimaryCustomButton();
         btnCancelar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         jLabel6 = new javax.swing.JLabel();
+        lblTitulo = new javax.swing.JLabel();
+        lblLogo = new javax.swing.JLabel();
+        lblDescricao = new javax.swing.JLabel();
+        lblDescricaoPontos = new javax.swing.JLabel();
         lblTitutoSidebar = new javax.swing.JLabel();
         lblBackgroundSidebar = new javax.swing.JLabel();
         lblBackground = new javax.swing.JLabel();
@@ -80,11 +82,33 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
         getContentPane().add(jLabel6);
         jLabel6.setBounds(900, 320, 110, 16);
 
+        lblTitulo.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 30)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(0, 0, 0));
+        lblTitulo.setText("<html>Comece a aproveitar as ferramentas<br>de gestão da Estetify<html>");
+        getContentPane().add(lblTitulo);
+        lblTitulo.setBounds(70, 250, 640, 88);
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo100x88.png"))); // NOI18N
+        getContentPane().add(lblLogo);
+        lblLogo.setBounds(60, 110, 100, 90);
+
+        lblDescricao.setFont(new java.awt.Font("Fira Sans", 0, 16)); // NOI18N
+        lblDescricao.setForeground(new java.awt.Color(0, 0, 0));
+        lblDescricao.setText("<html>Ao fazer login, você pode acessar todas as funcionalidades para gerenciar<br>sua clínica de estética em um só lugar. <b>Organize consultas</b>, acompanhe <br><b>históricos</b> de <b>procedimentos</b> e obtenha <b>feedback</b> dos pacientes, tudo<br>com <b>praticidade</b> e <b>segurança</b>.</html>");
+        getContentPane().add(lblDescricao);
+        lblDescricao.setBounds(70, 360, 660, 120);
+
+        lblDescricaoPontos.setFont(new java.awt.Font("Fira Sans", 0, 14)); // NOI18N
+        lblDescricaoPontos.setForeground(new java.awt.Color(0, 0, 0));
+        lblDescricaoPontos.setText("<html>Nossas ferramentas ajudam você a:<br> <li>Ganhar tempo ao organizar sua agenda de consultas e procedimentos de maneira centralizada.</li> <li>Acompanhar o histórico de tratamentos e preferências de cada paciente.</li> <li>Receber feedback e obter insights valiosos para aprimorar a experiência dos seus pacientes.</li></html>");
+        getContentPane().add(lblDescricaoPontos);
+        lblDescricaoPontos.setBounds(70, 490, 630, 160);
+
         lblTitutoSidebar.setFont(new java.awt.Font("Fira Sans SemiBold", 0, 18)); // NOI18N
         lblTitutoSidebar.setForeground(new java.awt.Color(0, 0, 0));
-        lblTitutoSidebar.setText("Entre nas ferramentas da Estetify");
+        lblTitutoSidebar.setText("Recupere sua senha fornecendo seu e-mail");
         getContentPane().add(lblTitutoSidebar);
-        lblTitutoSidebar.setBounds(920, 270, 300, 20);
+        lblTitutoSidebar.setBounds(890, 270, 380, 20);
 
         lblBackgroundSidebar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/sidebar.png"))); // NOI18N
         getContentPane().add(lblBackgroundSidebar);
@@ -102,7 +126,7 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEmailActionPerformed
 
-    private void btnRecuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecuperarActionPerformed
+    private void btnRecuperarActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             String email = edtEmail.getText().trim();
             
@@ -115,32 +139,32 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
             Pessoa usuario = autenticacaoController.buscarUsuarioPorEmail(email);
             
             if (usuario == null) {
-                JOptionPane.showMessageDialog(this, "Email não encontrado!");
+                JOptionPane.showMessageDialog(this, 
+                    "Email não encontrado no sistema!\n" +
+                    "Por favor, verifique se digitou corretamente.");
                 return;
             }
             
-            // Gera nova senha aleatória
-            String novaSenha = GeradorSenha.gerarSenha(8);
-            String novaSenhaHash = gerenciadorCriptografia.criptografarSenha(novaSenha);
-            
-            // Atualiza a senha no banco
-            autenticacaoController.atualizarSenhaUsuario(usuario.getId(), novaSenhaHash);
-            
-            // Envia email com a nova senha
+            // Envia email com a nova senha temporária
             NotificadorEmail notificador = new NotificadorEmail();
-            notificador.enviarCredenciais(usuario, novaSenha);
+            boolean enviado = notificador.enviarLembreteCredenciais(usuario);
             
-            JOptionPane.showMessageDialog(this, 
-                "Uma nova senha foi enviada para seu email!\n" +
-                "Por favor, verifique sua caixa de entrada.");
-            
-            this.dispose();
+            if (enviado) {
+                JOptionPane.showMessageDialog(this, 
+                    "Uma nova senha temporária foi enviada para seu email!\n" +
+                    "Por favor, verifique sua caixa de entrada.");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Houve um erro ao enviar o email.\n" +
+                    "Por favor, tente novamente mais tarde.");
+            }
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, 
                 "Erro ao recuperar senha: " + ex.getMessage());
         }
-    }//GEN-LAST:event_btnRecuperarActionPerformed
+    }
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
@@ -154,6 +178,10 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundSidebar;
+    private javax.swing.JLabel lblDescricao;
+    private javax.swing.JLabel lblDescricaoPontos;
+    private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTitutoSidebar;
     // End of variables declaration//GEN-END:variables
 }

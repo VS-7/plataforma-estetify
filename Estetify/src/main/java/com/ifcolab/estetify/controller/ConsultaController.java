@@ -126,4 +126,46 @@ public class ConsultaController {
         );
         grd.setModel(tmMinhasConsultas);
     }
+    
+    public void confirmarConsulta(int id) {
+        Consulta consulta = repositorio.find(id);
+        if (consulta == null) {
+            throw new ConsultaException("Consulta não encontrada");
+        }
+        
+        if (!consulta.isAgendada()) {
+            throw new ConsultaException("Apenas consultas agendadas podem ser confirmadas");
+        }
+        
+        consulta.setStatus(StatusConsulta.CONFIRMADA);
+        repositorio.update(consulta);
+    }
+    
+    public void cancelarConsulta(int id) {
+        Consulta consulta = repositorio.find(id);
+        if (consulta == null) {
+            throw new ConsultaException("Consulta não encontrada");
+        }
+        
+        if (!consulta.isAgendada()) {
+            throw new ConsultaException("Apenas consultas agendadas podem ser canceladas");
+        }
+        
+        consulta.setStatus(StatusConsulta.CANCELADA);
+        repositorio.update(consulta);
+    }
+    
+    public void realizarConsulta(int id) {
+        Consulta consulta = repositorio.find(id);
+        if (consulta == null) {
+            throw new ConsultaException("Consulta não encontrada");
+        }
+        
+        if (!consulta.isConfirmada()) {
+            throw new ConsultaException("Apenas consultas confirmadas podem ser realizadas");
+        }
+        
+        consulta.setStatus(StatusConsulta.CONCLUIDA);
+        repositorio.update(consulta);
+    }
 }

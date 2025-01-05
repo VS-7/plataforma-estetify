@@ -14,6 +14,9 @@ import java.util.List;
 import javax.swing.*;
 import java.util.Map;
 import java.util.TreeMap;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class AgendaPanel extends javax.swing.JPanel {
     private final ConsultaController consultaController;
@@ -120,28 +123,33 @@ public class AgendaPanel extends javax.swing.JPanel {
         List<Consulta> consultas = consultaController.buscarPorData(dataAtual);
         
         // Organizar consultas por hora
-        Map<LocalTime, JPanel> horarios = new TreeMap<>();
+        Map<LocalTime, List<Consulta>> consultasPorHorario = new TreeMap<>();
         
-        // Criar slots de horário
+        // Inicializar todos os horários com uma lista vazia
         LocalTime hora = config.getHorarioAbertura();
         while (!hora.isAfter(config.getHorarioFechamento())) {
-            JPanel pnlHorario = criarPainelHorario(hora);
-            horarios.put(hora, pnlHorario);
+            consultasPorHorario.put(hora, new ArrayList<>());
             hora = hora.plusMinutes(config.getIntervaloConsultaMinutos());
         }
         
-        // Adicionar consultas nos horários
+        // Agrupar consultas por horário
         for (Consulta consulta : consultas) {
             LocalTime horaConsulta = consulta.getDataHora().toLocalTime();
-            JPanel pnlHorario = horarios.get(horaConsulta);
-            
-            if (pnlHorario != null) {
-                pnlHorario.add(criarPainelConsulta(consulta));
-            }
+            consultasPorHorario.computeIfAbsent(horaConsulta, k -> new ArrayList<>()).add(consulta);
         }
         
-        // Adicionar todos os horários na agenda
-        horarios.values().forEach(pnlAgenda::add);
+        // Criar painéis para cada horário
+        consultasPorHorario.forEach((horario, consultasDoHorario) -> {
+            JPanel pnlHorario = criarPainelHorario(horario);
+            JPanel pnlConsultas = (JPanel) ((BorderLayout) pnlHorario.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+            
+            // Adicionar todas as consultas do horário
+            for (Consulta consulta : consultasDoHorario) {
+                pnlConsultas.add(criarPainelConsulta(consulta));
+            }
+            
+            pnlAgenda.add(pnlHorario);
+        });
         
         // Atualizar interface
         pnlAgenda.revalidate();
@@ -152,8 +160,6 @@ public class AgendaPanel extends javax.swing.JPanel {
         JPanel panel = new JPanel(new BorderLayout(10, 0));
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(230, 230, 230)));
-        panel.setMaximumSize(new Dimension(980, 80)); // Ajustado para a nova largura
-        panel.setPreferredSize(new Dimension(980, 80));
         
         // Label da hora
         JLabel lblHora = new JLabel(hora.format(DateTimeFormatter.ofPattern("HH:mm")));
@@ -161,9 +167,13 @@ public class AgendaPanel extends javax.swing.JPanel {
         lblHora.setPreferredSize(new Dimension(80, 30));
         lblHora.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         
-        // Painel para consultas
+        // Painel para consultas com FlowLayout modificado
         JPanel pnlConsultas = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         pnlConsultas.setBackground(Color.WHITE);
+        
+        // Configurar tamanho mínimo do painel de consultas
+        panel.setMinimumSize(new Dimension(980, 100));
+        panel.setPreferredSize(new Dimension(980, 100));
         
         panel.add(lblHora, BorderLayout.WEST);
         panel.add(pnlConsultas, BorderLayout.CENTER);
@@ -174,36 +184,87 @@ public class AgendaPanel extends javax.swing.JPanel {
     private JPanel criarPainelConsulta(Consulta consulta) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(240, 247, 255));
+        
+        // Definir cores baseadas no status
+        Color backgroundColor;
+        Color borderColor;
+        
+        switch (consulta.getStatus()) {
+            case AGENDADA:
+                backgroundColor = new Color(240, 247, 255); // Azul claro
+                borderColor = new Color(200, 220, 255);     // Azul médio
+                break;
+            case CONFIRMADA:
+                backgroundColor = new Color(236, 252, 241); // Verde claro
+                borderColor = new Color(183, 235, 193);     // Verde médio
+                break;
+            case CONCLUIDA:
+                backgroundColor = new Color(241, 241, 241); // Cinza claro
+                borderColor = new Color(220, 220, 220);     // Cinza médio
+                break;
+            case CANCELADA:
+                backgroundColor = new Color(255, 235, 235); // Vermelho claro
+                borderColor = new Color(255, 200, 200);     // Vermelho médio
+                break;
+            default:
+                backgroundColor = new Color(240, 247, 255);
+                borderColor = new Color(200, 220, 255);
+        }
+        
+        panel.setBackground(backgroundColor);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 220, 255), 1),
+            BorderFactory.createLineBorder(borderColor, 1),
             BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         
-        // Ajustar tamanho do painel de consulta
-        panel.setPreferredSize(new Dimension(200, 100)); // Reduzido para caber melhor
+        // Definir tamanho fixo menor para cada painel de consulta
+        panel.setPreferredSize(new Dimension(250, 90));
+        panel.setMaximumSize(new Dimension(250, 90));
+        panel.setMinimumSize(new Dimension(250, 90));
         
-        // Informações da consulta com fonte e espaçamento adequados
+        // Informações da consulta
+        JLabel lblStatus = new JLabel(consulta.getStatus().toString());
         JLabel lblPaciente = new JLabel("Paciente: " + consulta.getPaciente().getNome());
         JLabel lblMedico = new JLabel("Médico: " + consulta.getMedico().getNome());
         JLabel lblEnfermeira = new JLabel("Enfermeira: " + consulta.getEnfermeira().getNome());
         
-        // Configurar fonte
-        Font labelFont = new Font("Fira Sans", Font.PLAIN, 12);
+        // Configurar fonte e estilo
+        Font labelFont = new Font("Fira Sans", Font.PLAIN, 11);
+        Font statusFont = new Font("Fira Sans", Font.BOLD, 11);
+        
+        lblStatus.setFont(statusFont);
         lblPaciente.setFont(labelFont);
         lblMedico.setFont(labelFont);
         lblEnfermeira.setFont(labelFont);
         
-        // Adicionar componentes com espaçamento
+        // Definir cor do texto do status
+        switch (consulta.getStatus()) {
+            case AGENDADA:
+                lblStatus.setForeground(new Color(51, 102, 204));  // Azul escuro
+                break;
+            case CONFIRMADA:
+                lblStatus.setForeground(new Color(46, 125, 50));   // Verde escuro
+                break;
+            case CONCLUIDA:
+                lblStatus.setForeground(new Color(88, 88, 88));    // Cinza escuro
+                break;
+            case CANCELADA:
+                lblStatus.setForeground(new Color(211, 47, 47));   // Vermelho escuro
+                break;
+        }
+        
+        // Adicionar componentes
+        panel.add(lblStatus);
+        panel.add(Box.createRigidArea(new Dimension(0, 2)));
         panel.add(lblPaciente);
-        panel.add(Box.createRigidArea(new Dimension(0, 4)));
+        panel.add(Box.createRigidArea(new Dimension(0, 2)));
         panel.add(lblMedico);
-        panel.add(Box.createRigidArea(new Dimension(0, 4)));
+        panel.add(Box.createRigidArea(new Dimension(0, 2)));
         panel.add(lblEnfermeira);
         
         // Adicionar procedimentos se houver
         if (!consulta.getProcedimentos().isEmpty()) {
-            panel.add(Box.createRigidArea(new Dimension(0, 4)));
+            panel.add(Box.createRigidArea(new Dimension(0, 2)));
             JLabel lblProcedimentos = new JLabel("<html>Procedimentos: " + 
                 String.join(", ", consulta.getProcedimentos().stream()
                     .map(Procedimento::getNome)
@@ -212,7 +273,92 @@ public class AgendaPanel extends javax.swing.JPanel {
             panel.add(lblProcedimentos);
         }
         
+        // Adicionar cursor e evento de clique
+        panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                abrirDetalhesConsulta(consulta);
+            }
+        });
+        
         return panel;
+    }
+    
+    // Adicionar classe WrapLayout para organizar os painéis de consulta
+    private class WrapLayout extends FlowLayout {
+        private Dimension preferredLayoutSize;
+        
+        public WrapLayout(int align, int hgap, int vgap) {
+            super(align, hgap, vgap);
+        }
+        
+        @Override
+        public Dimension preferredLayoutSize(Container target) {
+            return layoutSize(target, true);
+        }
+        
+        @Override
+        public Dimension minimumLayoutSize(Container target) {
+            return layoutSize(target, false);
+        }
+        
+        private Dimension layoutSize(Container target, boolean preferred) {
+            synchronized (target.getTreeLock()) {
+                int targetWidth = target.getWidth();
+                if (targetWidth == 0) {
+                    targetWidth = Integer.MAX_VALUE;
+                }
+                
+                int hgap = getHgap();
+                int vgap = getVgap();
+                Insets insets = target.getInsets();
+                int horizontalInsetsAndGap = insets.left + insets.right + (hgap * 2);
+                int maxWidth = targetWidth - horizontalInsetsAndGap;
+                
+                Dimension dim = new Dimension(0, 0);
+                int rowWidth = 0;
+                int rowHeight = 0;
+                
+                int nmembers = target.getComponentCount();
+                for (int i = 0; i < nmembers; i++) {
+                    Component m = target.getComponent(i);
+                    if (m.isVisible()) {
+                        Dimension d = preferred ? m.getPreferredSize() : m.getMinimumSize();
+                        if (rowWidth + d.width > maxWidth) {
+                            dim.height += rowHeight + vgap;
+                            rowWidth = d.width;
+                            rowHeight = d.height;
+                        } else {
+                            rowWidth += d.width + hgap;
+                            rowHeight = Math.max(rowHeight, d.height);
+                        }
+                    }
+                }
+                dim.height += rowHeight;
+                dim.width = maxWidth;
+                
+                dim.width += horizontalInsetsAndGap;
+                dim.height += insets.top + insets.bottom + vgap * 2;
+                
+                return dim;
+            }
+        }
+    }
+    
+    private void abrirDetalhesConsulta(Consulta consulta) {
+        Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof JFrame) {
+            DlgNovaConsulta dialog = new DlgNovaConsulta((JFrame) window, true);
+            dialog.preencherFormulario(consulta);
+            dialog.setLocationRelativeTo(window);
+            dialog.setVisible(true);
+            
+            // Atualizar a agenda após fechar o diálogo
+            if (dialog.isConsultaCadastrada() || dialog.isConsultaAlterada()) {
+                atualizarVisualizacao();
+            }
+        }
     }
     
     // Método público para forçar atualização

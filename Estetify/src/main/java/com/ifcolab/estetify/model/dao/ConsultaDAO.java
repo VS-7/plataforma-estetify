@@ -41,7 +41,8 @@ public class ConsultaDAO extends Dao<Consulta> {
                "LEFT JOIN FETCH c.procedimentos " +
                "LEFT JOIN FETCH c.paciente " +
                "LEFT JOIN FETCH c.medico " +
-               "LEFT JOIN FETCH c.enfermeira";
+               "LEFT JOIN FETCH c.enfermeira " +
+               "ORDER BY c.dataHora DESC";
         TypedQuery<Consulta> query = this.entityManager.createQuery(jpql, Consulta.class);
         List<Consulta> lst = query.getResultList();
         this.entityManager.close();
@@ -64,7 +65,6 @@ public class ConsultaDAO extends Dao<Consulta> {
     public List<Consulta> buscarPorData(LocalDate data) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         try {
-            // Criar LocalDateTime para início e fim do dia
             LocalDateTime inicioDia = data.atStartOfDay();
             LocalDateTime fimDia = data.atTime(23, 59, 59);
             
@@ -74,7 +74,7 @@ public class ConsultaDAO extends Dao<Consulta> {
                    "LEFT JOIN FETCH c.medico " +
                    "LEFT JOIN FETCH c.enfermeira " +
                    "WHERE c.dataHora BETWEEN :inicio AND :fim " +
-                   "ORDER BY c.dataHora";
+                   "ORDER BY c.dataHora DESC";
             
             TypedQuery<Consulta> query = this.entityManager.createQuery(jpql, Consulta.class);
             query.setParameter("inicio", inicioDia);

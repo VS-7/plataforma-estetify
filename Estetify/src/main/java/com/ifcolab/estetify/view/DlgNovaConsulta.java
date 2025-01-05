@@ -65,7 +65,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
             return;
         }
         
-        // Inicializa as outras variáveis
+        controller.atualizarTabela(grdConsultas);
         idConsultaEditando = -1;
         consultaCadastrada = false;
         consultaAlterada = false;
@@ -229,13 +229,13 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     }
     
     private Consulta getObjetoSelecionadoNaGrid() {
-        int rowCliked = grdConsultas.getSelectedRow();
-        if (rowCliked >= 0) {
-            // Pega o objeto Consulta que está associado à linha
-            return (Consulta) grdConsultas.getModel().getValueAt(rowCliked, 0);
+        int rowSelected = grdConsultas.getSelectedRow();
+        if (rowSelected >= 0) {
+            TMViewConsulta model = (TMViewConsulta) grdConsultas.getModel();
+            return model.getConsulta(rowSelected);
         }
         return null;
-    }    
+    }  
     
     private void atualizarListaProcedimentos() {
         DefaultListModel<Procedimento> model = new DefaultListModel<>();
@@ -502,56 +502,85 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+        Consulta consultaSelecionada = getObjetoSelecionadoNaGrid();
+        if (consultaSelecionada == null) {
+            JOptionPane.showMessageDialog(this, "Selecione uma consulta para remover.");
+            return;
+        }
 
+        int opcao = JOptionPane.showConfirmDialog(this,
+            "Deseja realmente remover esta consulta?",
+            "Confirmação",
+            JOptionPane.YES_NO_OPTION);
+
+        if (opcao == JOptionPane.YES_OPTION) {
+            try {
+                controller.excluir(consultaSelecionada.getId());
+                controller.atualizarTabela(grdConsultas);
+                consultaAlterada = true;
+                
+                // Limpar e desabilitar o formulário após remover
+                this.limparFormulario();
+                this.habilitarFormulario(false);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                    "Erro ao remover consulta: " + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-    try {
-        // Converte data e hora para LocalDateTime
-        String dataHoraStr = fEdtData.getText() + " " + fEdtHora.getText();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
-        
-        // Obtém os itens selecionados
-        Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
-        Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
-        Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
-        String observacoes = txtObeservacoes.getText();
-        
-        if (idConsultaEditando > 0) {
-            controller.atualizar(
-                idConsultaEditando,
-                dataHora,
-                observacoes,
-                paciente,
-                medico,
-                enfermeira,
-                procedimentosSelecionados
-            );
-            consultaAlterada = true;
-        } else {
-            controller.cadastrar(
-                dataHora,
-                observacoes,
-                paciente,
-                medico,
-                enfermeira,
-                procedimentosSelecionados
-            );
-            consultaCadastrada = true;
+        try {
+            // Converte data e hora para LocalDateTime
+            String dataHoraStr = fEdtData.getText() + " " + fEdtHora.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
+            
+            // Obtém os itens selecionados
+            Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
+            Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
+            Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
+            String observacoes = txtObeservacoes.getText();
+            
+            if (idConsultaEditando > 0) {
+                controller.atualizar(
+                    idConsultaEditando,
+                    dataHora,
+                    observacoes,
+                    paciente,
+                    medico,
+                    enfermeira,
+                    procedimentosSelecionados
+                );
+                consultaAlterada = true;
+            } else {
+                controller.cadastrar(
+                    dataHora,
+                    observacoes,
+                    paciente,
+                    medico,
+                    enfermeira,
+                    procedimentosSelecionados
+                );
+                consultaCadastrada = true;
+            }
+
+            // Atualizar a tabela antes de fechar
+            controller.atualizarTabela(grdConsultas);
+            
+            // Limpar e desabilitar o formulário
+            this.idConsultaEditando = -1;
+            this.habilitarFormulario(false);
+            this.limparFormulario();
+
+            dispose();
+
+        } catch (ConsultaException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
-
-           this.idConsultaEditando = -1;
-           controller.atualizarTabela(grdConsultas);
-           this.habilitarFormulario(false);
-           this.limparFormulario();
-
-           dispose();
-
-       } catch (ConsultaException e) {
-           System.err.println(e.getMessage());
-           JOptionPane.showMessageDialog(this, e.getMessage());
-       }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAdicionarProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarProcedimentoActionPerformed
@@ -596,8 +625,17 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxSelecionarEnfermeiraPropertyChange
 
     private void grdConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grdConsultasMouseClicked
-
+        if (evt.getClickCount() == 2) {
+            Consulta consultaSelecionada = getObjetoSelecionadoNaGrid();
+            if (consultaSelecionada != null) {
+                this.limparFormulario();
+                this.habilitarFormulario(true);
+                this.preencherFormulario(consultaSelecionada);
+                this.idConsultaEditando = consultaSelecionada.getId();
+            }
+        }
     }//GEN-LAST:event_grdConsultasMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;
