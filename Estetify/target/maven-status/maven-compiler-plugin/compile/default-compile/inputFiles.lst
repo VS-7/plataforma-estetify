@@ -49,6 +49,7 @@
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/Medico.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/enums/StatusConsulta.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/exceptions/EnfermeiraException.java
+/home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/view/DlgPagamento.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTextAreaScrollPane.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/enums/TipoSexo.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/components/CustomTable.java
@@ -63,7 +64,6 @@
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/view/DlgTrocarSenha.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/Recepcionista.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/controller/EnfermeiraController.java
-/home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/view/DlgPagamento1.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/exceptions/ProcedimentoException.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/model/valid/ValidateConsulta.java
 /home/vitorsrgio/Área de Trabalho/LPS/plataforma-estetify/Estetify/src/main/java/com/ifcolab/estetify/components/CustomSidebar.java

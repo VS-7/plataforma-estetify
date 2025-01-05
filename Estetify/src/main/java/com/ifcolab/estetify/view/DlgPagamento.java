@@ -6,6 +6,7 @@ import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.enums.MetodoPagamento;
 import com.ifcolab.estetify.model.enums.StatusPagamento;
 import com.ifcolab.estetify.model.exceptions.PagamentoException;
+import com.ifcolab.estetify.utils.NotificadorEmail;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -217,9 +218,13 @@ public class DlgPagamento extends javax.swing.JDialog {
                 consulta.getMedico() // Ou outro usuário logado que esteja registrando o pagamento
             );
 
+            // Enviar email de confirmação
+            NotificadorEmail notificador = new NotificadorEmail();
+            notificador.enviarConfirmacaoPagamento(consulta, valor, metodoPagamento);
+
             pagamentoRealizado = true;
             JOptionPane.showMessageDialog(this,
-                "Pagamento registrado com sucesso!",
+                "Pagamento registrado com sucesso!\nUm email de confirmação foi enviado para o paciente.",
                 "Sucesso",
                 JOptionPane.INFORMATION_MESSAGE);
             dispose();
