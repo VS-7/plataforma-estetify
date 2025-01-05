@@ -7,6 +7,7 @@ import com.ifcolab.estetify.view.DlgFeedback;
 import com.ifcolab.estetify.view.DlgGerenciaEnfermeira;
 import com.ifcolab.estetify.view.DlgGerenciaMedico;
 import com.ifcolab.estetify.view.DlgGerenciaPaciente;
+import com.ifcolab.estetify.view.DlgGerenciaProcedimento;
 import com.ifcolab.estetify.view.DlgGerenciaRecepcionista;
 import com.ifcolab.estetify.view.FrMenu;
 import javax.swing.JFrame;
@@ -32,7 +33,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         btnGerenciarMedicos.setVisible(false);
         btnGerenciarEnfermeiras.setVisible(false);
         btnGerenciarPacientes.setVisible(false);
-        btnGerenciarRecepcionistas.setVisible(false);
+        btnGerenciarProcedimentos.setVisible(false);
         btnSair.setVisible(false);
         btnConfiguracoes.setVisible(false);
         btnMinhasConsultas.setVisible(false);
@@ -48,7 +49,7 @@ public class CustomSidebar extends javax.swing.JPanel {
             btnGerenciarMedicos.setVisible(true);
             btnGerenciarEnfermeiras.setVisible(true);
             btnGerenciarPacientes.setVisible(true);
-            btnGerenciarRecepcionistas.setVisible(true);
+            btnGerenciarProcedimentos.setVisible(true);
             btnConfiguracoes.setVisible(true);
             btnFeedbacksAdmin.setVisible(true);
             btnSair.setVisible(true);
@@ -89,6 +90,7 @@ public class CustomSidebar extends javax.swing.JPanel {
         btnFeedbacks = new com.ifcolab.estetify.components.CustomButton();
         btnSair = new com.ifcolab.estetify.components.CustomButton();
         btnFeedbacksAdmin = new com.ifcolab.estetify.components.CustomButton();
+        btnGerenciarProcedimentos = new com.ifcolab.estetify.components.CustomButton();
         btnGerenciarRecepcionistas = new com.ifcolab.estetify.components.CustomButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -197,7 +199,17 @@ public class CustomSidebar extends javax.swing.JPanel {
             }
         });
         add(btnFeedbacksAdmin);
-        btnFeedbacksAdmin.setBounds(10, 500, 230, 50);
+        btnFeedbacksAdmin.setBounds(10, 570, 230, 50);
+
+        btnGerenciarProcedimentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/recepcionista.png"))); // NOI18N
+        btnGerenciarProcedimentos.setText("Gerenciar Procedimentos");
+        btnGerenciarProcedimentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerenciarProcedimentosActionPerformed(evt);
+            }
+        });
+        add(btnGerenciarProcedimentos);
+        btnGerenciarProcedimentos.setBounds(10, 510, 230, 50);
 
         btnGerenciarRecepcionistas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/recepcionista.png"))); // NOI18N
         btnGerenciarRecepcionistas.setText("Gerenciar Recepcionistas");
@@ -261,17 +273,23 @@ public class CustomSidebar extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnFeedbacksAdminActionPerformed
 
-    private void btnGerenciarRecepcionistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarRecepcionistasActionPerformed
-        DlgGerenciaRecepcionista dialog = new DlgGerenciaRecepcionista(null, true);
+    private void btnGerenciarProcedimentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarProcedimentosActionPerformed
+        DlgGerenciaProcedimento dialog = new DlgGerenciaProcedimento(null, true);
         dialog.setLocationRelativeTo(parentFrame);
         dialog.setVisible(true);
-    }//GEN-LAST:event_btnGerenciarRecepcionistasActionPerformed
+    }//GEN-LAST:event_btnGerenciarProcedimentosActionPerformed
 
     private void btnMinhasConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinhasConsultasActionPerformed
         if (parentFrame instanceof FrMenu) {
             ((FrMenu) parentFrame).mostrarMinhasConsultas();
         }
     }//GEN-LAST:event_btnMinhasConsultasActionPerformed
+
+    private void btnGerenciarRecepcionistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarRecepcionistasActionPerformed
+        DlgGerenciaRecepcionista dialog = new DlgGerenciaRecepcionista(null, true);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnGerenciarRecepcionistasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -282,6 +300,7 @@ public class CustomSidebar extends javax.swing.JPanel {
     private com.ifcolab.estetify.components.CustomButton btnGerenciarEnfermeiras;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarMedicos;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarPacientes;
+    private com.ifcolab.estetify.components.CustomButton btnGerenciarProcedimentos;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarRecepcionistas;
     private com.ifcolab.estetify.components.CustomButton btnMinhasConsultas;
     private com.ifcolab.estetify.components.CustomButton btnPerfil;

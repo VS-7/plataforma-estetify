@@ -120,6 +120,7 @@ com/ifcolab/estetify/model/valid/ValidateRelatorio.class
 com/ifcolab/estetify/components/CustomComboBox$1.class
 com/ifcolab/estetify/controller/tablemodel/TMViewMinhasConsultas.class
 com/ifcolab/estetify/components/CustomFormattedTextField.class
+com/ifcolab/estetify/components/CustomSidebar$11.class
 com/ifcolab/estetify/controller/PacienteController.class
 com/ifcolab/estetify/controller/ConsultaController.class
 com/ifcolab/estetify/view/DlgNovaConsulta$10.class

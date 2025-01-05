@@ -3,14 +3,19 @@ package com.ifcolab.estetify.view;
 import com.ifcolab.estetify.components.PrimaryCustomButton;
 import com.ifcolab.estetify.components.SecondaryCustomButton;
 import com.ifcolab.estetify.controller.ConsultaController;
+import com.ifcolab.estetify.controller.PagamentoController;
 import com.ifcolab.estetify.model.Consulta;
+import com.ifcolab.estetify.model.Pagamento;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
+import com.ifcolab.estetify.utils.GeradorPdf;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import javax.swing.JFileChooser;
 
 public class DlgOpcoesConsulta extends javax.swing.JDialog {
     private final Consulta consulta;
@@ -135,7 +142,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     
     private JPanel criarPainelBotoes() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout());  // Usar GridBagLayout para centralizar
+        panel.setLayout(new GridBagLayout()); 
         panel.setBackground(Color.WHITE);
         
         JPanel innerPanel = new JPanel();
@@ -157,10 +164,10 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         }
         
         if (consulta.isConcluida()) {
-            adicionarBotao(innerPanel, new SecondaryCustomButton("Emitir Relatório"), e -> emitirRelatorio());
+            adicionarBotao(innerPanel, new SecondaryCustomButton("Emitir Recibo"), e -> emitirRecibo());
         }
         
-        // Botão editar sempre disponível
+       
         adicionarBotao(innerPanel, new SecondaryCustomButton("Editar Consulta"), e -> editarConsulta());
         
         panel.add(innerPanel);
@@ -268,9 +275,54 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         } 
     }
     
-    private void emitirRelatorio() {
-        // Implementar geração de relatório
-        JOptionPane.showMessageDialog(this, "Funcionalidade em desenvolvimento");
+    private void emitirRecibo() {
+        try {
+            // Verificar se existe pagamento
+            PagamentoController pagamentoController = new PagamentoController();
+            List<Pagamento> pagamentos = pagamentoController.buscarPorConsulta(consulta.getId());
+
+            if (pagamentos.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                    "Não há pagamento registrado para esta consulta.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Usar o primeiro pagamento encontrado
+            Pagamento pagamento = pagamentos.get(0);
+
+            // Criar diálogo para escolher onde salvar
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Salvar Recibo");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                String caminho = fileChooser.getSelectedFile().getAbsolutePath();
+
+                
+                GeradorPdf gerador = new GeradorPdf();
+                gerador.gerarReciboPagamento(caminho, consulta, pagamento);
+
+                
+                int opcao = JOptionPane.showConfirmDialog(this,
+                    "Recibo gerado com sucesso!\nDeseja abrir o arquivo agora?",
+                    "Sucesso",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+                if (opcao == JOptionPane.YES_OPTION) {
+                    File arquivo = new File(caminho + "/recibo_pagamento.pdf");
+                    Desktop.getDesktop().open(arquivo);
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Erro ao gerar recibo: " + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void editarConsulta() {

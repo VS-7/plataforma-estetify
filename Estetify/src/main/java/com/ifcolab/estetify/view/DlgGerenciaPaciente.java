@@ -153,7 +153,6 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
         edtHistoricoMedico = new com.ifcolab.estetify.components.CustomTextField();
         lblHistoricoMedico = new javax.swing.JLabel();
-        edtSenha = new javax.swing.JPasswordField();
         cboSexo = new com.ifcolab.estetify.components.CustomComboBox();
         tmMedicos = new javax.swing.JScrollPane();
         grdPacientes = new com.ifcolab.estetify.components.CustomTable();
@@ -289,10 +288,6 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
         lblHistoricoMedico.setText("Histórico Médico");
         getContentPane().add(lblHistoricoMedico);
         lblHistoricoMedico.setBounds(1030, 210, 140, 17);
-
-        edtSenha.setText("jPasswordField1");
-        getContentPane().add(edtSenha);
-        edtSenha.setBounds(430, 280, 260, 27);
         getContentPane().add(cboSexo);
         cboSexo.setBounds(1130, 160, 160, 44);
 
@@ -462,7 +457,6 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.CustomTextField edtEndereco;
     private com.ifcolab.estetify.components.CustomTextField edtHistoricoMedico;
     private com.ifcolab.estetify.components.CustomTextField edtNome;
-    private javax.swing.JPasswordField edtSenha;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtCPF;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtDataNascimento;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtTelefone;
