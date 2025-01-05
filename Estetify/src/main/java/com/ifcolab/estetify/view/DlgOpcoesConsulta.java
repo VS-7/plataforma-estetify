@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.time.format.DateTimeFormatter;
 
-public class DlgOpcoesConsulta extends JDialog {
+public class DlgOpcoesConsulta extends javax.swing.JDialog {
     private final Consulta consulta;
     private final ConsultaController controller;
     private boolean alteracaoRealizada = false;

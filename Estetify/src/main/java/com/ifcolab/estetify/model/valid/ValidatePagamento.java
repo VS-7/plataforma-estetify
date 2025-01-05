@@ -17,7 +17,6 @@ public class ValidatePagamento {
             MetodoPagamento metodoPagamento,
             String detalhes,
             Consulta consulta,
-            Procedimento procedimento,
             Pessoa registrador
     ) {
         if (valor <= 0) {
@@ -36,15 +35,11 @@ public class ValidatePagamento {
             throw new PagamentoException("Detalhes não podem ter mais que 500 caracteres.");
         }
         
-        if (consulta == null && procedimento == null) {
-            throw new PagamentoException("É necessário associar o pagamento a uma consulta ou procedimento.");
-        }
-        
         if (registrador == null) {
             throw new PagamentoException("Registrador do pagamento não pode estar em branco.");
         }
         
         return new Pagamento(0, valor, status, metodoPagamento, LocalDateTime.now(), 
-                           detalhes, consulta, procedimento, registrador);
+                           detalhes, consulta, registrador);
     }
 }
