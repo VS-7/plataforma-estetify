@@ -68,15 +68,22 @@ Este diagrama é essencial para entender como os dados são estruturados no sist
 
 ### Diagramas de Sequência
 
-#### 1. Agendamento de Procedimentos
-Este diagrama mostra o fluxo para realizar um agendamento, desde a escolha do cliente até a confirmação do procedimento.
+#### 1. Gerenciar Procedimentos
+Este diagrama mostra o fluxo para gerenciar procedimentos, desde a escolha do cliente até a confirmação do procedimento.
 
-![Diagrama de Sequência de Agendamento](./docs/diagramaSequenciaAgendamento.png)
+![Diagrama de Sequência de Agendamento](./estetifyDiagramaSequenciaProcedimento.png)
 
 #### 2. Geração de Relatórios
 Ilustra o processo de geração de relatórios de desempenho da clínica e histórico de procedimentos.
 
-![Diagrama de Sequência de Relatórios](./docs/diagramaSequenciaRelatorios.png)
+![Diagrama de Sequência de Relatórios](./docs/estetifyDiagramaSequenciaRelatorio.png)
+
+---
+
+#### 2. Geração de Relatórios
+Ilustra o processo de geração de relatórios de desempenho da clínica e histórico de procedimentos.
+
+![Diagrama de Sequência de Relatórios](./docs/estetifyDiagramaSequenciaFeedback.png)
 
 ---
 
