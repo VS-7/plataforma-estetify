@@ -76,10 +76,5 @@ public class ConfiguracaoSistema implements Serializable {
         return minutos % intervaloConsultaMinutos == 0;
     }
     
-    public LocalTime proximoHorarioDisponivel(LocalTime horario) {
-        long minutos = horario.getHour() * 60L + horario.getMinute();
-        long intervalo = intervaloConsultaMinutos;
-        minutos = ((minutos + intervalo - 1) / intervalo) * intervalo;
-        return LocalTime.of((int)(minutos / 60), (int)(minutos % 60));
-    }
+
 } 

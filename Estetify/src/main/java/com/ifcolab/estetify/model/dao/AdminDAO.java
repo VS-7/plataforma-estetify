@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Admin;
-import com.ifcolab.estetify.model.exceptions.AdminException;
 import java.util.List;
 
 public class AdminDAO extends Dao<Admin> {
@@ -14,13 +13,14 @@ public class AdminDAO extends Dao<Admin> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Admin admin = this.entityManager.find(Admin.class, id);
-        if (admin != null) {
-            this.entityManager.remove(admin);
-        } else {
+        if (admin == null) {
             this.entityManager.getTransaction().rollback();
-            throw new AdminException("Erro - Administrador inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(admin);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

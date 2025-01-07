@@ -18,9 +18,11 @@ public class MedicoController {
     private MedicoDAO repositorio;
     private GerenciadorCriptografia gerenciadorCriptografia;
     private NotificadorEmail notificadorEmail;
+    private ValidateMedico valid;
     
     public MedicoController() {
         repositorio = new MedicoDAO();
+        valid = new ValidateMedico();
         gerenciadorCriptografia = new GerenciadorCriptografia();
         notificadorEmail = new NotificadorEmail();
     }
@@ -29,27 +31,21 @@ public class MedicoController {
         String senhaTemporaria = GeradorSenha.gerarSenha(8);
         String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
         
-        ValidateMedico valid = new ValidateMedico();
-        Medico medico = valid.validaCamposEntrada(
-                nome,
-                email,
-                senhaHash,
-                cpf,
-                sexo,
-                dataNascimento,
-                telefone,
-                endereco,
-                crm,
-                especializacao,
-                avatar
-        );
+        Medico medico = valid.validaCamposEntrada(nome, email, senhaHash, cpf, sexo, dataNascimento, telefone, endereco, crm, especializacao, avatar);
         
-        if (repositorio.findByCRM(crm) != null) {
-            throw new MedicoException("CRM já cadastrado");
-        }
+    if (repositorio.findByCPF(cpf) != null) {
+        throw new MedicoException("CPF já cadastrado no sistema");
+    }
+    
+    if (repositorio.findByEmail(email) != null) {
+        throw new MedicoException("Email já cadastrado no sistema");
+    }
+    
+    if (repositorio.findByCRM(crm) != null) {
+        throw new MedicoException("CRM já cadastrado no sistema");
+    }
         
         repositorio.save(medico);
-        
         enviarCredenciaisAcesso(medico, senhaTemporaria);
     }
     
@@ -72,10 +68,25 @@ public class MedicoController {
     
     
     public void atualizar(int id, String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String crm, EspecializacaoMedico especializacao, int avatar) {
-        ValidateMedico valid = new ValidateMedico();
-        Medico medico = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, crm, especializacao, avatar);
         
+        Medico medico = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, crm, especializacao, avatar);
         medico.setId(id);
+        
+        Medico medicoExistenteCPF = repositorio.findByCPF(cpf);
+        if (medicoExistenteCPF != null && medicoExistenteCPF.getId() != id) {
+            throw new MedicoException("CPF já cadastrado para outro médico");
+        }
+        
+        Medico medicoExistenteEmail = repositorio.findByEmail(email);
+        if (medicoExistenteEmail != null && medicoExistenteEmail.getId() != id) {
+            throw new MedicoException("Email já cadastrado para outro médico");
+        }
+        
+        Medico medicoExistenteCRM = repositorio.findByCRM(crm);
+        if (medicoExistenteCRM != null && medicoExistenteCRM.getId() != id) {
+            throw new MedicoException("CRM já cadastrado para outro médico");
+        }
+        
         repositorio.update(medico);
     }
     

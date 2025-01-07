@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Medico;
-import com.ifcolab.estetify.model.exceptions.MedicoException;
 import java.util.List;
 
 public class MedicoDAO extends Dao<Medico> {
@@ -14,13 +13,14 @@ public class MedicoDAO extends Dao<Medico> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Medico medico = this.entityManager.find(Medico.class, id);
-        if (medico != null) {
-            this.entityManager.remove(medico);
-        } else {
+        if (medico == null) {
             this.entityManager.getTransaction().rollback();
-            throw new MedicoException("Erro - Médico inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(medico);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;
@@ -52,6 +52,16 @@ public class MedicoDAO extends Dao<Medico> {
         List<Medico> lst = qry.getResultList();
         this.entityManager.close();
         return lst;
+    }
+    
+    public Medico findByCPF(String cpf) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        jpql = "SELECT p FROM Medico p WHERE p.cpf = :cpf";
+        qry = this.entityManager.createQuery(jpql, Medico.class);
+        qry.setParameter("cpf", cpf);
+        List<Medico> lst = qry.getResultList();
+        this.entityManager.close();
+        return !lst.isEmpty() ? lst.get(0) : null;
     }
     
     public Medico findByCRM(String crm) {

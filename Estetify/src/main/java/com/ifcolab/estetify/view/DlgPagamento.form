@@ -164,7 +164,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="com.ifcolab.estetify.components.CustomTextArea" name="customTextArea1">
+            <Component class="com.ifcolab.estetify.components.CustomTextArea" name="txtDetalhes">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="rows" type="int" value="5"/>

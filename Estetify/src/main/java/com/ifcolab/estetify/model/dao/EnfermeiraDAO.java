@@ -14,13 +14,14 @@ public class EnfermeiraDAO extends Dao<Enfermeira> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Enfermeira enfermeira = this.entityManager.find(Enfermeira.class, id);
-        if (enfermeira != null) {
-            this.entityManager.remove(enfermeira);
-        } else {
+        if (enfermeira == null) {
             this.entityManager.getTransaction().rollback();
-            throw new EnfermeiraException("Erro - Enfermeira inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(enfermeira);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;
@@ -52,6 +53,16 @@ public class EnfermeiraDAO extends Dao<Enfermeira> {
         List<Enfermeira> lst = qry.getResultList();
         this.entityManager.close();
         return lst;
+    }
+    
+    public Enfermeira findByCPF(String cpf) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        jpql = "SELECT p FROM Enfermeira p WHERE p.cpf = :cpf";
+        qry = this.entityManager.createQuery(jpql, Enfermeira.class);
+        qry.setParameter("cpf", cpf);
+        List<Enfermeira> lst = qry.getResultList();
+        this.entityManager.close();
+        return !lst.isEmpty() ? lst.get(0) : null;
     }
     
     public Enfermeira findByCOREN(String coren) {

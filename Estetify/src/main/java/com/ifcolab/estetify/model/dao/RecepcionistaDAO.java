@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Recepcionista;
-import com.ifcolab.estetify.model.exceptions.RecepcionistaException;
 import java.util.List;
 
 public class RecepcionistaDAO extends Dao<Recepcionista> {
@@ -14,13 +13,14 @@ public class RecepcionistaDAO extends Dao<Recepcionista> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Recepcionista recepcionista = this.entityManager.find(Recepcionista.class, id);
-        if (recepcionista != null) {
-            this.entityManager.remove(recepcionista);
-        } else {
+        if (recepcionista == null) {
             this.entityManager.getTransaction().rollback();
-            throw new RecepcionistaException("Erro - Recepcionista inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(recepcionista);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

@@ -1,58 +1,18 @@
 package com.ifcolab.estetify.model.valid;
 
-import com.ifcolab.estetify.model.ConfiguracaoSistema;
-import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
-import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
-import com.ifcolab.estetify.model.dao.ConsultaDAO;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
-import com.ifcolab.estetify.model.enums.StatusConsulta;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 public class ValidateConsulta {
     
-    private final ConsultaDAO repositorio;
-    
-    public ValidateConsulta() {
-        this.repositorio = new ConsultaDAO();
-    }
-    
-    private void validarHorariosConflitantes(LocalDateTime dataHora, Medico medico, Enfermeira enfermeira, Paciente paciente, Integer idConsultaAtual) {
-        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
-        ConfiguracaoSistema config = configDAO.getConfiguracao();
-        int duracaoConsulta = config.getIntervaloConsultaMinutos();
-        
-        // Define o período da consulta
-        LocalDateTime fimConsulta = dataHora.plusMinutes(duracaoConsulta);
-        
-        List<Consulta> consultasConflitantes = repositorio.buscarConsultasNoPeriodo(
-            dataHora, 
-            fimConsulta
-        );
-        
-        if (idConsultaAtual != null) {
-            consultasConflitantes.removeIf(c -> c.getId() == idConsultaAtual);
-        }
-        
-        if (consultasConflitantes.stream().anyMatch(c -> c.getMedico().equals(medico))) {
-            throw new ConsultaException("Médico já possui consulta agendada neste horário");
-        }
-        
-        if (consultasConflitantes.stream().anyMatch(c -> c.getEnfermeira().equals(enfermeira))) {
-            throw new ConsultaException("Enfermeira já possui consulta agendada neste horário");
-        }
-
-        if (consultasConflitantes.stream().anyMatch(c -> c.getPaciente().equals(paciente))) {
-            throw new ConsultaException("Paciente já possui consulta agendada neste horário");
-        }
-    }
-    
-    public void validaCamposEntrada(LocalDateTime dataHora, String observacoes, Paciente paciente, Medico medico, Enfermeira enfermeira, List<Procedimento> procedimentos) {
+    public void validaCamposEntrada(LocalDateTime dataHora, String observacoes, 
+            Paciente paciente, Medico medico, Enfermeira enfermeira, 
+            List<Procedimento> procedimentos) {
         
         if (dataHora == null) {
             throw new ConsultaException("Data e hora não podem estar em branco");
@@ -74,12 +34,46 @@ public class ValidateConsulta {
             throw new ConsultaException("Selecione pelo menos um procedimento");
         }
         
-        validarHorariosConflitantes(dataHora, medico, enfermeira, paciente, null);
+        if (observacoes != null && observacoes.length() > 1000) {
+            throw new ConsultaException("Observações muito longas. Máximo de 1000 caracteres.");
+        }
     }
     
-    public void validaCamposEntrada(int id, LocalDateTime dataHora, String observacoes, Paciente paciente, Medico medico, Enfermeira enfermeira, List<Procedimento> procedimentos) {
-        validaCamposEntrada(dataHora, observacoes, paciente, medico, enfermeira, procedimentos);
+    public void validarHorarioConflitante(LocalDateTime dataHoraConsulta, 
+            LocalDateTime dataHoraExistente, int duracaoMinutos) {
+            
+        LocalDateTime fimConsultaExistente = dataHoraExistente.plusMinutes(duracaoMinutos);
         
-        validarHorariosConflitantes(dataHora, medico, enfermeira, paciente, id);
+        if ((dataHoraConsulta.isEqual(dataHoraExistente) || 
+             dataHoraConsulta.isAfter(dataHoraExistente)) && 
+            dataHoraConsulta.isBefore(fimConsultaExistente)) {
+            throw new ConsultaException("Existe conflito de horário com outra consulta");
+        }
+    }
+    
+    public void validarHorarioFuncionamento(LocalDateTime dataHora, 
+            LocalDateTime horarioAbertura, LocalDateTime horarioFechamento) {
+            
+        if (dataHora.isBefore(horarioAbertura) || dataHora.isAfter(horarioFechamento)) {
+            throw new ConsultaException("Horário fora do período de funcionamento");
+        }
+    }
+    
+    public void validarAntecedencia(LocalDateTime dataHora, 
+            int tempoMinimoAntecedenciaMinutos, int tempoMaximoAgendamentoDias) {
+            
+        LocalDateTime agora = LocalDateTime.now();
+        long minutosAteConsulta = java.time.Duration.between(agora, dataHora).toMinutes();
+        long diasAteConsulta = java.time.Duration.between(agora, dataHora).toDays();
+        
+        if (minutosAteConsulta < tempoMinimoAntecedenciaMinutos) {
+            throw new ConsultaException("É necessário agendar com no mínimo " + 
+                tempoMinimoAntecedenciaMinutos + " minutos de antecedência");
+        }
+        
+        if (diasAteConsulta > tempoMaximoAgendamentoDias) {
+            throw new ConsultaException("Não é possível agendar consultas com mais de " + 
+                tempoMaximoAgendamentoDias + " dias de antecedência");
+        }
     }
 }

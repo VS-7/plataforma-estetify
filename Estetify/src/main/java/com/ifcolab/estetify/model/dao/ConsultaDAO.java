@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Consulta;
-import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.util.List;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
@@ -14,13 +13,14 @@ public class ConsultaDAO extends Dao<Consulta> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Consulta consulta = this.entityManager.find(Consulta.class, id);
-        if (consulta != null) {
-            this.entityManager.remove(consulta);
-        } else {
+        if (consulta == null) {
             this.entityManager.getTransaction().rollback();
-            throw new ConsultaException("Erro - Consulta inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(consulta);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

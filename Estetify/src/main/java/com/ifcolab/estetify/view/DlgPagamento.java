@@ -116,7 +116,7 @@ public class DlgPagamento extends javax.swing.JDialog {
         btnCancelar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         cboMetodoPagamento = new com.ifcolab.estetify.components.CustomComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        customTextArea1 = new com.ifcolab.estetify.components.CustomTextArea();
+        txtDetalhes = new com.ifcolab.estetify.components.CustomTextArea();
         edtValorPagamento = new com.ifcolab.estetify.components.CustomTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -175,9 +175,9 @@ public class DlgPagamento extends javax.swing.JDialog {
         pnlBackground.add(cboMetodoPagamento);
         cboMetodoPagamento.setBounds(160, 370, 460, 44);
 
-        customTextArea1.setColumns(20);
-        customTextArea1.setRows(5);
-        jScrollPane1.setViewportView(customTextArea1);
+        txtDetalhes.setColumns(20);
+        txtDetalhes.setRows(5);
+        jScrollPane1.setViewportView(txtDetalhes);
 
         pnlBackground.add(jScrollPane1);
         jScrollPane1.setBounds(160, 440, 460, 116);
@@ -198,7 +198,7 @@ public class DlgPagamento extends javax.swing.JDialog {
         try {
             double valor = ((Number) edtValorPagamento.getValue()).doubleValue();
             MetodoPagamento metodoPagamento = (MetodoPagamento) cboMetodoPagamento.getSelectedItem();
-            String detalhes = customTextArea1.getText();
+            String detalhes = txtDetalhes.getText();
 
             controller.cadastrar(
                 valor,
@@ -232,7 +232,6 @@ public class DlgPagamento extends javax.swing.JDialog {
     private com.ifcolab.estetify.components.SecondaryCustomButton btnCancelar;
     private com.ifcolab.estetify.components.PrimaryCustomButton btnSalvar;
     private com.ifcolab.estetify.components.CustomComboBox cboMetodoPagamento;
-    private com.ifcolab.estetify.components.CustomTextArea customTextArea1;
     private com.ifcolab.estetify.components.CustomTextField edtValorPagamento;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDetalhes;
@@ -241,5 +240,6 @@ public class DlgPagamento extends javax.swing.JDialog {
     private javax.swing.JLabel lblTitleGerenciaMedicos;
     private javax.swing.JLabel lblValorPagamento;
     private javax.swing.JPanel pnlBackground;
+    private com.ifcolab.estetify.components.CustomTextArea txtDetalhes;
     // End of variables declaration//GEN-END:variables
 }

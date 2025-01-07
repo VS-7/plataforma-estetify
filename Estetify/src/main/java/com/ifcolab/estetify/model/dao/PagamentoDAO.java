@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Pagamento;
-import com.ifcolab.estetify.model.exceptions.PagamentoException;
 import java.util.List;
 import javax.persistence.TypedQuery;
 
@@ -12,13 +11,14 @@ public class PagamentoDAO extends Dao<Pagamento> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Pagamento pagamento = this.entityManager.find(Pagamento.class, id);
-        if (pagamento != null) {
-            this.entityManager.remove(pagamento);
-        } else {
+        if (pagamento == null) {
             this.entityManager.getTransaction().rollback();
-            throw new PagamentoException("Erro - Pagamento inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(pagamento);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

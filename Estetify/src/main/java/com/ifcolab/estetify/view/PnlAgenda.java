@@ -7,7 +7,6 @@ import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.ConfiguracaoSistema;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
-import com.ifcolab.estetify.view.DlgNovaConsulta;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,11 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.*;
 import java.util.Map;
-import java.util.TreeMap;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import com.ifcolab.estetify.view.DlgOpcoesConsulta;
 
 public class PnlAgenda extends javax.swing.JPanel {
     private final ConsultaController consultaController;
@@ -104,30 +100,18 @@ public class PnlAgenda extends javax.swing.JPanel {
     }
     
     private void atualizarAgenda() {
-
+        pnlAgenda.removeAll();
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy");
         lblMes.setText(dataAtual.format(formatter));
         
-        pnlAgenda.removeAll();
-        
-        List<Consulta> consultas = consultaController.buscarPorData(dataAtual);
-        
-        Map<LocalTime, List<Consulta>> consultasPorHorario = new TreeMap<>();
-        
-        LocalTime hora = config.getHorarioAbertura();
-        while (!hora.isAfter(config.getHorarioFechamento())) {
-            consultasPorHorario.put(hora, new ArrayList<>());
-            hora = hora.plusMinutes(config.getIntervaloConsultaMinutos());
-        }
-        
-        for (Consulta consulta : consultas) {
-            LocalTime horaConsulta = consulta.getDataHora().toLocalTime();
-            consultasPorHorario.computeIfAbsent(horaConsulta, k -> new ArrayList<>()).add(consulta);
-        }
-        
+        Map<LocalTime, List<Consulta>> consultasPorHorario = 
+            consultaController.getConsultasOrganizadasPorHorario(dataAtual);
+            
         consultasPorHorario.forEach((horario, consultasDoHorario) -> {
             JPanel pnlHorario = criarPainelHorario(horario);
-            JPanel pnlConsultas = (JPanel) ((BorderLayout) pnlHorario.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+            JPanel pnlConsultas = (JPanel) ((BorderLayout) pnlHorario.getLayout())
+                                          .getLayoutComponent(BorderLayout.CENTER);
             
             for (Consulta consulta : consultasDoHorario) {
                 pnlConsultas.add(criarPainelConsulta(consulta));
@@ -136,7 +120,6 @@ public class PnlAgenda extends javax.swing.JPanel {
             pnlAgenda.add(pnlHorario);
         });
         
-        // Atualizar interface
         pnlAgenda.revalidate();
         pnlAgenda.repaint();
     }

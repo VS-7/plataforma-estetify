@@ -1,8 +1,10 @@
 package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.controller.tablemodel.TMViewPaciente;
+import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.dao.PacienteDAO;
+import com.ifcolab.estetify.model.dao.ConsultaDAO;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
 import com.ifcolab.estetify.model.valid.ValidatePaciente;
@@ -12,33 +14,40 @@ import com.ifcolab.estetify.utils.NotificadorEmail;
 import javax.swing.JTable;
 import java.util.List;
 
-/**
- *
- * @author vitorsrgio
- */
+
 public class PacienteController {
     
     private PacienteDAO repositorio;
+    private ConsultaDAO consultaDAO;
+    private ValidatePaciente valid;
     private GerenciadorCriptografia gerenciadorCriptografia;
     private NotificadorEmail notificadorEmail;
     
     public PacienteController() {
-        repositorio = new PacienteDAO();
+        this.repositorio = new PacienteDAO();
+        this.consultaDAO = new ConsultaDAO();
+        valid = new ValidatePaciente();
         gerenciadorCriptografia = new GerenciadorCriptografia();
         notificadorEmail = new NotificadorEmail();
     }
     
     public void cadastrar(String nome, String email, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String historicoMedico, int avatar) {
+        
         String senhaTemporaria = GeradorSenha.gerarSenha(8);
         String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
         
-        ValidatePaciente valid = new ValidatePaciente();
         Paciente paciente = valid.validaCamposEntrada(nome, email, senhaHash, cpf, sexo, dataNascimento, telefone, endereco, historicoMedico, avatar);
         
-        if (repositorio.findByCPF(cpf) != null) {
+        Paciente pacienteExistenteCPF = repositorio.findByCPF(cpf);
+        if (pacienteExistenteCPF != null) {
             throw new PacienteException("CPF já cadastrado");
         }
         
+        Paciente pacienteExistenteEmail = repositorio.findByEmail(email);
+        if (pacienteExistenteEmail != null) {
+            throw new PacienteException("Email já cadastrado");
+        }
+
         repositorio.save(paciente);
         enviarCredenciaisAcesso(paciente, senhaTemporaria);
     }
@@ -61,22 +70,36 @@ public class PacienteController {
     }
     
     public void atualizar(int id, String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String historicoMedico, int avatar) {
-        ValidatePaciente valid = new ValidatePaciente();
-        Paciente paciente = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, historicoMedico, avatar);
         
-        if (repositorio.findByCPF(cpf) != null) {
-            throw new PacienteException("CPF já cadastrado");
+        Paciente paciente = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, historicoMedico, avatar);
+        paciente.setId(id);
+        
+        Paciente pacienteExistenteCPF = repositorio.findByCPF(cpf);
+        if (pacienteExistenteCPF != null && pacienteExistenteCPF.getId() != id) {
+            throw new PacienteException("CPF já cadastrado para outro paciente");
         }
         
-        paciente.setId(id);
+        Paciente pacienteExistenteEmail = repositorio.findByEmail(email);
+        if (pacienteExistenteEmail != null && pacienteExistenteEmail.getId() != id) {
+            throw new PacienteException("Email já cadastrado para outro paciente");
+        }
+        
         repositorio.update(paciente);
     }
     
     public void excluir(Paciente paciente) {
-        if (paciente != null) {
-            repositorio.delete(paciente.getId());
-        } else {
+        if (paciente == null) {
             throw new PacienteException("Erro - Paciente inexistente.");
+        }
+        
+        List<Consulta> consultas = consultaDAO.buscarConsultasPorPaciente(paciente.getId());
+        if (!consultas.isEmpty()) {
+            throw new PacienteException("Não é possível excluir o paciente pois existem consultas associadas a ele.");
+        }
+        
+        boolean deletado = repositorio.delete(paciente.getId());
+        if (!deletado) {
+            throw new PacienteException("Erro ao excluir o paciente.");
         }
     }
     

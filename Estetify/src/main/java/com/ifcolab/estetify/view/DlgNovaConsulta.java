@@ -15,6 +15,7 @@ import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         procedimentoController = new ProcedimentoController();
         
         try {
-            controller.getConfiguracao(); // Verifica se as configurações estão disponíveis
+            controller.getConfiguracao();
             
             controller.atualizarTabela(grdConsultas);
             idConsultaEditando = -1;
@@ -59,13 +60,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
             this.configurarComponentes();
             this.carregarCombos();
             
-            // Configura o horário inicial usando a lógica do controller
-            LocalDateTime proximoHorario = controller.calcularProximoHorarioDisponivel();
-            DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            DateTimeFormatter horaFormatter = DateTimeFormatter.ofPattern("HH:mm");
             
-            fEdtData.setText(proximoHorario.format(dataFormatter));
-            fEdtHora.setText(proximoHorario.format(horaFormatter));
             
             this.habilitarFormulario(false);
             
@@ -198,7 +193,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         lblCPF = new javax.swing.JLabel();
         lblNome = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
-        lblObservacoes = new javax.swing.JLabel();
+        lblProcedimentosSelecionados = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
         lblDataNascimento = new javax.swing.JLabel();
         lblHora = new javax.swing.JLabel();
@@ -215,6 +210,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         btnSalvar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnEditar = new com.ifcolab.estetify.components.SecondaryCustomButton();
         btnRemover = new com.ifcolab.estetify.components.SecondaryCustomButton();
+        lblObservacoes = new javax.swing.JLabel();
         scrollProcedimentos = new javax.swing.JScrollPane();
         lstProcedimentos = new javax.swing.JList<>();
         tmConsultas = new javax.swing.JScrollPane();
@@ -244,10 +240,10 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         getContentPane().add(lblEmail);
         lblEmail.setBounds(390, 120, 170, 17);
 
-        lblObservacoes.setForeground(new java.awt.Color(51, 51, 51));
-        lblObservacoes.setText("Observacoes");
-        getContentPane().add(lblObservacoes);
-        lblObservacoes.setBounds(240, 190, 110, 17);
+        lblProcedimentosSelecionados.setForeground(new java.awt.Color(51, 51, 51));
+        lblProcedimentosSelecionados.setText("Procedimentos Selecionados");
+        getContentPane().add(lblProcedimentosSelecionados);
+        lblProcedimentosSelecionados.setBounds(990, 190, 290, 17);
 
         lblData.setForeground(new java.awt.Color(51, 51, 51));
         lblData.setText("Hora");
@@ -364,6 +360,11 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         getContentPane().add(btnRemover);
         btnRemover.setBounds(500, 80, 170, 30);
 
+        lblObservacoes.setForeground(new java.awt.Color(51, 51, 51));
+        lblObservacoes.setText("Observacoes");
+        getContentPane().add(lblObservacoes);
+        lblObservacoes.setBounds(240, 190, 110, 17);
+
         lstProcedimentos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstProcedimentos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -373,7 +374,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         scrollProcedimentos.setViewportView(lstProcedimentos);
 
         getContentPane().add(scrollProcedimentos);
-        scrollProcedimentos.setBounds(980, 200, 300, 130);
+        scrollProcedimentos.setBounds(980, 210, 300, 120);
 
         grdConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -483,7 +484,28 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
             
-            // Obtém os itens selecionados
+            controller.validarHorarioConsulta(dataHora);
+
+            ConfiguracaoSistema config = controller.getConfiguracao();
+            if (!config.isDiaFuncionamento(dataHora.getDayOfWeek())) {
+                throw new ConsultaException("A clínica não funciona neste dia da semana");
+            }
+            
+            LocalTime horario = dataHora.toLocalTime();
+            if (horario.isBefore(config.getHorarioAbertura()) || 
+                horario.isAfter(config.getHorarioFechamento())) {
+                throw new ConsultaException("Horário fora do período de funcionamento (" + 
+                    config.getHorarioAbertura().format(DateTimeFormatter.ofPattern("HH:mm")) + " às " + 
+                    config.getHorarioFechamento().format(DateTimeFormatter.ofPattern("HH:mm")) + ")");
+            }
+            
+            LocalDateTime agora = LocalDateTime.now();
+            long minutosAteConsulta = java.time.Duration.between(agora, dataHora).toMinutes();
+            if (minutosAteConsulta < config.getTempoMinimoAntecedenciaMinutos()) {
+                throw new ConsultaException("É necessário agendar com no mínimo " + 
+                    config.getTempoMinimoAntecedenciaMinutos() + " minutos de antecedência");
+            }
+            
             Paciente paciente = (Paciente) cbxSelecionarPaciente.getSelectedItem();
             Medico medico = (Medico) cbxSelecionarMedico.getSelectedItem();
             Enfermeira enfermeira = (Enfermeira) cbxSelecionarEnfermeira.getSelectedItem();
@@ -512,10 +534,8 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
                 consultaCadastrada = true;
             }
 
-            // Atualizar a tabela antes de fechar
             controller.atualizarTabela(grdConsultas);
             
-            // Limpar e desabilitar o formulário
             this.idConsultaEditando = -1;
             this.habilitarFormulario(false);
             this.limparFormulario();
@@ -605,6 +625,7 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     private javax.swing.JLabel lblHora;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblObservacoes;
+    private javax.swing.JLabel lblProcedimentosSelecionados;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
     private javax.swing.JList<Procedimento> lstProcedimentos;

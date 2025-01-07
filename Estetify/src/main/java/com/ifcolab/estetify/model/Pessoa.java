@@ -33,16 +33,15 @@ public abstract class Pessoa implements Serializable {
     protected String nome;
     
     @Column(unique = true)
-    protected String email;
+    private String email;
     
     @Column
     protected String senha;
     
     @Column(unique = true)
-    protected String cpf;
+    private String cpf;
     
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
     protected TipoSexo sexo;
     
     protected LocalDate dataNascimento;

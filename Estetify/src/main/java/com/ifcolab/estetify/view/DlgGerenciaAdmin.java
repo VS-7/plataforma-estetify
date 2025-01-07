@@ -91,16 +91,16 @@ public class DlgGerenciaAdmin extends javax.swing.JDialog {
         edtEndereco.setText("");
     }
 
-    private void preencherFormulario(Paciente paciente) {
+    private void preencherFormulario(Admin admin) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         
-        edtNome.setText(paciente.getNome());
-        edtEmail.setText(paciente.getEmail());
-        fEdtCPF.setText(paciente.getCpf());
-        cboSexo.setSelectedItem(paciente.getSexo());
-        fEdtDataNascimento.setText(paciente.getDataNascimento().format(formatter));
-        fEdtTelefone.setText(paciente.getTelefone());
-        edtEndereco.setText(paciente.getEndereco());
+        edtNome.setText(admin.getNome());
+        edtEmail.setText(admin.getEmail());
+        fEdtCPF.setText(admin.getCpf());
+        cboSexo.setSelectedItem(admin.getSexo());
+        fEdtDataNascimento.setText(admin.getDataNascimento().format(formatter));
+        fEdtTelefone.setText(admin.getTelefone());
+        edtEndereco.setText(admin.getEndereco());
     }
 
     private Object getObjetoSelecionadoNaGrid() {
@@ -276,13 +276,13 @@ public class DlgGerenciaAdmin extends javax.swing.JDialog {
 
         grdAdmins.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         tmMedicos.setViewportView(grdAdmins);
@@ -375,15 +375,15 @@ public class DlgGerenciaAdmin extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        Paciente pacienteEditando = (Paciente) this.getObjetoSelecionadoNaGrid();
+        Admin adminEditando = (Admin) this.getObjetoSelecionadoNaGrid();
 
-        if (pacienteEditando == null)
+        if (adminEditando == null)
         JOptionPane.showMessageDialog(this, "Primeiro selecione um registro na tabela.");
         else {
             this.limparFormulario();
             this.habilitarFormulario(true);
-            this.preencherFormulario(pacienteEditando);
-            this.idAdminEditando = pacienteEditando.getId();
+            this.preencherFormulario(adminEditando);
+            this.idAdminEditando = adminEditando.getId();
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 

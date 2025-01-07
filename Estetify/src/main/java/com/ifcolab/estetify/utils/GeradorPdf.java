@@ -79,7 +79,6 @@ public class GeradorPdf implements IGeradorDocumento {
             PdfWriter.getInstance(documento, new FileOutputStream(caminhoArquivo));
             documento.open();
             
-            // Cabeçalho
             Paragraph cabecalho = new Paragraph("ESTETIFY", TITULO);
             cabecalho.setAlignment(Element.ALIGN_CENTER);
             documento.add(cabecalho);
@@ -88,39 +87,33 @@ public class GeradorPdf implements IGeradorDocumento {
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             documento.add(subtitulo);
             
-            // CNPJ
             Paragraph cnpj = new Paragraph("CNPJ: 12.345.678/0001-90", RODAPE);
             cnpj.setAlignment(Element.ALIGN_CENTER);
             documento.add(cnpj);
             documento.add(new Paragraph("\n"));
             
-            // Número do Recibo
             Paragraph numeroRecibo = new Paragraph(
                 "Recibo Nº: " + String.format("%06d", pagamento.getId()), DESTAQUE);
             numeroRecibo.setAlignment(Element.ALIGN_RIGHT);
             documento.add(numeroRecibo);
             documento.add(new Paragraph("\n"));
             
-            // Título do Recibo
             Paragraph titulo = new Paragraph("RECIBO DE PAGAMENTO", TITULO);
             titulo.setAlignment(Element.ALIGN_CENTER);
             documento.add(titulo);
             documento.add(new Paragraph("\n"));
             
-            // Informações do Paciente
             documento.add(new Paragraph("Dados do Paciente", SUBTITULO));
             adicionarLinha(documento, "Nome:", consulta.getPaciente().getNome());
             adicionarLinha(documento, "CPF:", consulta.getPaciente().getCpf());
             documento.add(new Paragraph("\n"));
             
-            // Informações da Consulta
             documento.add(new Paragraph("Dados da Consulta", SUBTITULO));
             adicionarLinha(documento, "Data/Hora:", 
                 consulta.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
             adicionarLinha(documento, "Médico:", "Dr(a). " + consulta.getMedico().getNome());
             documento.add(new Paragraph("\n"));
             
-            // Procedimentos
             documento.add(new Paragraph("Procedimentos Realizados", SUBTITULO));
             double totalProcedimentos = 0;
             for (Procedimento proc : consulta.getProcedimentos()) {
@@ -130,7 +123,6 @@ public class GeradorPdf implements IGeradorDocumento {
             }
             documento.add(new Paragraph("\n"));
             
-            // Informações do Pagamento
             documento.add(new Paragraph("Dados do Pagamento", SUBTITULO));
             adicionarLinha(documento, "Valor Total:", "R$ " + String.format("%.2f", pagamento.getValor()));
             adicionarLinha(documento, "Método de Pagamento:", pagamento.getMetodoPagamento().toString());
@@ -141,8 +133,7 @@ public class GeradorPdf implements IGeradorDocumento {
                 documento.add(new Paragraph("\nObservações:", DESTAQUE));
                 documento.add(new Paragraph(pagamento.getDetalhes(), NORMAL));
             }
-            
-            // Rodapé
+
             documento.add(new Paragraph("\n"));
             Paragraph rodape = new Paragraph(
                 "Este documento é um recibo oficial do pagamento realizado.", RODAPE);
@@ -174,7 +165,6 @@ public class GeradorPdf implements IGeradorDocumento {
             PdfWriter.getInstance(documento, new FileOutputStream(caminhoArquivo));
             documento.open();
             
-            // Cabeçalho
             Paragraph cabecalho = new Paragraph("ESTETIFY", TITULO);
             cabecalho.setAlignment(Element.ALIGN_CENTER);
             documento.add(cabecalho);
@@ -183,19 +173,19 @@ public class GeradorPdf implements IGeradorDocumento {
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             documento.add(subtitulo);
             
-            // CNPJ
+
             Paragraph cnpj = new Paragraph("CNPJ: 12.345.678/0001-90", RODAPE);
             cnpj.setAlignment(Element.ALIGN_CENTER);
             documento.add(cnpj);
             documento.add(new Paragraph("\n"));
             
-            // Título do Relatório
+
             Paragraph titulo = new Paragraph("RELATÓRIO DE PROCEDIMENTO", TITULO);
             titulo.setAlignment(Element.ALIGN_CENTER);
             documento.add(titulo);
             documento.add(new Paragraph("\n"));
             
-            // Data e Hora
+  
             Paragraph dataHora = new Paragraph(
                 "Data/Hora: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 DESTAQUE
@@ -204,19 +194,19 @@ public class GeradorPdf implements IGeradorDocumento {
             documento.add(dataHora);
             documento.add(new Paragraph("\n"));
             
-            // Informações do Paciente
+  
             documento.add(new Paragraph("Dados do Paciente", SUBTITULO));
             adicionarLinha(documento, "Nome:", consulta.getPaciente().getNome());
             adicionarLinha(documento, "CPF:", consulta.getPaciente().getCpf());
             documento.add(new Paragraph("\n"));
             
-            // Informações do Médico
+
             documento.add(new Paragraph("Responsável pelo Procedimento", SUBTITULO));
             adicionarLinha(documento, "Médico:", "Dr(a). " + consulta.getMedico().getNome());
             adicionarLinha(documento, "CRM:", consulta.getMedico().getCrm());
             documento.add(new Paragraph("\n"));
             
-            // Detalhes do Procedimento
+
             documento.add(new Paragraph("Detalhes do Procedimento", SUBTITULO));
             adicionarLinha(documento, "Tipo:", procedimento.getTipo().toString());
             adicionarLinha(documento, "Descrição:", procedimento.getDescricao());
@@ -234,19 +224,19 @@ public class GeradorPdf implements IGeradorDocumento {
             }
             documento.add(new Paragraph("\n"));
             
-            // Resultado
+ 
             documento.add(new Paragraph("Resultado do Procedimento", SUBTITULO));
             documento.add(new Paragraph(resultado, NORMAL));
             documento.add(new Paragraph("\n"));
             
-            // Observações (se houver)
+  
             if (observacoes != null && !observacoes.isEmpty()) {
                 documento.add(new Paragraph("Observações", SUBTITULO));
                 documento.add(new Paragraph(observacoes, NORMAL));
                 documento.add(new Paragraph("\n"));
             }
             
-            // Retorno
+     
             if (procedimento.getIntervaloRetornoDias() > 0) {
                 documento.add(new Paragraph("Retorno", SUBTITULO));
                 LocalDateTime dataRetorno = consulta.getDataHora().plusDays(procedimento.getIntervaloRetornoDias());
@@ -256,7 +246,7 @@ public class GeradorPdf implements IGeradorDocumento {
                 documento.add(new Paragraph("\n"));
             }
             
-            // Rodapé
+       
             Paragraph rodape = new Paragraph(
                 "Este documento é um relatório oficial do procedimento realizado.", RODAPE);
             rodape.setAlignment(Element.ALIGN_CENTER);

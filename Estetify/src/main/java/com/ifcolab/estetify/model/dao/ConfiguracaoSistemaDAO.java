@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.ConfiguracaoSistema;
-import com.ifcolab.estetify.model.exceptions.ConfiguracaoException;
 import java.util.List;
 
 public class ConfiguracaoSistemaDAO extends Dao<ConfiguracaoSistema> {
@@ -12,7 +11,7 @@ public class ConfiguracaoSistemaDAO extends Dao<ConfiguracaoSistema> {
     
     @Override
     public boolean delete(int id) {
-        throw new ConfiguracaoException("Não é possível excluir a configuração do sistema.");
+        return false; // Não permitimos excluir a configuração do sistema
     }
     
     @Override
@@ -69,15 +68,14 @@ public class ConfiguracaoSistemaDAO extends Dao<ConfiguracaoSistema> {
             this.entityManager.getTransaction().begin();
             this.entityManager.persist(config);
             this.entityManager.getTransaction().commit();
+            return config;
         } catch (Exception e) {
             if (this.entityManager.getTransaction().isActive()) {
                 this.entityManager.getTransaction().rollback();
             }
-            throw new ConfiguracaoException("Erro ao criar configuração padrão: " + e.getMessage());
+            return null;
         } finally {
             this.entityManager.close();
         }
-        
-        return config;
     }
 } 

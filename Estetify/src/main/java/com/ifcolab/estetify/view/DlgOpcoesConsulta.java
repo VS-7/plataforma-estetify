@@ -50,7 +50,6 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(Color.WHITE);
         
-        // Título
         JLabel lblTitulo = new JLabel("Detalhes da Consulta");
         lblTitulo.setFont(new Font("Fira Sans SemiBold", Font.PLAIN, 18));
         lblTitulo.setForeground(new Color(51, 51, 51));
@@ -58,13 +57,12 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         mainPanel.add(lblTitulo);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
-        // Card com informações
         JPanel cardPanel = criarPainelInformacoes();
         cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(cardPanel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         
-        // Botões de ação
+
         JPanel botoesPanel = criarPainelBotoes();
         botoesPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(botoesPanel);
@@ -81,23 +79,21 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             BorderFactory.createEmptyBorder(20, 25, 20, 25)
         ));
         
-        // Formatador de data
+  
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         
-        // Status com cor especial
         JLabel lblStatus = new JLabel("Status: " + consulta.getStatus());
         lblStatus.setFont(new Font("Fira Sans", Font.BOLD, 14));
         definirCorStatus(lblStatus, consulta.getStatus());
         panel.add(lblStatus);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         
-        // Outras informações
         adicionarLabel(panel, "Data/Hora: " + consulta.getDataHora().format(formatter));
         adicionarLabel(panel, "Paciente: " + consulta.getPaciente().getNome());
         adicionarLabel(panel, "Médico: " + consulta.getMedico().getNome());
         adicionarLabel(panel, "Enfermeira: " + consulta.getEnfermeira().getNome());
         
-        // Procedimentos
+
         if (!consulta.getProcedimentos().isEmpty()) {
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
             JLabel lblProcedimentos = new JLabel("<html><b>Procedimentos:</b><br/>" + 
@@ -108,7 +104,6 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             panel.add(lblProcedimentos);
         }
         
-        // Valor total
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         JLabel lblValorTotal = new JLabel("Valor Total: R$ " + String.format("%.2f", consulta.getValorTotal()));
         lblValorTotal.setFont(new Font("Fira Sans", Font.BOLD, 14));
@@ -150,14 +145,16 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
         innerPanel.setBackground(Color.WHITE);
         
-        // Botões de status
-        if (consulta.isAgendada()) {
-            adicionarBotao(innerPanel, new PrimaryCustomButton("Confirmar Consulta"), e -> confirmarConsulta());
-            adicionarBotao(innerPanel, new SecondaryCustomButton("Cancelar Consulta"), e -> cancelarConsulta());
+        if (controller.podeConfirmarConsulta(consulta)) {
+            adicionarBotao(innerPanel, new PrimaryCustomButton("Confirmar Consulta"), 
+                          e -> confirmarConsulta());
+            adicionarBotao(innerPanel, new SecondaryCustomButton("Cancelar Consulta"), 
+                          e -> cancelarConsulta());
         }
         
-        if (consulta.isConfirmada()) {
-            adicionarBotao(innerPanel, new PrimaryCustomButton("Realizar Consulta"), e -> realizarConsulta());
+        if (controller.podeRealizarConsulta(consulta)) {
+            adicionarBotao(innerPanel, new PrimaryCustomButton("Realizar Consulta"), 
+                          e -> realizarConsulta());
         }
         
         if (consulta.isConcluida() && consulta.getPagamento() == null) {
@@ -172,9 +169,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             adicionarBotao(innerPanel, new SecondaryCustomButton("Relatorio"), e -> gerarRelatorio());
         }
         
-       
         adicionarBotao(innerPanel, new SecondaryCustomButton("Editar Consulta"), e -> editarConsulta());
-        
         
         panel.add(innerPanel);
         return panel;
@@ -190,7 +185,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     
     private void configurarJanela() {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setSize(450, 600);
+        setSize(550, 650);
         setLocationRelativeTo(getParent());
         setResizable(false);
     }
@@ -283,7 +278,6 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     
     private void emitirRecibo() {
         try {
-            // Verificar se existe pagamento
             PagamentoController pagamentoController = new PagamentoController();
             List<Pagamento> pagamentos = pagamentoController.buscarPorConsulta(consulta.getId());
 
@@ -295,10 +289,8 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
                 return;
             }
 
-            // Usar o primeiro pagamento encontrado
             Pagamento pagamento = pagamentos.get(0);
 
-            // Criar diálogo para escolher onde salvar
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Salvar Recibo");
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -342,7 +334,6 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     }
     
     private void gerarRelatorio() {
-    // Verificar se há procedimentos na consulta
     if (consulta.getProcedimentos().isEmpty()) {
         JOptionPane.showMessageDialog(this,
             "Não há procedimentos registrados nesta consulta.",
@@ -351,7 +342,6 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         return;
     }
     
-    // Se houver apenas um procedimento, usar ele diretamente
     if (consulta.getProcedimentos().size() == 1) {
         Procedimento procedimento = consulta.getProcedimentos().get(0);
         DlgRelatorio dialog = new DlgRelatorio(null, true, consulta, procedimento);
@@ -361,7 +351,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             dispose();
         }
     } else {
-        // Se houver múltiplos procedimentos, permitir escolher
+
         Procedimento procedimento = (Procedimento) JOptionPane.showInputDialog(
             this,
             "Selecione o procedimento:",

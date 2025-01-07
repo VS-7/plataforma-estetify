@@ -16,32 +16,32 @@ public class RecepcionistaController {
     private RecepcionistaDAO repositorio;
     private GerenciadorCriptografia gerenciadorCriptografia;
     private NotificadorEmail notificadorEmail;
-    
+    private ValidateRecepcionista valid;
+           
     public RecepcionistaController() {
         repositorio = new RecepcionistaDAO();
         gerenciadorCriptografia = new GerenciadorCriptografia();
+        valid = new ValidateRecepcionista();
         notificadorEmail = new NotificadorEmail();
     }
     
-    public void cadastrar(
-            String nome,
-            String email,
-            String cpf,
-            TipoSexo sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String dataContratacao,
-            int avatar
-    ) {
+    public void cadastrar(String nome, String email, String cpf, TipoSexo sexo, 
+            String dataNascimento, String telefone, String endereco, String dataContratacao, int avatar) {
+            
         String senhaTemporaria = GeradorSenha.gerarSenha(8);
         String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
         
-        ValidateRecepcionista valid = new ValidateRecepcionista();
-        Recepcionista recepcionista = valid.validaCamposEntrada(nome, email, senhaHash, cpf, sexo, dataNascimento, telefone, endereco, dataContratacao, avatar);
+        Recepcionista recepcionista = valid.validaCamposEntrada(nome, email, senhaHash, 
+                cpf, sexo, dataNascimento, telefone, endereco, dataContratacao, avatar);
         
-        if (repositorio.findByCPF(cpf) != null) {
+        Recepcionista recepcionistaExistenteCPF = repositorio.findByCPF(cpf);
+        if (recepcionistaExistenteCPF != null) {
             throw new RecepcionistaException("CPF já cadastrado");
+        }
+        
+        Recepcionista recepcionistaExistenteEmail = repositorio.findByEmail(email);
+        if (recepcionistaExistenteEmail != null) {
+            throw new RecepcionistaException("Email já cadastrado");
         }
         
         repositorio.save(recepcionista);
@@ -65,11 +65,24 @@ public class RecepcionistaController {
         notificadorEmail.notificar(recepcionista, "Credenciais de Acesso - Estetify", mensagem);
     }
     
-    public void atualizar(int id, String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String dataContratacao, int avatar) {
-        ValidateRecepcionista valid = new ValidateRecepcionista();
-        Recepcionista recepcionista = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, dataContratacao, avatar);
-        
+    public void atualizar(int id, String nome, String email, String senha, String cpf, 
+            TipoSexo sexo, String dataNascimento, String telefone, String endereco, String dataContratacao, int avatar) {
+            
+ 
+        Recepcionista recepcionista = valid.validaCamposEntrada(nome, email, senha, 
+                cpf, sexo, dataNascimento, telefone, endereco, dataContratacao ,avatar);
         recepcionista.setId(id);
+        
+        Recepcionista recepcionistaExistenteCPF = repositorio.findByCPF(cpf);
+        if (recepcionistaExistenteCPF != null && recepcionistaExistenteCPF.getId() != id) {
+            throw new RecepcionistaException("CPF já cadastrado para outra recepcionista");
+        }
+        
+        Recepcionista recepcionistaExistenteEmail = repositorio.findByEmail(email);
+        if (recepcionistaExistenteEmail != null && recepcionistaExistenteEmail.getId() != id) {
+            throw new RecepcionistaException("Email já cadastrado para outra recepcionista");
+        }
+        
         repositorio.update(recepcionista);
     }
     

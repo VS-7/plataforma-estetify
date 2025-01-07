@@ -3,10 +3,8 @@ package com.ifcolab.estetify.view;
 import com.ifcolab.estetify.controller.RecepcionistaController;
 import com.ifcolab.estetify.model.Recepcionista;
 import com.ifcolab.estetify.model.enums.TipoSexo;
-import com.ifcolab.estetify.model.exceptions.PessoaException;
 import com.ifcolab.estetify.model.exceptions.RecepcionistaException;
 import com.ifcolab.estetify.model.exceptions.ValidateException;
-import com.ifcolab.estetify.utils.GerenciadorCriptografia;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -22,13 +20,11 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
 
     private RecepcionistaController controller;
     private int idRecepcionistaEditando;
-    private final GerenciadorCriptografia gerenciadorCriptografia;
 
     public DlgGerenciaRecepcionista(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        gerenciadorCriptografia = new GerenciadorCriptografia();
         controller = new RecepcionistaController();
         idRecepcionistaEditando = -1;
  

@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Procedimento;
-import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,13 +14,14 @@ public class ProcedimentoDAO extends Dao<Procedimento> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Procedimento procedimento = this.entityManager.find(Procedimento.class, id);
-        if (procedimento != null) {
-            this.entityManager.remove(procedimento);
-        } else {
+        if (procedimento == null) {
             this.entityManager.getTransaction().rollback();
-            throw new ProcedimentoException("Erro - Procedimento inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(procedimento);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

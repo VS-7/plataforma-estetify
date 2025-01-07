@@ -17,40 +17,40 @@ public class EnfermeiraController {
     private EnfermeiraDAO repositorio;
     private GerenciadorCriptografia gerenciadorCriptografia;
     private NotificadorEmail notificadorEmail;
+    private ValidateEnfermeira valid;
     
     public EnfermeiraController() {
         repositorio = new EnfermeiraDAO();
+        valid = new ValidateEnfermeira();
         gerenciadorCriptografia = new GerenciadorCriptografia();
         notificadorEmail = new NotificadorEmail();
     }
     
-    public void cadastrar(String nome, String email, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren, int avatar) {
+    public void cadastrar(String nome, String email, String cpf, TipoSexo sexo, 
+        String dataNascimento, String telefone, String endereco, String coren, int avatar) {
+            
         String senhaTemporaria = GeradorSenha.gerarSenha(8);
         String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
         
-        // Validar e criar enfermeira
-        ValidateEnfermeira valid = new ValidateEnfermeira();
-        Enfermeira enfermeira = valid.validaCamposEntrada(
-                nome,
-                email,
-                senhaHash,
-                cpf,
-                sexo,
-                dataNascimento,
-                telefone,
-                endereco,
-                coren,
-                avatar
-        );
+        Enfermeira enfermeira = valid.validaCamposEntrada(nome, email, senhaHash, cpf, 
+                sexo, dataNascimento, telefone, endereco, coren, avatar);
         
-        if (repositorio.findByCOREN(coren) != null) {
+        Enfermeira enfermeiraExistenteCPF = repositorio.findByCPF(cpf);
+        if (enfermeiraExistenteCPF != null) {
+            throw new EnfermeiraException("CPF já cadastrado");
+        }
+        
+        Enfermeira enfermeiraExistenteEmail = repositorio.findByEmail(email);
+        if (enfermeiraExistenteEmail != null) {
+            throw new EnfermeiraException("Email já cadastrado");
+        }
+        
+        Enfermeira enfermeiraExistenteCOREN = repositorio.findByCOREN(coren);
+        if (enfermeiraExistenteCOREN != null) {
             throw new EnfermeiraException("COREN já cadastrado");
         }
         
-        // Salvar no banco
         repositorio.save(enfermeira);
-        
-        // Enviar credenciais por email
         enviarCredenciaisAcesso(enfermeira, senhaTemporaria);
     }
     
@@ -72,11 +72,29 @@ public class EnfermeiraController {
     }
     
     
-    public void atualizar(int id, String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren, int avatar) {
-        ValidateEnfermeira valid = new ValidateEnfermeira();
-        Enfermeira enfermeira = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, coren, avatar);
-        
+    public void atualizar(int id, String nome, String email, String senha, String cpf, 
+        TipoSexo sexo, String dataNascimento, String telefone, String endereco, 
+        String coren, int avatar) {
+            
+        Enfermeira enfermeira = valid.validaCamposEntrada(nome, email, senha, cpf, 
+                sexo, dataNascimento, telefone, endereco, coren, avatar);
         enfermeira.setId(id);
+        
+        Enfermeira enfermeiraExistenteCPF = repositorio.findByCPF(cpf);
+        if (enfermeiraExistenteCPF != null && enfermeiraExistenteCPF.getId() != id) {
+            throw new EnfermeiraException("CPF já cadastrado para outra enfermeira");
+        }
+        
+        Enfermeira enfermeiraExistenteEmail = repositorio.findByEmail(email);
+        if (enfermeiraExistenteEmail != null && enfermeiraExistenteEmail.getId() != id) {
+            throw new EnfermeiraException("Email já cadastrado para outra enfermeira");
+        }
+        
+        Enfermeira enfermeiraExistenteCOREN = repositorio.findByCOREN(coren);
+        if (enfermeiraExistenteCOREN != null && enfermeiraExistenteCOREN.getId() != id) {
+            throw new EnfermeiraException("COREN já cadastrado para outra enfermeira");
+        }
+        
         repositorio.update(enfermeira);
     }
     

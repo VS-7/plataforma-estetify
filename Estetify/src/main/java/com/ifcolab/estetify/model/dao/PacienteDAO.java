@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Paciente;
-import com.ifcolab.estetify.model.exceptions.PacienteException;
 import java.util.List;
 
 public class PacienteDAO extends Dao<Paciente> {
@@ -14,13 +13,14 @@ public class PacienteDAO extends Dao<Paciente> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Paciente paciente = this.entityManager.find(Paciente.class, id);
-        if (paciente != null) {
-            this.entityManager.remove(paciente);
-        } else {
+        if (paciente == null) {
             this.entityManager.getTransaction().rollback();
-            throw new PacienteException("Erro - Paciente inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(paciente);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

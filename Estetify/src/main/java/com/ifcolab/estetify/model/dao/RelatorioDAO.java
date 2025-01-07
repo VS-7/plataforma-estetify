@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Relatorio;
-import com.ifcolab.estetify.model.exceptions.RelatorioException;
 
 import java.util.List;
 import javax.persistence.TypedQuery;
@@ -13,13 +12,14 @@ public class RelatorioDAO extends Dao<Relatorio> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Relatorio relatorio = this.entityManager.find(Relatorio.class, id);
-        if (relatorio != null) {
-            this.entityManager.remove(relatorio);
-        } else {
+        if (relatorio == null) {
             this.entityManager.getTransaction().rollback();
-            throw new RelatorioException("Erro - Relatório inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(relatorio);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

@@ -82,10 +82,12 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         fEdtHorarioFechamento = new com.ifcolab.estetify.components.CustomFormattedTextField();
         lblFechamento = new javax.swing.JLabel();
         spnIntervaloConsulta = new javax.swing.JSpinner();
-        lblMin = new javax.swing.JLabel();
+        lblDias = new javax.swing.JLabel();
         lblIntervaloConsulta1 = new javax.swing.JLabel();
         lblHorarioFuncionamento2 = new javax.swing.JLabel();
         chkSegunda = new javax.swing.JCheckBox();
+        lblMin2 = new javax.swing.JLabel();
+        lblMin1 = new javax.swing.JLabel();
         chkTerca = new javax.swing.JCheckBox();
         chkQuarta = new javax.swing.JCheckBox();
         chkQuinta = new javax.swing.JCheckBox();
@@ -140,10 +142,10 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         add(spnIntervaloConsulta);
         spnIntervaloConsulta.setBounds(40, 210, 160, 27);
 
-        lblMin.setForeground(new java.awt.Color(51, 51, 51));
-        lblMin.setText("min");
-        add(lblMin);
-        lblMin.setBounds(210, 220, 190, 17);
+        lblDias.setForeground(new java.awt.Color(51, 51, 51));
+        lblDias.setText("dias");
+        add(lblDias);
+        lblDias.setBounds(340, 500, 190, 17);
 
         lblIntervaloConsulta1.setForeground(new java.awt.Color(51, 51, 51));
         lblIntervaloConsulta1.setText("Intervalo entre consultas");
@@ -159,6 +161,16 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         chkSegunda.setText("Segunda");
         add(chkSegunda);
         chkSegunda.setBounds(40, 310, 90, 21);
+
+        lblMin2.setForeground(new java.awt.Color(51, 51, 51));
+        lblMin2.setText("min");
+        add(lblMin2);
+        lblMin2.setBounds(340, 440, 190, 17);
+
+        lblMin1.setForeground(new java.awt.Color(51, 51, 51));
+        lblMin1.setText("min");
+        add(lblMin1);
+        lblMin1.setBounds(210, 220, 190, 17);
 
         chkTerca.setText("Terça");
         add(chkTerca);
@@ -191,18 +203,18 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         lblHorarioFuncionamento.setBounds(40, 380, 270, 18);
 
         lblIntervaloConsulta2.setForeground(new java.awt.Color(51, 51, 51));
-        lblIntervaloConsulta2.setText("Antecedência Mínima");
+        lblIntervaloConsulta2.setText("Antecedência Mínima de Agendamento de Consultas");
         add(lblIntervaloConsulta2);
-        lblIntervaloConsulta2.setBounds(40, 410, 230, 17);
+        lblIntervaloConsulta2.setBounds(40, 410, 440, 17);
         add(spnTempoAntecedencia);
-        spnTempoAntecedencia.setBounds(40, 430, 160, 27);
+        spnTempoAntecedencia.setBounds(40, 430, 290, 27);
 
         lblIntervaloConsulta.setForeground(new java.awt.Color(51, 51, 51));
         lblIntervaloConsulta.setText("Agendamento Máximo");
         add(lblIntervaloConsulta);
         lblIntervaloConsulta.setBounds(40, 470, 230, 17);
         add(spnTempoMaxAgendamento);
-        spnTempoMaxAgendamento.setBounds(40, 490, 160, 27);
+        spnTempoMaxAgendamento.setBounds(40, 490, 290, 27);
 
         btnSalvar.setText("Salvar Alterações");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -265,6 +277,7 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtHorarioAbertura;
     private com.ifcolab.estetify.components.CustomFormattedTextField fEdtHorarioFechamento;
     private javax.swing.JLabel lblAbertura;
+    private javax.swing.JLabel lblDias;
     private javax.swing.JLabel lblFechamento;
     private javax.swing.JLabel lblHorarioFuncionamento;
     private javax.swing.JLabel lblHorarioFuncionamento1;
@@ -272,7 +285,8 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
     private javax.swing.JLabel lblIntervaloConsulta;
     private javax.swing.JLabel lblIntervaloConsulta1;
     private javax.swing.JLabel lblIntervaloConsulta2;
-    private javax.swing.JLabel lblMin;
+    private javax.swing.JLabel lblMin1;
+    private javax.swing.JLabel lblMin2;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
     private javax.swing.JSpinner spnIntervaloConsulta;

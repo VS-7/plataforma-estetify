@@ -34,9 +34,12 @@ public class ProcedimentoController {
     }
     
     public void excluir(Procedimento procedimento) {
-        if (procedimento != null) {
-            repositorio.delete(procedimento.getId());
-        } else {
+        if (procedimento == null) {
+            throw new ProcedimentoException("Erro - Procedimento inexistente.");
+        }
+        
+        boolean deletado = repositorio.delete(procedimento.getId());
+        if (!deletado) {
             throw new ProcedimentoException("Erro - Procedimento inexistente.");
         }
     }

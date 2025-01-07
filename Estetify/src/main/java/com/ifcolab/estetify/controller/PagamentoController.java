@@ -65,7 +65,10 @@ public class PagamentoController {
     }
     
     public void excluir(int id) {
-        repositorio.delete(id);
+        boolean deletado = repositorio.delete(id);
+        if (!deletado) {
+            throw new PagamentoException("Erro - Pagamento inexistente.");
+        }
     }
     
     public Pagamento buscar(int id) {

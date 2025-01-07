@@ -24,20 +24,17 @@ public class RelatorioController {
         geradorPdf = new GeradorPdf();
     }
     
+    
     public void cadastrar(String resultado, String observacoes, Consulta consulta, Procedimento procedimento) throws RelatorioException {
             
-        // Gerar o PDF primeiro
         String caminhoPdf = System.getProperty("user.home") + "/Estetify/relatorios/" + 
             consulta.getId() + "_" + procedimento.getId() + "_" + 
             LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         
-        // Criar diretório se não existir
         new java.io.File(caminhoPdf).mkdirs();
         
-        // Gerar o PDF
         geradorPdf.gerarRelatorioProcedimento(caminhoPdf, consulta, procedimento, resultado, observacoes);
         
-        // Caminho completo do arquivo PDF
         String caminhoCompletoPdf = caminhoPdf + "/relatorio_procedimento.pdf";
             
         Relatorio relatorio = validate.validaCamposEntrada(
@@ -52,8 +49,7 @@ public class RelatorioController {
     }
     
     public void atualizar(int id, String resultado, String observacoes, Consulta consulta, Procedimento procedimento) throws RelatorioException {
-            
-        // Gerar novo PDF
+
         String caminhoPdf = System.getProperty("user.home") + "/Estetify/relatorios/" + 
             consulta.getId() + "_" + procedimento.getId() + "_" + 
             LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -70,6 +66,13 @@ public class RelatorioController {
         
         relatorio.setId(id);
         repositorio.update(relatorio);
+    }
+    
+    public void validarESalvarRelatorio(String resultado, String observacoes, Consulta consulta, Procedimento procedimento) throws RelatorioException {
+        if (resultado.isEmpty()) {
+            throw new RelatorioException("O campo Resultado é obrigatório!");
+        }
+        cadastrar(resultado, observacoes, consulta, procedimento);
     }
     
     
@@ -95,4 +98,28 @@ public class RelatorioController {
             throw new RelatorioException("Erro ao abrir PDF: " + e.getMessage());
         }
     }
+    
+    public void excluir(Relatorio relatorio) throws RelatorioException {
+        if (relatorio == null) {
+            throw new RelatorioException("Erro - Relatório inexistente.");
+        }
+        
+        boolean deletado = repositorio.delete(relatorio.getId());
+        if (!deletado) {
+            throw new RelatorioException("Erro - Relatório inexistente.");
+        }
+    }
+    
+    public Relatorio buscarPorId(int id) throws RelatorioException {
+        Relatorio relatorio = repositorio.find(id);
+        if (relatorio == null) {
+            throw new RelatorioException("Relatório não encontrado.");
+        }
+        return relatorio;
+    }
+    
+    public List<Relatorio> buscarTodos() {
+        return repositorio.findAll();
+    }
+    
 }

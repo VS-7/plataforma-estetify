@@ -38,7 +38,7 @@ public class TMViewFeedback extends AbstractTableModel {
             case COL_TITULO:
                 return aux.getTitulo();
             case COL_AVALIACAO:
-                return "★".repeat(aux.getAvaliacao());
+                return "*".repeat(aux.getAvaliacao());
             case COL_DATA:
                 return aux.getDataAvaliacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             case COL_PACIENTE:

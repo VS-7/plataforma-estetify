@@ -27,7 +27,8 @@ public class PnlSidebar extends javax.swing.JPanel {
         btnGerenciarRecepcionistas.setVisible(false);
         btnGerenciarProcedimentos.setVisible(false);
         btnHistoricoProcedimento.setVisible(false);
-        btnSair.setVisible(false);
+        btnFeedbacksPaciente.setVisible(false);
+        btnSair.setVisible(true);
         btnConfiguracoes.setVisible(false);
         btnMinhasConsultas.setVisible(false);
         btnFeedbacks.setVisible(false);
@@ -49,27 +50,23 @@ public class PnlSidebar extends javax.swing.JPanel {
             btnGerenciarAdmins.setVisible(true);
             btnConfiguracoes.setVisible(true);
             btnFeedbacksAdmin.setVisible(true);
-            btnSair.setVisible(true);
         } 
         else if (authController.isPaciente()) {
             btnMinhasConsultas.setVisible(true);
-            btnFeedbacks.setVisible(true);
+            btnFeedbacksPaciente.setVisible(true);
             btnPerfil.setVisible(true);
-            btnSair.setVisible(true);
         }
         else if (authController.isMedico() || authController.isEnfermeira()) {
             btnAgenda.setVisible(true);
             btnPerfil.setVisible(true);
             btnFeedbacks.setVisible(true);
             btnHistoricoProcedimento.setVisible(true);
-            btnSair.setVisible(true);
         }
         else if (authController.isRecepcionista()) {
             btnAgenda.setVisible(true);
             btnGerenciarPacientes.setVisible(true);
             btnPerfil.setVisible(true);
             btnFeedbacks.setVisible(true);
-            btnSair.setVisible(true);
         }
     }
     @SuppressWarnings("unchecked")
@@ -85,6 +82,7 @@ public class PnlSidebar extends javax.swing.JPanel {
         btnPerfil = new com.ifcolab.estetify.components.CustomButton();
         btnGerenciarEnfermeiras = new com.ifcolab.estetify.components.CustomButton();
         btnMinhasConsultas = new com.ifcolab.estetify.components.CustomButton();
+        btnFeedbacksPaciente = new com.ifcolab.estetify.components.CustomButton();
         btnFeedbacks = new com.ifcolab.estetify.components.CustomButton();
         btnSair = new com.ifcolab.estetify.components.CustomButton();
         btnFeedbacksAdmin = new com.ifcolab.estetify.components.CustomButton();
@@ -175,6 +173,16 @@ public class PnlSidebar extends javax.swing.JPanel {
         });
         add(btnMinhasConsultas);
         btnMinhasConsultas.setBounds(10, 90, 230, 50);
+
+        btnFeedbacksPaciente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/feedbacks.png"))); // NOI18N
+        btnFeedbacksPaciente.setText("Feedbacks");
+        btnFeedbacksPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFeedbacksPacienteActionPerformed(evt);
+            }
+        });
+        add(btnFeedbacksPaciente);
+        btnFeedbacksPaciente.setBounds(10, 210, 230, 50);
 
         btnFeedbacks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/feedbacks.png"))); // NOI18N
         btnFeedbacks.setText("Feedbacks");
@@ -341,12 +349,19 @@ public class PnlSidebar extends javax.swing.JPanel {
         telaLogin.setVisible(true);
     }//GEN-LAST:event_btnSairActionPerformed
 
+    private void btnFeedbacksPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedbacksPacienteActionPerformed
+        DlgFeedbackPaciente dialog = new DlgFeedbackPaciente(null, true);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnFeedbacksPacienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.CustomButton btnAgenda;
     private com.ifcolab.estetify.components.CustomButton btnConfiguracoes;
     private com.ifcolab.estetify.components.CustomButton btnFeedbacks;
     private com.ifcolab.estetify.components.CustomButton btnFeedbacksAdmin;
+    private com.ifcolab.estetify.components.CustomButton btnFeedbacksPaciente;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarAdmins;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarEnfermeiras;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarMedicos;

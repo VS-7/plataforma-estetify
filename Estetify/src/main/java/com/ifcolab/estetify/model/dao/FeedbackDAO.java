@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Feedback;
-import com.ifcolab.estetify.model.exceptions.FeedbackException;
 import java.util.List;
 import javax.persistence.TypedQuery;
 
@@ -12,13 +11,14 @@ public class FeedbackDAO extends Dao<Feedback> {
     public boolean delete(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
+        
         Feedback feedback = this.entityManager.find(Feedback.class, id);
-        if (feedback != null) {
-            this.entityManager.remove(feedback);
-        } else {
+        if (feedback == null) {
             this.entityManager.getTransaction().rollback();
-            throw new FeedbackException("Erro - Feedback inexistente.");
+            return false;
         }
+        
+        this.entityManager.remove(feedback);
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
         return true;

@@ -27,4 +27,6 @@ public abstract class Dao<T> implements IDao<T> {
         this.entityManager.getTransaction().commit();
         this.entityManager.close();
     }
+    
+    
 }

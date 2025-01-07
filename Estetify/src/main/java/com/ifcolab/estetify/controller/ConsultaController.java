@@ -2,6 +2,7 @@ package com.ifcolab.estetify.controller;
 
 import com.ifcolab.estetify.controller.tablemodel.TMViewConsulta;
 import com.ifcolab.estetify.controller.tablemodel.TMViewMinhasConsultas;
+import com.ifcolab.estetify.controller.tablemodel.TMViewHistoricoProcedimento;
 import com.ifcolab.estetify.model.ConfiguracaoSistema;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Enfermeira;
@@ -17,18 +18,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.ArrayList;
 import javax.swing.JTable;
 
 public class ConsultaController {
     
     private final ConsultaDAO repositorio;
-    private final ValidateConsulta validador;
     private final ConfiguracaoSistemaDAO configDAO;
+    private final ValidateConsulta validador;
     
     public ConsultaController() {
         this.repositorio = new ConsultaDAO();
-        this.validador = new ValidateConsulta();
         this.configDAO = new ConfiguracaoSistemaDAO();
+        this.validador = new ValidateConsulta();
     }
     
     public ConfiguracaoSistema getConfiguracao() {
@@ -39,67 +43,76 @@ public class ConsultaController {
         return config;
     }
     
-    public LocalDateTime calcularProximoHorarioDisponivel() {
-        ConfiguracaoSistema config = getConfiguracao();
-        LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime proximaData = agora;
-
-        while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
-            proximaData = proximaData.plusDays(1);
-        }
-
-        LocalTime horario;
-        if (proximaData.toLocalDate().equals(agora.toLocalDate())) {
-            horario = agora.toLocalTime();
-
-            if (horario.isBefore(config.getHorarioAbertura())) {
-                horario = config.getHorarioAbertura();
-            } else if (horario.isAfter(config.getHorarioFechamento())) {
-                proximaData = proximaData.plusDays(1);
-                while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
-                    proximaData = proximaData.plusDays(1);
-                }
-                horario = config.getHorarioAbertura();
-            } else {
-                horario = config.proximoHorarioDisponivel(horario);
-
-                if (horario.isAfter(config.getHorarioFechamento())) {
-                    proximaData = proximaData.plusDays(1);
-                    while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
-                        proximaData = proximaData.plusDays(1);
-                    }
-                    horario = config.getHorarioAbertura();
-                }
-            }
-        } else {
-            horario = config.getHorarioAbertura();
-        }
-
-        return proximaData.with(horario);
-    }
-    
-    public void cadastrar(LocalDateTime dataHora, String observacoes, Paciente paciente, Medico medico, Enfermeira enfermeira, List<Procedimento> procedimentos) {
-        validador.validaCamposEntrada(dataHora, observacoes, paciente, medico, enfermeira, procedimentos);
+    public void cadastrar(LocalDateTime dataHora, String observacoes, 
+            Paciente paciente, Medico medico, Enfermeira enfermeira, 
+            List<Procedimento> procedimentos) {
+            
+        validador.validaCamposEntrada(dataHora, observacoes, paciente, medico, 
+            enfermeira, procedimentos);
+            
+        ConfiguracaoSistema config = configDAO.getConfiguracao();
         
-        Consulta consulta = new Consulta(
-            0,
-            dataHora,
-            observacoes,
-            StatusConsulta.AGENDADA,
-            enfermeira,
-            medico,
-            paciente,
-            procedimentos
-        );
+        validador.validarHorarioFuncionamento(dataHora, 
+            LocalDateTime.of(dataHora.toLocalDate(), config.getHorarioAbertura()),
+            LocalDateTime.of(dataHora.toLocalDate(), config.getHorarioFechamento()));
+            
+        validador.validarAntecedencia(dataHora, 
+            config.getTempoMinimoAntecedenciaMinutos(),
+            config.getTempoMaximoAgendamentoDias());
+            
+        List<Consulta> consultasExistentes = repositorio.buscarConsultasNoPeriodo(
+            dataHora, dataHora.plusMinutes(config.getIntervaloConsultaMinutos()));
+            
+        for (Consulta consulta : consultasExistentes) {
+            validador.validarHorarioConflitante(dataHora, 
+                consulta.getDataHora(), 
+                config.getIntervaloConsultaMinutos());
+        }
         
+        Consulta consulta = new Consulta(0, dataHora, observacoes, 
+            StatusConsulta.AGENDADA, enfermeira, medico, paciente, procedimentos);
+            
         repositorio.save(consulta);
     }
     
-    public void atualizar(int id, LocalDateTime dataHora, String observacoes, Paciente paciente, Medico medico, Enfermeira enfermeira, List<Procedimento> procedimentos) {
-        validador.validaCamposEntrada(id, dataHora, observacoes, paciente, medico, enfermeira, procedimentos);
+    public void atualizar(int id, LocalDateTime dataHora, String observacoes, 
+            Paciente paciente, Medico medico, Enfermeira enfermeira, 
+            List<Procedimento> procedimentos) {
+            
         
-        Consulta consulta = new Consulta(id, dataHora, observacoes, StatusConsulta.AGENDADA, enfermeira, medico, paciente, procedimentos);
+        validador.validaCamposEntrada(dataHora, observacoes, paciente, medico, 
+            enfermeira, procedimentos);
+            
         
+        Consulta consultaAtual = repositorio.find(id);
+        if (consultaAtual == null) {
+            throw new ConsultaException("Consulta não encontrada");
+        }
+        
+        ConfiguracaoSistema config = configDAO.getConfiguracao();
+        
+        validador.validarHorarioFuncionamento(dataHora, 
+            LocalDateTime.of(dataHora.toLocalDate(), config.getHorarioAbertura()),
+            LocalDateTime.of(dataHora.toLocalDate(), config.getHorarioFechamento()));
+            
+        validador.validarAntecedencia(dataHora, 
+            config.getTempoMinimoAntecedenciaMinutos(),
+            config.getTempoMaximoAgendamentoDias());
+            
+        List<Consulta> consultasExistentes = repositorio.buscarConsultasNoPeriodo(
+            dataHora, dataHora.plusMinutes(config.getIntervaloConsultaMinutos()));
+            
+        for (Consulta consulta : consultasExistentes) {
+            if (consulta.getId() != id) {
+                validador.validarHorarioConflitante(dataHora, 
+                    consulta.getDataHora(), 
+                    config.getIntervaloConsultaMinutos());
+            }
+        }
+        
+        Consulta consulta = new Consulta(id, dataHora, observacoes, 
+            consultaAtual.getStatus(), enfermeira, medico, paciente, procedimentos);
+            
         repositorio.update(consulta);
     }
     
@@ -176,4 +189,74 @@ public class ConsultaController {
         repositorio.update(consulta);
     }
     
+    public void atualizarTabelaHistorico(JTable grd, int idPaciente) {
+        List<Consulta> consultas = buscarConsultasPorPaciente(idPaciente);
+        TMViewHistoricoProcedimento tmHistorico = new TMViewHistoricoProcedimento(consultas);
+        grd.setModel(tmHistorico);
+    }
+    
+    public Map<LocalTime, List<Consulta>> getConsultasOrganizadasPorHorario(LocalDate data) {
+        ConfiguracaoSistema config = getConfiguracao();
+        List<Consulta> consultas = buscarPorData(data);
+        
+        Map<LocalTime, List<Consulta>> consultasPorHorario = new TreeMap<>();
+        
+        LocalTime hora = config.getHorarioAbertura();
+        while (!hora.isAfter(config.getHorarioFechamento())) {
+            consultasPorHorario.put(hora, new ArrayList<>());
+            hora = hora.plusMinutes(config.getIntervaloConsultaMinutos());
+        }
+        
+        for (Consulta consulta : consultas) {
+            LocalTime horaConsulta = consulta.getDataHora().toLocalTime();
+            consultasPorHorario.computeIfAbsent(horaConsulta, k -> new ArrayList<>())
+                              .add(consulta);
+        }
+        
+        return consultasPorHorario;
+    }
+    
+    // Métodos para DlgOpcoesConsulta
+
+    public boolean podeConfirmarConsulta(Consulta consulta) {
+        return consulta != null && consulta.isAgendada();
+    }
+
+    public boolean podeCancelarConsulta(Consulta consulta) {
+        return consulta != null && consulta.isAgendada();
+    }
+
+    public boolean podeRealizarConsulta(Consulta consulta) {
+        return consulta != null && consulta.isConfirmada();
+    }
+
+    public void validarHorarioConsulta(LocalDateTime dataHora) {
+        ConfiguracaoSistema config = getConfiguracao();
+        
+        if (!config.isDiaFuncionamento(dataHora.getDayOfWeek())) {
+            throw new ConsultaException("A clínica não funciona neste dia da semana");
+        }
+        
+        LocalTime horario = dataHora.toLocalTime();
+        if (horario.isBefore(config.getHorarioAbertura()) || 
+            horario.isAfter(config.getHorarioFechamento())) {
+            throw new ConsultaException("Horário fora do período de funcionamento");
+        }
+        
+        if (horario.getMinute() % config.getIntervaloConsultaMinutos() != 0) {
+            throw new ConsultaException("Horário inválido para agendamento");
+        }
+        
+        LocalDateTime agora = LocalDateTime.now();
+        long minutosAteConsulta = java.time.Duration.between(agora, dataHora).toMinutes();
+        long diasAteConsulta = java.time.Duration.between(agora, dataHora).toDays();
+        
+        if (minutosAteConsulta < config.getTempoMinimoAntecedenciaMinutos()) {
+            throw new ConsultaException("Antecedência mínima não respeitada");
+        }
+        
+        if (diasAteConsulta > config.getTempoMaximoAgendamentoDias()) {
+            throw new ConsultaException("Prazo máximo para agendamento excedido");
+        }
+    }
 }

@@ -15,7 +15,6 @@ com/ifcolab/estetify/view/DlgNovaConsulta$7.class
 com/ifcolab/estetify/view/DlgNovaConsulta$2.class
 com/ifcolab/estetify/components/CustomComboBox.class
 com/ifcolab/estetify/view/DlgOpcoesConsulta$1.class
-com/ifcolab/estetify/view/DlgFeedback$1.class
 com/ifcolab/estetify/view/DlgGerenciaProcedimento$7.class
 com/ifcolab/estetify/view/pnlPerfil$4.class
 com/ifcolab/estetify/components/CustomScrollPane.class
@@ -54,7 +53,6 @@ com/ifcolab/estetify/view/DlgGerenciaMedico$5.class
 com/ifcolab/estetify/model/dao/RelatorioDAO.class
 com/ifcolab/estetify/view/DlgGerenciaPaciente$7.class
 com/ifcolab/estetify/controller/RecepcionistaController.class
-com/ifcolab/estetify/view/DlgFeedback.class
 com/ifcolab/estetify/controller/PagamentoController.class
 com/ifcolab/estetify/model/enums/StatusPagamento.class
 com/ifcolab/estetify/view/DlgGerenciaRecepcionista$4.class

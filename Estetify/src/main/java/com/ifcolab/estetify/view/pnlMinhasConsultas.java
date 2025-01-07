@@ -2,10 +2,8 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.AutenticacaoController;
 import com.ifcolab.estetify.controller.ConsultaController;
-import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Pessoa;
-import javax.swing.JOptionPane;
 
 public class pnlMinhasConsultas extends javax.swing.JPanel {
 
@@ -19,23 +17,18 @@ public class pnlMinhasConsultas extends javax.swing.JPanel {
         autenticacaoController = new AutenticacaoController();
         consultaController = new ConsultaController();
         
-        // Obter usuário logado
         usuario = autenticacaoController.getUsuarioLogado();
         
-        // Configurar componentes
         configurarComponentes();
         
-        // Carregar consultas
         if (usuario instanceof Paciente) {
             carregarConsultas();
         }
     }
     
     private void configurarComponentes() {
-        // Atualizar subtítulo
         lblSubtituloGerenciaMedicos.setText("Visualize todas as suas consultas agendadas.");
         
-        // Configurar tabela
         grdMinhasConsultas.setShowGrid(false);
         grdMinhasConsultas.setShowHorizontalLines(true);
         grdMinhasConsultas.setGridColor(new java.awt.Color(230, 230, 230));
