@@ -18,49 +18,16 @@ public class ProcedimentoController {
         repositorio = new ProcedimentoDAO();
     }
     
-    public void cadastrar(
-            String descricao,
-            String duracao,
-            String valor,
-            String requisitos,
-            String contraindicacoes,
-            TipoProcedimento tipo,
-            int intervaloRetornoDias
-    ) {
+    public void cadastrar(String descricao, String duracao, String valor, String requisitos, String contraindicacoes, TipoProcedimento tipo, int intervaloRetornoDias) {
         ValidateProcedimento valid = new ValidateProcedimento();
-        Procedimento procedimento = valid.validaCamposEntrada(
-                descricao,
-                duracao,
-                valor,
-                requisitos,
-                contraindicacoes,
-                tipo,
-                intervaloRetornoDias
-        );
-        
+        Procedimento procedimento = valid.validaCamposEntrada(descricao, duracao, valor, requisitos, contraindicacoes, tipo, intervaloRetornoDias);
+
         repositorio.save(procedimento);
     }
     
-    public void atualizar(
-            int id,
-            String descricao,
-            String duracao,
-            String valor,
-            String requisitos,
-            String contraindicacoes,
-            TipoProcedimento tipo,
-            int intervaloRetornoDias
-    ) {
+    public void atualizar(int id, String descricao, String duracao, String valor, String requisitos, String contraindicacoes, TipoProcedimento tipo, int intervaloRetornoDias) {
         ValidateProcedimento valid = new ValidateProcedimento();
-        Procedimento procedimento = valid.validaCamposEntrada(
-                descricao,
-                duracao,
-                valor,
-                requisitos,
-                contraindicacoes,
-                tipo,
-                intervaloRetornoDias
-        );
+        Procedimento procedimento = valid.validaCamposEntrada(descricao, duracao, valor, requisitos, contraindicacoes, tipo, intervaloRetornoDias);
         
         procedimento.setId(id);
         repositorio.update(procedimento);

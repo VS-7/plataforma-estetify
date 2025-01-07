@@ -6,34 +6,34 @@ import com.ifcolab.estetify.model.dao.EnfermeiraDAO;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.EnfermeiraException;
 import com.ifcolab.estetify.model.valid.ValidateEnfermeira;
+import com.ifcolab.estetify.utils.GeradorSenha;
+import com.ifcolab.estetify.utils.GerenciadorCriptografia;
+import com.ifcolab.estetify.utils.NotificadorEmail;
 import javax.swing.JTable;
 import java.util.List;
 
 public class EnfermeiraController {
     
     private EnfermeiraDAO repositorio;
+    private GerenciadorCriptografia gerenciadorCriptografia;
+    private NotificadorEmail notificadorEmail;
     
     public EnfermeiraController() {
         repositorio = new EnfermeiraDAO();
+        gerenciadorCriptografia = new GerenciadorCriptografia();
+        notificadorEmail = new NotificadorEmail();
     }
     
-    public void cadastrar(
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            TipoSexo sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String coren,
-            int avatar
-    ) {
+    public void cadastrar(String nome, String email, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren, int avatar) {
+        String senhaTemporaria = GeradorSenha.gerarSenha(8);
+        String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
+        
+        // Validar e criar enfermeira
         ValidateEnfermeira valid = new ValidateEnfermeira();
         Enfermeira enfermeira = valid.validaCamposEntrada(
                 nome,
                 email,
-                senha,
+                senhaHash,
                 cpf,
                 sexo,
                 dataNascimento,
@@ -47,35 +47,34 @@ public class EnfermeiraController {
             throw new EnfermeiraException("COREN já cadastrado");
         }
         
+        // Salvar no banco
         repositorio.save(enfermeira);
+        
+        // Enviar credenciais por email
+        enviarCredenciaisAcesso(enfermeira, senhaTemporaria);
     }
     
-    public void atualizar(
-            int id,
-            String nome,
-            String email,
-            String senha,
-            String cpf,
-            TipoSexo sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String coren,
-            int avatar
-    ) {
-        ValidateEnfermeira valid = new ValidateEnfermeira();
-        Enfermeira enfermeira = valid.validaCamposEntrada(
-                nome,
-                email,
-                senha,
-                cpf,
-                sexo,
-                dataNascimento,
-                telefone,
-                endereco,
-                coren,
-                avatar
+    private void enviarCredenciaisAcesso(Enfermeira enfermeira, String senhaTemporaria) {
+        String mensagem = String.format(
+            "Olá %s,\n\n" +
+            "Suas credenciais de acesso ao sistema Estetify foram criadas:\n\n" +
+            "Email: %s\n" +
+            "Senha: %s\n\n" +
+            "Por favor, altere sua senha no primeiro acesso.\n\n" +
+            "Atenciosamente,\n" +
+            "Equipe Estetify",
+            enfermeira.getNome(),
+            enfermeira.getEmail(),
+            senhaTemporaria
         );
+
+        notificadorEmail.notificar(enfermeira, "Credenciais de Acesso - Estetify", mensagem);
+    }
+    
+    
+    public void atualizar(int id, String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String coren, int avatar) {
+        ValidateEnfermeira valid = new ValidateEnfermeira();
+        Enfermeira enfermeira = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, coren, avatar);
         
         enfermeira.setId(id);
         repositorio.update(enfermeira);

@@ -7,13 +7,7 @@ import java.time.LocalDateTime;
 
 public class ValidateRelatorio {
     
-    public Relatorio validaCamposEntrada(
-            LocalDateTime dataEmissao,
-            String resultado,
-            String observacoes,
-            String caminhoPdf,
-            Consulta consulta
-    ) {
+    public Relatorio validaCamposEntrada(LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf, Consulta consulta) {
         if (dataEmissao == null) {
             throw new RelatorioException("Data de emissão não pode estar em branco.");
         }

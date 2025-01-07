@@ -18,21 +18,17 @@ public class CustomTextArea extends JTextArea {
     }
     
     private void setupTextArea() {
-        // Configurar fonte
+ 
         setFont(new Font("Fira Sans", Font.PLAIN, 14));
         
-        // Configurar cores
         setBackground(Color.WHITE);
         setForeground(new Color(111, 111, 111)); // Texto em cinza escuro
         
-        // Configurar quebra de linha
         setLineWrap(true);
         setWrapStyleWord(true);
         
-        // Remover borda padrão
         setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         
-        // Tornar o componente opaco
         setOpaque(false);
     }
     

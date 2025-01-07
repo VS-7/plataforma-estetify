@@ -7,13 +7,7 @@ import java.time.LocalDateTime;
 
 public class ValidateFeedback {
     
-    public Feedback validaCamposEntrada(
-            String titulo,
-            String descricao,
-            int avaliacao,
-            Consulta consulta,
-            LocalDateTime dataAvaliacao
-    ) {
+    public Feedback validaCamposEntrada(String titulo, String descricao, int avaliacao, Consulta consulta, LocalDateTime dataAvaliacao) {
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new FeedbackException("Título não pode estar em branco.");
         }

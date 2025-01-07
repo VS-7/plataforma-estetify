@@ -15,34 +15,8 @@ public class ConfiguracaoSistemaController {
         this.validador = new ValidateConfiguracao();
     }
     
-    public void atualizar(
-            LocalTime horarioAbertura,
-            LocalTime horarioFechamento,
-            int intervaloConsultaMinutos,
-            boolean funcionaSegunda,
-            boolean funcionaTerca,
-            boolean funcionaQuarta,
-            boolean funcionaQuinta,
-            boolean funcionaSexta,
-            boolean funcionaSabado,
-            boolean funcionaDomingo,
-            int tempoMinimoAntecedenciaMinutos,
-            int tempoMaximoAgendamentoDias
-    ) {
-        ConfiguracaoSistema config = validador.validaCamposEntrada(
-            horarioAbertura,
-            horarioFechamento,
-            intervaloConsultaMinutos,
-            funcionaSegunda,
-            funcionaTerca,
-            funcionaQuarta,
-            funcionaQuinta,
-            funcionaSexta,
-            funcionaSabado,
-            funcionaDomingo,
-            tempoMinimoAntecedenciaMinutos,
-            tempoMaximoAgendamentoDias
-        );
+    public void atualizar(LocalTime horarioAbertura, LocalTime horarioFechamento, int intervaloConsultaMinutos, boolean funcionaSegunda, boolean funcionaTerca, boolean funcionaQuarta, boolean funcionaQuinta, boolean funcionaSexta, boolean funcionaSabado, boolean funcionaDomingo, int tempoMinimoAntecedenciaMinutos, int tempoMaximoAgendamentoDias) {
+        ConfiguracaoSistema config = validador.validaCamposEntrada(horarioAbertura, horarioFechamento, intervaloConsultaMinutos, funcionaSegunda, funcionaTerca, funcionaQuarta, funcionaQuinta, funcionaSexta, funcionaSabado, funcionaDomingo, tempoMinimoAntecedenciaMinutos, tempoMaximoAgendamentoDias);
         
         repositorio.update(config);
     }

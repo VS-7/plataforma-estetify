@@ -27,19 +27,15 @@ public class SecondaryCustomButton extends JButton implements Serializable {
         // Configurar fonte
         setFont(new Font("Fira Sans", Font.PLAIN, 14));
         
-        // Configurar cores
         setBackground(new Color(0, 0, 0, 0)); // Transparente
         setForeground(Colors.GRAY_500); // Texto em cinza escuro
         
-        // Remover borda padrão e adicionar padding
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         
-        // Configurar aparência
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
         
-        // Adicionar efeito hover
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {

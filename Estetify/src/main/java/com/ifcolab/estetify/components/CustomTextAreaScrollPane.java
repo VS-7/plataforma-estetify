@@ -21,7 +21,7 @@ public class CustomTextAreaScrollPane extends JScrollPane {
     }
     
     private void setupScrollPane() {
-        // Remover bordas do ScrollPane
+
         setBorder(new EmptyBorder(0, 0, 0, 0));
         
         // Configurar a barra de rolagem

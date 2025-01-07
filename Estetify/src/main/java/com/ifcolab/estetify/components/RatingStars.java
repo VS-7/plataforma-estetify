@@ -31,7 +31,8 @@ public class RatingStars extends JPanel implements Serializable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (!isEnabled) return;
-                updateRating(getStarFromPosition(e.getX()));
+                int newRating = getStarFromPosition(e.getX());
+                setRating(newRating);
             }
             
             @Override
@@ -39,10 +40,6 @@ public class RatingStars extends JPanel implements Serializable {
                 if (!isEnabled) return;
                 hoverRating = -1;
                 repaint();
-            }
-
-            private void updateRating(int starFromPosition) {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         });
         

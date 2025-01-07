@@ -22,13 +22,7 @@ public class ValidateConsulta {
         this.repositorio = new ConsultaDAO();
     }
     
-    private void validarHorariosConflitantes(
-            LocalDateTime dataHora,
-            Medico medico,
-            Enfermeira enfermeira,
-            Paciente paciente,
-            Integer idConsultaAtual
-    ) {
+    private void validarHorariosConflitantes(LocalDateTime dataHora, Medico medico, Enfermeira enfermeira, Paciente paciente, Integer idConsultaAtual) {
         ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
         ConfiguracaoSistema config = configDAO.getConfiguracao();
         int duracaoConsulta = config.getIntervaloConsultaMinutos();
@@ -58,14 +52,7 @@ public class ValidateConsulta {
         }
     }
     
-    public void validaCamposEntrada(
-            LocalDateTime dataHora,
-            String observacoes,
-            Paciente paciente,
-            Medico medico,
-            Enfermeira enfermeira,
-            List<Procedimento> procedimentos
-    ) {
+    public void validaCamposEntrada(LocalDateTime dataHora, String observacoes, Paciente paciente, Medico medico, Enfermeira enfermeira, List<Procedimento> procedimentos) {
         
         if (dataHora == null) {
             throw new ConsultaException("Data e hora não podem estar em branco");
@@ -90,15 +77,7 @@ public class ValidateConsulta {
         validarHorariosConflitantes(dataHora, medico, enfermeira, paciente, null);
     }
     
-    public void validaCamposEntrada(
-            int id,
-            LocalDateTime dataHora,
-            String observacoes,
-            Paciente paciente,
-            Medico medico,
-            Enfermeira enfermeira,
-            List<Procedimento> procedimentos
-    ) {
+    public void validaCamposEntrada(int id, LocalDateTime dataHora, String observacoes, Paciente paciente, Medico medico, Enfermeira enfermeira, List<Procedimento> procedimentos) {
         validaCamposEntrada(dataHora, observacoes, paciente, medico, enfermeira, procedimentos);
         
         validarHorariosConflitantes(dataHora, medico, enfermeira, paciente, id);

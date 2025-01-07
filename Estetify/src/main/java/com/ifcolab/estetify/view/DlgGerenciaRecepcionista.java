@@ -2,12 +2,11 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.RecepcionistaController;
 import com.ifcolab.estetify.model.Recepcionista;
-import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 import com.ifcolab.estetify.model.enums.TipoSexo;
+import com.ifcolab.estetify.model.exceptions.PessoaException;
 import com.ifcolab.estetify.model.exceptions.RecepcionistaException;
-import com.ifcolab.estetify.utils.GeradorSenha;
+import com.ifcolab.estetify.model.exceptions.ValidateException;
 import com.ifcolab.estetify.utils.GerenciadorCriptografia;
-import com.ifcolab.estetify.utils.NotificadorEmail;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -360,13 +359,12 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             if (idRecepcionistaEditando > 0) {
-                // Se estiver editando, não mexe na senha
                 Recepcionista recepcionistaAtual = controller.find(idRecepcionistaEditando);
                 controller.atualizar(
                     idRecepcionistaEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
-                    recepcionistaAtual.getSenha(), // mantém a senha atual
+                    recepcionistaAtual.getSenha(),
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -376,14 +374,9 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
                     recepcionistaAtual.getAvatar()
                 );
             } else {
-                // Se for novo cadastro, gera senha aleatória
-                String senhaTemporaria = GeradorSenha.gerarSenha(8);
-                String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
-
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -392,13 +385,6 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
                     fEdtDataContratacao.getText(),
                     1
                 );
-
-                // Busca o recepcionista recém-cadastrado pelo CPF
-                Recepcionista novoRecepcionista = controller.buscarPorCPF(fEdtCPF.getText());
-
-                // Envia email com as credenciais
-                NotificadorEmail notificador = new NotificadorEmail();
-                notificador.enviarCredenciais(novoRecepcionista, senhaTemporaria);
             }
 
             this.idRecepcionistaEditando = -1;
@@ -406,8 +392,7 @@ public class DlgGerenciaRecepcionista extends javax.swing.JDialog {
             this.habilitarFormulario(false);
             this.limparFormulario();
 
-        } catch (RecepcionistaException e) {
-            System.err.println(e.getMessage());
+        } catch (ValidateException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed

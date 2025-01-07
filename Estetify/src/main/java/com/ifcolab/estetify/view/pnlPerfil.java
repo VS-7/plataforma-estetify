@@ -31,7 +31,6 @@ public class pnlPerfil extends javax.swing.JPanel {
     
     private void configurarComboBoxAvatar() {
         cboAvatar.removeAllItems();
-        // Adiciona opções de avatar (1 a 8 por exemplo)
         for (int i = 1; i <= 10; i++) {
             cboAvatar.addItem(i);
         }
@@ -283,7 +282,6 @@ public class pnlPerfil extends javax.swing.JPanel {
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            // Atualizar dados básicos
             usuario.setNome(edtNome.getText());
             usuario.setEmail(edtEmail.getText());
             usuario.setTelefone(fEdtTelefone.getText());
@@ -291,13 +289,10 @@ public class pnlPerfil extends javax.swing.JPanel {
             
             int novoAvatar = (int) cboAvatar.getSelectedItem();
             
-            // Atualizar no banco de dados através do controller
             autenticacaoController.atualizarDadosUsuario(usuario, novoAvatar);
             
-            // Atualizar preview do avatar
             atualizarPreviewAvatar(novoAvatar);
             
-            // Atualizar AppBar
             if (SwingUtilities.getWindowAncestor(this) instanceof FrMenu) {
                 FrMenu frMenu = (FrMenu) SwingUtilities.getWindowAncestor(this);
                 frMenu.atualizarAppBar();

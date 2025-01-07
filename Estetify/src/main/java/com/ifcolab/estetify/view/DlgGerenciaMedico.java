@@ -6,9 +6,8 @@ import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.MedicoException;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
-import com.ifcolab.estetify.utils.GeradorSenha;
-import com.ifcolab.estetify.utils.GerenciadorCriptografia;
-import com.ifcolab.estetify.utils.NotificadorEmail;
+import com.ifcolab.estetify.model.exceptions.PessoaException;
+import com.ifcolab.estetify.model.exceptions.ValidateException;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -21,7 +20,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
 
     private MedicoController controller;
     private int idMedicoEditando;
-    private final GerenciadorCriptografia gerenciadorCriptografia;
 
     
     public DlgGerenciaMedico(java.awt.Frame parent, boolean modal) {
@@ -29,7 +27,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
         initComponents();
         
         controller = new MedicoController();
-        gerenciadorCriptografia = new GerenciadorCriptografia();
         idMedicoEditando = -1;
         
         this.configurarComboBoxes();
@@ -382,13 +379,12 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
             if (idMedicoEditando > 0) {
-                // Se estiver editando, não mexe na senha
                 Medico medicoAtual = controller.find(idMedicoEditando);
                 controller.atualizar(
                     idMedicoEditando,
                     edtNome.getText(),
                     edtEmail.getText(),
-                    medicoAtual.getSenha(), // mantém a senha atual
+                    medicoAtual.getSenha(),
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -399,15 +395,9 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
                     medicoAtual.getAvatar()
                 );
             } else {
-                // Se for novo cadastro, gera senha aleatória
-                String senhaTemporaria = GeradorSenha.gerarSenha(8);
-                String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
-
-                // Primeiro cadastra o médico
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -417,13 +407,6 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
                     (EspecializacaoMedico) cboEspecializacao.getSelectedItem(),
                     1
                 );
-
-                
-                Medico novoMedico = controller.buscarPorCRM(edtCRM.getText());
-
-                // Envia email com as credenciais
-                NotificadorEmail notificador = new NotificadorEmail();
-                notificador.enviarCredenciais(novoMedico, senhaTemporaria);
             }
 
             this.idMedicoEditando = -1;
@@ -431,8 +414,7 @@ public class DlgGerenciaMedico extends javax.swing.JDialog {
             this.habilitarFormulario(false);
             this.limparFormulario();
 
-        } catch (MedicoException e) {
-            System.err.println(e.getMessage());
+        } catch (ValidateException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed

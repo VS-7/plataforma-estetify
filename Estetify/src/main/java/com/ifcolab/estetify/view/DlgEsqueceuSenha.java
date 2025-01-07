@@ -1,10 +1,6 @@
 package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.AutenticacaoController;
-import com.ifcolab.estetify.model.Pessoa;
-import com.ifcolab.estetify.utils.GeradorSenha;
-import com.ifcolab.estetify.utils.GerenciadorCriptografia;
-import com.ifcolab.estetify.utils.NotificadorEmail;
 import javax.swing.JOptionPane;
 
 /**
@@ -134,31 +130,13 @@ public class DlgEsqueceuSenha extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "Por favor, digite seu email!");
                 return;
             }
+           
+            autenticacaoController.recuperarSenha(email);
             
-            // Busca o usuário pelo email
-            Pessoa usuario = autenticacaoController.buscarUsuarioPorEmail(email);
-            
-            if (usuario == null) {
-                JOptionPane.showMessageDialog(this, 
-                    "Email não encontrado no sistema!\n" +
-                    "Por favor, verifique se digitou corretamente.");
-                return;
-            }
-            
-            // Envia email com a nova senha temporária
-            NotificadorEmail notificador = new NotificadorEmail();
-            boolean enviado = notificador.enviarLembreteCredenciais(usuario);
-            
-            if (enviado) {
-                JOptionPane.showMessageDialog(this, 
-                    "Uma nova senha temporária foi enviada para seu email!\n" +
-                    "Por favor, verifique sua caixa de entrada.");
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, 
-                    "Houve um erro ao enviar o email.\n" +
-                    "Por favor, tente novamente mais tarde.");
-            }
+            JOptionPane.showMessageDialog(this, 
+                "Uma nova senha temporária foi enviada para seu email!\n" +
+                "Por favor, verifique sua caixa de entrada.");
+            this.dispose();
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, 

@@ -6,20 +6,8 @@ import java.time.LocalTime;
 
 public class ValidateConfiguracao {
     
-    public ConfiguracaoSistema validaCamposEntrada(
-            LocalTime horarioAbertura,
-            LocalTime horarioFechamento,
-            int intervaloConsultaMinutos,
-            boolean funcionaSegunda,
-            boolean funcionaTerca,
-            boolean funcionaQuarta,
-            boolean funcionaQuinta,
-            boolean funcionaSexta,
-            boolean funcionaSabado,
-            boolean funcionaDomingo,
-            int tempoMinimoAntecedenciaMinutos,
-            int tempoMaximoAgendamentoDias
-    ) {
+    public ConfiguracaoSistema validaCamposEntrada(LocalTime horarioAbertura, LocalTime horarioFechamento, int intervaloConsultaMinutos, boolean funcionaSegunda, boolean funcionaTerca, boolean funcionaQuarta, boolean funcionaQuinta, boolean funcionaSexta, boolean funcionaSabado, boolean funcionaDomingo, int tempoMinimoAntecedenciaMinutos, int tempoMaximoAgendamentoDias) {
+
         if (horarioAbertura == null) {
             throw new ConfiguracaoException("Horário de abertura não pode estar em branco.");
         }
@@ -49,21 +37,8 @@ public class ValidateConfiguracao {
             throw new ConfiguracaoException("Tempo máximo de agendamento deve estar entre 1 e 365 dias.");
         }
         
-        return new ConfiguracaoSistema(
-            1, // ID fixo
-            horarioAbertura,
-            horarioFechamento,
-            intervaloConsultaMinutos,
-            funcionaSegunda,
-            funcionaTerca,
-            funcionaQuarta,
-            funcionaQuinta,
-            funcionaSexta,
-            funcionaSabado,
-            funcionaDomingo,
-            tempoMinimoAntecedenciaMinutos,
-            tempoMaximoAgendamentoDias
-        );
+        return new ConfiguracaoSistema(1, horarioAbertura, horarioFechamento, intervaloConsultaMinutos, funcionaSegunda, funcionaTerca, funcionaQuarta, funcionaQuinta, funcionaSexta, funcionaSabado, funcionaDomingo, tempoMinimoAntecedenciaMinutos, tempoMaximoAgendamentoDias);
+
     }
 
 } 

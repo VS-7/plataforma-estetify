@@ -30,7 +30,7 @@ public class Feedback implements Serializable {
     @Column(nullable = false, length = 1000)
     private String descricao;
     
-    @Column(nullable = false)
+    @Column(name = "numAvaliacaoEstrela", nullable = false)
     private int avaliacao; // 1 a 5 estrelas
     
     @Column(nullable = false)
@@ -40,12 +40,11 @@ public class Feedback implements Serializable {
     @JoinColumn(name = "consulta_id", nullable = false)
     private Consulta consulta;
     
-    
     public Feedback(String titulo, String descricao, int avaliacao, Consulta consulta, LocalDateTime dataAvaliacao) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.avaliacao = avaliacao;
         this.consulta = consulta;
-        this.dataAvaliacao = LocalDateTime.now();
+        this.dataAvaliacao = dataAvaliacao;
     }
 }

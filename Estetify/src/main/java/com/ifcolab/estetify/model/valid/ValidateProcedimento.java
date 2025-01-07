@@ -10,21 +10,8 @@ import java.util.Locale;
 
 public class ValidateProcedimento {
     
-    private ProcedimentoDAO repositorio;
     
-    public ValidateProcedimento() {
-        repositorio = new ProcedimentoDAO();
-    }
-    
-    public Procedimento validaCamposEntrada(
-            String descricao,
-            String duracao,
-            String valor,
-            String requisitos,
-            String contraindicacoes,
-            TipoProcedimento tipo,
-            int intervaloRetornoDias
-    ) {
+    public Procedimento validaCamposEntrada(String descricao, String duracao, String valor, String requisitos, String contraindicacoes, TipoProcedimento tipo, int intervaloRetornoDias) {
         if (descricao == null || descricao.isEmpty()) {
             throw new ProcedimentoException("Descrição não pode estar em branco.");
         }
@@ -60,15 +47,7 @@ public class ValidateProcedimento {
             throw new ProcedimentoException("Contraindicações muito longas. Máximo de 500 caracteres.");
         }
         
-        return new Procedimento(
-                tipo,
-                descricao,
-                duracao,
-                valorNumerico,
-                requisitos,
-                contraindicacoes,
-                intervaloRetornoDias
-        );
+        return new Procedimento(tipo, descricao, duracao, valorNumerico, requisitos, contraindicacoes, intervaloRetornoDias);
     }
     
     private void isValidDuracao(String duracao) {

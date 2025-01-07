@@ -4,9 +4,8 @@ import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
-import com.ifcolab.estetify.utils.GeradorSenha;
-import com.ifcolab.estetify.utils.GerenciadorCriptografia;
-import com.ifcolab.estetify.utils.NotificadorEmail;
+import com.ifcolab.estetify.model.exceptions.PessoaException;
+import com.ifcolab.estetify.model.exceptions.ValidateException;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -18,14 +17,12 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
 
     private PacienteController controller;
     private int idPacienteEditando;
-    private final GerenciadorCriptografia gerenciadorCriptografia;
     
 
     public DlgGerenciaPaciente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        gerenciadorCriptografia = new GerenciadorCriptografia();
         controller = new PacienteController();
         idPacienteEditando = -1;
  
@@ -34,7 +31,6 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
         this.habilitarFormulario(false);
         this.limparFormulario();
         
-        // Adicionar listener de duplo clique
         grdPacientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 grdPacientesMouseClicked(evt);
@@ -370,14 +366,9 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
                     pacienteAtual.getAvatar()
                 );
             } else {
-
-                String senhaTemporaria = GeradorSenha.gerarSenha(8);
-                String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
-
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -386,11 +377,6 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
                     edtHistoricoMedico.getText(),
                     1
                 );
-
-                Paciente novoPaciente = controller.buscarPorCPF(fEdtCPF.getText());
-
-                NotificadorEmail notificador = new NotificadorEmail();
-                notificador.enviarCredenciais(novoPaciente, senhaTemporaria);
             }
 
             this.idPacienteEditando = -1;
@@ -398,8 +384,7 @@ public class DlgGerenciaPaciente extends javax.swing.JDialog {
             this.habilitarFormulario(false);
             this.limparFormulario();
 
-        } catch (PacienteException e) {
-            System.err.println(e.getMessage());
+        } catch (ValidateException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed

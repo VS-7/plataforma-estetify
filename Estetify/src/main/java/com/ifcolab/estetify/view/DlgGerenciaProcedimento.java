@@ -3,8 +3,8 @@ package com.ifcolab.estetify.view;
 import com.ifcolab.estetify.controller.ProcedimentoController;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.enums.TipoProcedimento;
-import com.ifcolab.estetify.model.exceptions.PacienteException;
 import com.ifcolab.estetify.model.exceptions.ProcedimentoException;
+import com.ifcolab.estetify.model.exceptions.ValidateException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -340,7 +340,7 @@ public class DlgGerenciaProcedimento extends javax.swing.JDialog {
             this.habilitarFormulario(false);
             this.limparFormulario();
 
-        } catch (ProcedimentoException e) {
+        } catch (ValidateException e) {
             System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(this, e.getMessage());
         }

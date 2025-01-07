@@ -12,18 +12,14 @@ import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.Medico;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Procedimento;
-import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
-import com.ifcolab.estetify.model.enums.StatusConsulta;
 import com.ifcolab.estetify.model.exceptions.ConsultaException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
@@ -35,7 +31,6 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     private final MedicoController medicoController;
     private final EnfermeiraController enfermeiraController;
     private final ProcedimentoController procedimentoController;
-    private ConfiguracaoSistema config;
     private int idConsultaEditando;
     private boolean consultaCadastrada;
     private boolean consultaAlterada;
@@ -44,38 +39,40 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     public DlgNovaConsulta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
-        // Inicializa os controllers
+        this.setLocationRelativeTo(null);
+
         controller = new ConsultaController();
         pacienteController = new PacienteController();
         medicoController = new MedicoController();
         enfermeiraController = new EnfermeiraController();
         procedimentoController = new ProcedimentoController();
         
-        // Inicializa a configuração primeiro
-        ConfiguracaoSistemaDAO configDAO = new ConfiguracaoSistemaDAO();
-        config = configDAO.getConfiguracao();
-        
-        if (config == null) {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao carregar configurações do sistema",
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
+        try {
+            controller.getConfiguracao(); // Verifica se as configurações estão disponíveis
+            
+            controller.atualizarTabela(grdConsultas);
+            idConsultaEditando = -1;
+            consultaCadastrada = false;
+            consultaAlterada = false;
+            procedimentosSelecionados = new ArrayList<>();
+            
+            this.configurarComponentes();
+            this.carregarCombos();
+            
+            // Configura o horário inicial usando a lógica do controller
+            LocalDateTime proximoHorario = controller.calcularProximoHorarioDisponivel();
+            DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter horaFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            
+            fEdtData.setText(proximoHorario.format(dataFormatter));
+            fEdtHora.setText(proximoHorario.format(horaFormatter));
+            
+            this.habilitarFormulario(false);
+            
+        } catch (ConsultaException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             this.dispose();
-            return;
         }
-        
-        controller.atualizarTabela(grdConsultas);
-        idConsultaEditando = -1;
-        consultaCadastrada = false;
-        consultaAlterada = false;
-        procedimentosSelecionados = new ArrayList<>();
-        
-        // Configura os componentes depois de ter a configuração
-        this.configurarComponentes();
-        this.carregarCombos();
-        this.configurarHorarioInicial();
-        this.habilitarFormulario(false);
     }
     
     public boolean isConsultaCadastrada() {
@@ -86,24 +83,22 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
         return consultaAlterada;
     }
 
-        private void configurarComponentes() {
+    private void configurarComponentes() {
         try {
-            // Configurar máscara da data
             MaskFormatter maskData = new MaskFormatter("##/##/####");
             maskData.setPlaceholderCharacter('_');
             maskData.install(fEdtData);
 
-            // Configurar máscara da hora
             MaskFormatter maskHora = new MaskFormatter("##:##");
             maskHora.setPlaceholderCharacter('_');
             maskHora.install(fEdtHora);
 
-            // Configurar tooltip com horário de funcionamento
+            ConfiguracaoSistema config = controller.getConfiguracao();
             String tooltip = String.format("Horário de funcionamento: %s às %s", 
                 config.getHorarioAbertura().format(DateTimeFormatter.ofPattern("HH:mm")),
                 config.getHorarioFechamento().format(DateTimeFormatter.ofPattern("HH:mm")));
             fEdtHora.setToolTipText(tooltip);
-
+            
         } catch (ParseException ex) {
             Logger.getLogger(DlgNovaConsulta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,79 +106,29 @@ public class DlgNovaConsulta extends javax.swing.JDialog {
     
     
     private void carregarCombos() {
-        // Carregar médicos
+
         cbxSelecionarMedico.removeAllItems();
         medicoController.findAll().forEach(medico -> {
             cbxSelecionarMedico.addItem(medico);
         });
         
-        // Carregar enfermeiras
+
         cbxSelecionarEnfermeira.removeAllItems();
         enfermeiraController.findAll().forEach(enfermeira -> {
             cbxSelecionarEnfermeira.addItem(enfermeira);
         });
         
-        // Carregar pacientes
         cbxSelecionarPaciente.removeAllItems();
         pacienteController.findAll().forEach(paciente -> {
             cbxSelecionarPaciente.addItem(paciente);
         });
         
-        // Carregar procedimentos disponíveis
         cbxSelecionarProcedimento.removeAllItems();
         procedimentoController.findAll().forEach(procedimento -> {
             cbxSelecionarProcedimento.addItem(procedimento);
         });
     }
 
-    private void configurarHorarioInicial() {
-        LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime proximaData = agora;
-
-        // Encontra o próximo dia útil
-        while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
-            proximaData = proximaData.plusDays(1);
-        }
-
-        // Configura o horário
-        LocalTime horario;
-        if (proximaData.toLocalDate().equals(agora.toLocalDate())) {
-            // Se for hoje, pega o próximo horário disponível
-            horario = agora.toLocalTime();
-
-            if (horario.isBefore(config.getHorarioAbertura())) {
-                horario = config.getHorarioAbertura();
-            } else if (horario.isAfter(config.getHorarioFechamento())) {
-                // Se passou do horário, vai para o próximo dia
-                proximaData = proximaData.plusDays(1);
-                while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
-                    proximaData = proximaData.plusDays(1);
-                }
-                horario = config.getHorarioAbertura();
-            } else {
-                // Ajusta para o próximo intervalo disponível
-                horario = config.proximoHorarioDisponivel(horario);
-
-                if (horario.isAfter(config.getHorarioFechamento())) {
-                    proximaData = proximaData.plusDays(1);
-                    while (!config.isDiaFuncionamento(proximaData.getDayOfWeek())) {
-                        proximaData = proximaData.plusDays(1);
-                    }
-                    horario = config.getHorarioAbertura();
-                }
-            }
-        } else {
-            horario = config.getHorarioAbertura();
-        }
-
-        // Formata e define os valores
-        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter horaFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-        fEdtData.setText(proximaData.format(dataFormatter));
-        fEdtHora.setText(horario.format(horaFormatter));
-    }
-    
     private void habilitarFormulario(boolean habilitar) {
         cbxSelecionarPaciente.setEnabled(habilitar);
         cbxSelecionarMedico.setEnabled(habilitar);

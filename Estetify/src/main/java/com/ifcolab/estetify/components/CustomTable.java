@@ -22,28 +22,24 @@ public class CustomTable extends JTable implements Serializable {
     }
     
     private void setupTable() {
-        // Configurar fonte
+        
         setFont(new Font("Fira Sans", Font.PLAIN, 14));
         getTableHeader().setFont(new Font("Fira Sans", Font.HANGING_BASELINE, 14));
         
-        // Configurar cores
         setBackground(Colors.WHITE);
         setForeground(Colors.GRAY_500);
         setGridColor(Colors.GRAY_100);
         
-        // Configurar header
         getTableHeader().setBackground(Colors.GRAY_100);
         getTableHeader().setForeground(Colors.GRAY_500);
         getTableHeader().setBorder(null);
         
-        // Configurar aparência
         setRowHeight(50);
         setIntercellSpacing(new Dimension(0, 0));
         setShowVerticalLines(false);
         setSelectionBackground(new Color(0, 122, 255, 20));
         setSelectionForeground(Colors.GRAY_500);
         
-        // Remover borda
         setBorder(BorderFactory.createEmptyBorder());
         
         // Customizar o renderer das células
@@ -90,7 +86,6 @@ public class CustomTable extends JTable implements Serializable {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        // Desenhar background com bordas arredondadas
         g2.setColor(getBackground());
         g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), BORDER_RADIUS, BORDER_RADIUS));
         
@@ -98,7 +93,6 @@ public class CustomTable extends JTable implements Serializable {
         super.paintComponent(g);
     }
 
-    // Adicionar este método para impedir o desenho da borda
     @Override
     public void paintBorder(Graphics g) {
         // Não fazer nada aqui para remover a borda

@@ -43,14 +43,14 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="com.ifcolab.estetify.components.AppBar" name="pnlAppBar">
+    <Component class="com.ifcolab.estetify.view.PnlAppBar" name="pnlAppBar">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="250" y="0" width="1100" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="com.ifcolab.estetify.components.CustomSidebar" name="pnlSidebar">
+    <Component class="com.ifcolab.estetify.view.PnlSidebar" name="pnlSidebar">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="0" y="0" width="250" height="850"/>

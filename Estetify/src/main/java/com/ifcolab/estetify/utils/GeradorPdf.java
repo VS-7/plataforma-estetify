@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -135,7 +136,6 @@ public class GeradorPdf implements IGeradorDocumento {
             adicionarLinha(documento, "Método de Pagamento:", pagamento.getMetodoPagamento().toString());
             adicionarLinha(documento, "Data do Pagamento:",
                 pagamento.getDataPagamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-            adicionarLinha(documento, "Registrado por:", pagamento.getRegistradoPor().getNome());
             
             if (pagamento.getDetalhes() != null && !pagamento.getDetalhes().isEmpty()) {
                 documento.add(new Paragraph("\nObservações:", DESTAQUE));
@@ -164,6 +164,108 @@ public class GeradorPdf implements IGeradorDocumento {
             documento.add(p);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void gerarRelatorioProcedimento(String caminho, Consulta consulta, Procedimento procedimento, String resultado, String observacoes) {
+        Document documento = new Document();
+        try {
+            String caminhoArquivo = caminho + "/relatorio_procedimento.pdf";
+            PdfWriter.getInstance(documento, new FileOutputStream(caminhoArquivo));
+            documento.open();
+            
+            // Cabeçalho
+            Paragraph cabecalho = new Paragraph("ESTETIFY", TITULO);
+            cabecalho.setAlignment(Element.ALIGN_CENTER);
+            documento.add(cabecalho);
+            
+            Paragraph subtitulo = new Paragraph("Sistema de Gestão de Clínica Estética", RODAPE);
+            subtitulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(subtitulo);
+            
+            // CNPJ
+            Paragraph cnpj = new Paragraph("CNPJ: 12.345.678/0001-90", RODAPE);
+            cnpj.setAlignment(Element.ALIGN_CENTER);
+            documento.add(cnpj);
+            documento.add(new Paragraph("\n"));
+            
+            // Título do Relatório
+            Paragraph titulo = new Paragraph("RELATÓRIO DE PROCEDIMENTO", TITULO);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(titulo);
+            documento.add(new Paragraph("\n"));
+            
+            // Data e Hora
+            Paragraph dataHora = new Paragraph(
+                "Data/Hora: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                DESTAQUE
+            );
+            dataHora.setAlignment(Element.ALIGN_RIGHT);
+            documento.add(dataHora);
+            documento.add(new Paragraph("\n"));
+            
+            // Informações do Paciente
+            documento.add(new Paragraph("Dados do Paciente", SUBTITULO));
+            adicionarLinha(documento, "Nome:", consulta.getPaciente().getNome());
+            adicionarLinha(documento, "CPF:", consulta.getPaciente().getCpf());
+            documento.add(new Paragraph("\n"));
+            
+            // Informações do Médico
+            documento.add(new Paragraph("Responsável pelo Procedimento", SUBTITULO));
+            adicionarLinha(documento, "Médico:", "Dr(a). " + consulta.getMedico().getNome());
+            adicionarLinha(documento, "CRM:", consulta.getMedico().getCrm());
+            documento.add(new Paragraph("\n"));
+            
+            // Detalhes do Procedimento
+            documento.add(new Paragraph("Detalhes do Procedimento", SUBTITULO));
+            adicionarLinha(documento, "Tipo:", procedimento.getTipo().toString());
+            adicionarLinha(documento, "Descrição:", procedimento.getDescricao());
+            adicionarLinha(documento, "Duração:", procedimento.getDuracaoEstimada().toHours() + "h" + 
+                procedimento.getDuracaoEstimada().toMinutesPart() + "min");
+            
+            if (procedimento.getRequisitos() != null && !procedimento.getRequisitos().isEmpty()) {
+                documento.add(new Paragraph("\nRequisitos:", DESTAQUE));
+                documento.add(new Paragraph(procedimento.getRequisitos(), NORMAL));
+            }
+            
+            if (procedimento.getContraindicacoes() != null && !procedimento.getContraindicacoes().isEmpty()) {
+                documento.add(new Paragraph("\nContraindicações:", DESTAQUE));
+                documento.add(new Paragraph(procedimento.getContraindicacoes(), NORMAL));
+            }
+            documento.add(new Paragraph("\n"));
+            
+            // Resultado
+            documento.add(new Paragraph("Resultado do Procedimento", SUBTITULO));
+            documento.add(new Paragraph(resultado, NORMAL));
+            documento.add(new Paragraph("\n"));
+            
+            // Observações (se houver)
+            if (observacoes != null && !observacoes.isEmpty()) {
+                documento.add(new Paragraph("Observações", SUBTITULO));
+                documento.add(new Paragraph(observacoes, NORMAL));
+                documento.add(new Paragraph("\n"));
+            }
+            
+            // Retorno
+            if (procedimento.getIntervaloRetornoDias() > 0) {
+                documento.add(new Paragraph("Retorno", SUBTITULO));
+                LocalDateTime dataRetorno = consulta.getDataHora().plusDays(procedimento.getIntervaloRetornoDias());
+                adicionarLinha(documento, "Retorno recomendado após:", 
+                    procedimento.getIntervaloRetornoDias() + " dias (" + 
+                    dataRetorno.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")");
+                documento.add(new Paragraph("\n"));
+            }
+            
+            // Rodapé
+            Paragraph rodape = new Paragraph(
+                "Este documento é um relatório oficial do procedimento realizado.", RODAPE);
+            rodape.setAlignment(Element.ALIGN_CENTER);
+            documento.add(rodape);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            documento.close();
         }
     }
 } 

@@ -196,31 +196,18 @@ public class DlgPagamento extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
-            // Validar e converter valor
             double valor = ((Number) edtValorPagamento.getValue()).doubleValue();
-
-            // Obter método de pagamento selecionado
             MetodoPagamento metodoPagamento = (MetodoPagamento) cboMetodoPagamento.getSelectedItem();
-            if (metodoPagamento == null) {
-                throw new PagamentoException("Selecione um método de pagamento.");
-            }
-
-            // Obter detalhes
             String detalhes = customTextArea1.getText();
 
-            // Registrar pagamento
             controller.cadastrar(
                 valor,
                 StatusPagamento.PAGO,
                 metodoPagamento,
                 detalhes,
                 consulta,
-                consulta.getMedico() // Ou outro usuário logado que esteja registrando o pagamento
+                consulta.getMedico()
             );
-
-            // Enviar email de confirmação
-            NotificadorEmail notificador = new NotificadorEmail();
-            notificador.enviarConfirmacaoPagamento(consulta, valor, metodoPagamento);
 
             pagamentoRealizado = true;
             JOptionPane.showMessageDialog(this,

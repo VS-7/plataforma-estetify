@@ -5,9 +5,8 @@ import com.ifcolab.estetify.model.Enfermeira;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import com.ifcolab.estetify.model.exceptions.EnfermeiraException;
 import com.ifcolab.estetify.model.exceptions.PacienteException;
-import com.ifcolab.estetify.utils.GeradorSenha;
-import com.ifcolab.estetify.utils.GerenciadorCriptografia;
-import com.ifcolab.estetify.utils.NotificadorEmail;
+import com.ifcolab.estetify.model.exceptions.PessoaException;
+import com.ifcolab.estetify.model.exceptions.ValidateException;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -23,13 +22,12 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
 
     private EnfermeiraController controller;
     private int idEnfermeiraEditando;
-    private final GerenciadorCriptografia gerenciadorCriptografia;
+
 
     public DlgGerenciaEnfermeira(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        gerenciadorCriptografia = new GerenciadorCriptografia();
         controller = new EnfermeiraController();
         idEnfermeiraEditando = -1;
  
@@ -38,7 +36,6 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
         this.habilitarFormulario(false);
         this.limparFormulario();
         
-        // Adicionar listener de duplo clique
         grdEnfermeiras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 grdEnfermeirasMouseClicked(evt);
@@ -415,13 +412,9 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
                     enfermeiraAtual.getAvatar()
                 );
             } else {
-                String senhaTemporaria = GeradorSenha.gerarSenha(8);
-                String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
-
                 controller.cadastrar(
                     edtNome.getText(),
                     edtEmail.getText(),
-                    senhaHash,
                     fEdtCPF.getText(),
                     (TipoSexo) cboSexo.getSelectedItem(),
                     fEdtDataNascimento.getText(),
@@ -430,11 +423,6 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
                     edtCOREN.getText(),
                     1
                 );
-
-                Enfermeira novaEnfermeira = controller.buscarPorCOREN(edtCOREN.getText());
-
-                NotificadorEmail notificador = new NotificadorEmail();
-                notificador.enviarCredenciais(novaEnfermeira, senhaTemporaria);
             }
 
             this.idEnfermeiraEditando = -1;
@@ -442,8 +430,7 @@ public class DlgGerenciaEnfermeira extends javax.swing.JDialog {
             this.habilitarFormulario(false);
             this.limparFormulario();
 
-        } catch (EnfermeiraException e) {
-            System.err.println(e.getMessage());
+        } catch (ValidateException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed

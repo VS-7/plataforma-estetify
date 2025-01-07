@@ -5,7 +5,9 @@ import com.ifcolab.estetify.model.dao.*;
 import com.ifcolab.estetify.model.enums.TipoUsuario;
 import com.ifcolab.estetify.model.exceptions.AutenticacaoException;
 import com.ifcolab.estetify.utils.Autenticacao;
+import com.ifcolab.estetify.utils.GeradorSenha;
 import com.ifcolab.estetify.utils.GerenciadorCriptografia;
+import com.ifcolab.estetify.utils.NotificadorEmail;
 import java.time.LocalDateTime;
 
 public class AutenticacaoController {
@@ -13,16 +15,20 @@ public class AutenticacaoController {
     private final EnfermeiraDAO enfermeiraDAO;
     private final PacienteDAO pacienteDAO;
     private final RecepcionistaDAO recepcionistaDAO;
+    private final AdminDAO adminDAO;
     private final Autenticacao autenticacao;
     private final GerenciadorCriptografia gerenciadorCriptografia;
+    private final NotificadorEmail notificadorEmail;
 
     public AutenticacaoController() {
         this.medicoDAO = new MedicoDAO();
         this.enfermeiraDAO = new EnfermeiraDAO();
         this.pacienteDAO = new PacienteDAO();
         this.recepcionistaDAO = new RecepcionistaDAO();
+        this.adminDAO = new AdminDAO();
         this.autenticacao = Autenticacao.getInstance();
         this.gerenciadorCriptografia = new GerenciadorCriptografia();
+        this.notificadorEmail = new NotificadorEmail();
     }
 
     private void realizarAutenticacao(Pessoa usuario, String senha) {
@@ -42,7 +48,7 @@ public class AutenticacaoController {
     }
 
     public void login(String email, String senha) {
-        // Tenta encontrar o usuário em cada repositório
+
         Pessoa usuario = medicoDAO.findByEmail(email);
         if (usuario == null) {
             usuario = enfermeiraDAO.findByEmail(email);
@@ -52,6 +58,10 @@ public class AutenticacaoController {
         }
         if (usuario == null) {
             usuario = recepcionistaDAO.findByEmail(email);
+        }
+        
+        if (usuario == null) {
+            usuario = adminDAO.findByEmail(email);
         }
         
         if (usuario == null) {
@@ -111,12 +121,10 @@ public class AutenticacaoController {
 
     public void atualizarDadosUsuario(Pessoa usuario, int novoAvatar) {
         try {
-            // Atualiza o avatar se foi fornecido um novo
             if (novoAvatar > 0) {
                 usuario.setAvatar(novoAvatar);
             }
             
-            // Atualiza no banco de dados apropriado
             if (usuario instanceof Medico) {
                 medicoDAO.update((Medico) usuario);
             } 
@@ -129,11 +137,14 @@ public class AutenticacaoController {
             else if (usuario instanceof Recepcionista) {
                 recepcionistaDAO.update((Recepcionista) usuario);
             }
+            
+            else if (usuario instanceof Admin) {
+                adminDAO.update((Admin) usuario);
+            }
             else {
                 throw new RuntimeException("Tipo de usuário não suportado");
             }
             
-            // Atualiza o usuário na sessão
             autenticacao.setUsuario(usuario);
             
         } catch (Exception ex) {
@@ -149,14 +160,11 @@ public class AutenticacaoController {
                 throw new AutenticacaoException("Usuário não autorizado para esta operação");
             }
             
-            // Atualiza a senha do usuário
             usuario.setSenha(novaSenhaHash);
             
-            // Limpa qualquer código de recuperação existente
             usuario.setCodigoRecuperacao(null);
             usuario.setValidadeCodigoRecuperacao(null);
             
-            // Atualiza no banco de dados apropriado
             if (usuario instanceof Medico) {
                 medicoDAO.update((Medico) usuario);
             } 
@@ -169,11 +177,13 @@ public class AutenticacaoController {
             else if (usuario instanceof Recepcionista) {
                 recepcionistaDAO.update((Recepcionista) usuario);
             }
+            else if (usuario instanceof Admin) {
+               adminDAO.update((Admin) usuario);
+            }
             else {
                 throw new RuntimeException("Tipo de usuário não suportado");
             }
             
-            // Atualiza o usuário na sessão
             autenticacao.setUsuario(usuario);
             
         } catch (Exception ex) {
@@ -182,7 +192,7 @@ public class AutenticacaoController {
     }
 
     public Pessoa buscarUsuarioPorEmail(String email) {
-        // Tenta encontrar o usuário em cada repositório
+
         Pessoa usuario = medicoDAO.findByEmail(email);
         if (usuario == null) {
             usuario = enfermeiraDAO.findByEmail(email);
@@ -193,7 +203,44 @@ public class AutenticacaoController {
         if (usuario == null) {
             usuario = recepcionistaDAO.findByEmail(email);
         }
+        if (usuario == null) {
+            usuario = adminDAO.findByEmail(email);
+        }
+        
         
         return usuario;
+    }
+
+    public void recuperarSenha(String email) {
+        Pessoa usuario = buscarUsuarioPorEmail(email);
+        
+        if (usuario == null) {
+            throw new AutenticacaoException("Email não encontrado no sistema!");
+        }
+
+        String senhaTemporaria = GeradorSenha.gerarSenha(8);
+        String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
+        
+        usuario.setSenha(senhaHash);
+        atualizarDadosUsuario(usuario, usuario.getAvatar());
+
+        String mensagem = String.format(
+            "Olá %s,\n\n" +
+            "Você solicitou a recuperação de sua senha do sistema Estetify.\n" +
+            "Uma nova senha temporária foi gerada:\n\n" +
+            "Email: %s\n" +
+            "Nova Senha: %s\n\n" +
+            "Por favor, altere esta senha após realizar o login.\n" +
+            "Caso não tenha solicitado esta recuperação, entre em contato com o suporte.\n\n" +
+            "Atenciosamente,\n" +
+            "Equipe Estetify",
+            usuario.getNome(),
+            usuario.getEmail(),
+            senhaTemporaria
+        );
+
+        if (!notificadorEmail.notificar(usuario, "Nova Senha Temporária - Estetify", mensagem)) {
+            throw new AutenticacaoException("Erro ao enviar email de recuperação");
+        }
     }
 } 

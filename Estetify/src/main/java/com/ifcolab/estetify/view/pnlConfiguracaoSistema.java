@@ -110,7 +110,7 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
 
         lblSubtituloGerenciaMedicos.setFont(new java.awt.Font("Fira Sans Medium", 0, 13)); // NOI18N
         lblSubtituloGerenciaMedicos.setForeground(new java.awt.Color(102, 102, 102));
-        lblSubtituloGerenciaMedicos.setText("Controle as informações das enfermeiras e dados pessoais.");
+        lblSubtituloGerenciaMedicos.setText("Controle as informações do Sistemas.");
         add(lblSubtituloGerenciaMedicos);
         lblSubtituloGerenciaMedicos.setBounds(30, 40, 720, 17);
 

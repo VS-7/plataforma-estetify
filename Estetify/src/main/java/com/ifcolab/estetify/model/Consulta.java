@@ -2,6 +2,8 @@ package com.ifcolab.estetify.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +21,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
+import javax.persistence.FetchType;
 
 @Data
 @NoArgsConstructor
@@ -49,7 +52,7 @@ public class Consulta implements Serializable {
     @JoinColumn(name = "enfermeira_id")
     private Enfermeira enfermeira;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "Consulta_Procedimento",
         joinColumns = @JoinColumn(name = "Consulta_id"),
@@ -94,5 +97,15 @@ public class Consulta implements Serializable {
         return procedimentos.stream()
                 .mapToDouble(Procedimento::getValor)
                 .sum();
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("Consulta do dia %s - %s",
+            dataHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+            procedimentos.stream()
+                .map(Procedimento::getNome)
+                .collect(Collectors.joining(", "))
+        );
     }
 }

@@ -24,17 +24,14 @@ public class CustomTextField extends JFormattedTextField {
     }
     
     private void setupTextField() {
-        // Configurar fonte
+
         setFont(new Font("Fira Sans", Font.PLAIN, 14));
         
-        // Configurar cores
         setBackground(Color.WHITE);
         setForeground(new Color(111, 111, 111)); // Texto em cinza escuro
         
-        // Remover borda padrão
         setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         
-        // Tornar o componente opaco
         setOpaque(false);
         
         addFocusListener(new java.awt.event.FocusAdapter() {

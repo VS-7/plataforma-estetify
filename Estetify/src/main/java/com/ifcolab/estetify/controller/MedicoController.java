@@ -9,35 +9,31 @@ import javax.swing.JTable;
 import java.util.List;
 import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 import com.ifcolab.estetify.model.enums.TipoSexo;
+import com.ifcolab.estetify.utils.GeradorSenha;
+import com.ifcolab.estetify.utils.GerenciadorCriptografia;
+import com.ifcolab.estetify.utils.NotificadorEmail;
 
 public class MedicoController {
     
     private MedicoDAO repositorio;
+    private GerenciadorCriptografia gerenciadorCriptografia;
+    private NotificadorEmail notificadorEmail;
     
     public MedicoController() {
         repositorio = new MedicoDAO();
+        gerenciadorCriptografia = new GerenciadorCriptografia();
+        notificadorEmail = new NotificadorEmail();
     }
     
-    public void cadastrar(
-            String nome,
-            String email,
-            String senha,
-            
-            String cpf,
-            TipoSexo sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String crm,
-            EspecializacaoMedico especializacao,
-            int avatar
-    ) {
+    public void cadastrar(String nome, String email, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String crm, EspecializacaoMedico especializacao, int avatar) {
+        String senhaTemporaria = GeradorSenha.gerarSenha(8);
+        String senhaHash = gerenciadorCriptografia.criptografarSenha(senhaTemporaria);
+        
         ValidateMedico valid = new ValidateMedico();
         Medico medico = valid.validaCamposEntrada(
                 nome,
                 email,
-                senha,
-                
+                senhaHash,
                 cpf,
                 sexo,
                 dataNascimento,
@@ -53,38 +49,31 @@ public class MedicoController {
         }
         
         repositorio.save(medico);
+        
+        enviarCredenciaisAcesso(medico, senhaTemporaria);
     }
     
-    public void atualizar(
-            int id,
-            String nome,
-            String email,
-            String senha,
-
-            String cpf,
-            TipoSexo sexo,
-            String dataNascimento,
-            String telefone,
-            String endereco,
-            String crm,
-            EspecializacaoMedico especializacao,
-            int avatar
-    ) {
-        ValidateMedico valid = new ValidateMedico();
-        Medico medico = valid.validaCamposEntrada(
-                nome,
-                email,
-                senha,
-                
-                cpf,
-                sexo,
-                dataNascimento,
-                telefone,
-                endereco,
-                crm,
-                especializacao,
-                avatar
+    private void enviarCredenciaisAcesso(Medico medico, String senhaTemporaria) {
+        String mensagem = String.format(
+            "Olá %s,\n\n" +
+            "Suas credenciais de acesso ao sistema Estetify foram criadas:\n\n" +
+            "Email: %s\n" +
+            "Senha: %s\n\n" +
+            "Por favor, altere sua senha no primeiro acesso.\n\n" +
+            "Atenciosamente,\n" +
+            "Equipe Estetify",
+            medico.getNome(),
+            medico.getEmail(),
+            senhaTemporaria
         );
+
+        notificadorEmail.notificar(medico, "Credenciais de Acesso - Estetify", mensagem);
+    }
+    
+    
+    public void atualizar(int id, String nome, String email, String senha, String cpf, TipoSexo sexo, String dataNascimento, String telefone, String endereco, String crm, EspecializacaoMedico especializacao, int avatar) {
+        ValidateMedico valid = new ValidateMedico();
+        Medico medico = valid.validaCamposEntrada(nome, email, senha, cpf, sexo, dataNascimento, telefone, endereco, crm, especializacao, avatar);
         
         medico.setId(id);
         repositorio.update(medico);

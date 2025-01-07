@@ -11,14 +11,7 @@ import java.time.LocalDateTime;
 
 public class ValidatePagamento {
     
-    public Pagamento validaCamposEntrada(
-            double valor,
-            StatusPagamento status,
-            MetodoPagamento metodoPagamento,
-            String detalhes,
-            Consulta consulta,
-            Pessoa registrador
-    ) {
+    public Pagamento validaCamposEntrada(double valor, StatusPagamento status, MetodoPagamento metodoPagamento, String detalhes, Consulta consulta, Pessoa registrador) {
         if (valor <= 0) {
             throw new PagamentoException("Valor deve ser maior que zero.");
         }

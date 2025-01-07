@@ -2,8 +2,10 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.AutenticacaoController;
 import com.ifcolab.estetify.controller.ConsultaController;
+import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Paciente;
 import com.ifcolab.estetify.model.Pessoa;
+import javax.swing.JOptionPane;
 
 public class pnlMinhasConsultas extends javax.swing.JPanel {
 
@@ -38,7 +40,9 @@ public class pnlMinhasConsultas extends javax.swing.JPanel {
         grdMinhasConsultas.setShowHorizontalLines(true);
         grdMinhasConsultas.setGridColor(new java.awt.Color(230, 230, 230));
         grdMinhasConsultas.setRowHeight(50);
+        
     }
+
     
     private void carregarConsultas() {
         if (usuario instanceof Paciente) {
@@ -90,7 +94,7 @@ public class pnlMinhasConsultas extends javax.swing.JPanel {
         jScrollPane1.setViewportView(grdMinhasConsultas);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(30, 70, 960, 620);
+        jScrollPane1.setBounds(10, 70, 980, 620);
     }// </editor-fold>//GEN-END:initComponents
 
 

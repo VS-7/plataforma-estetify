@@ -6,6 +6,7 @@ import com.ifcolab.estetify.controller.ConsultaController;
 import com.ifcolab.estetify.controller.PagamentoController;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Pagamento;
+import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
 import com.ifcolab.estetify.utils.GeradorPdf;
 import java.awt.Color;
@@ -167,8 +168,13 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             adicionarBotao(innerPanel, new SecondaryCustomButton("Emitir Recibo"), e -> emitirRecibo());
         }
         
+        if (consulta.isConcluida()) {
+            adicionarBotao(innerPanel, new SecondaryCustomButton("Relatorio"), e -> gerarRelatorio());
+        }
+        
        
         adicionarBotao(innerPanel, new SecondaryCustomButton("Editar Consulta"), e -> editarConsulta());
+        
         
         panel.add(innerPanel);
         return panel;
@@ -333,6 +339,48 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             alteracaoRealizada = true;
             dispose();
         }
+    }
+    
+    private void gerarRelatorio() {
+    // Verificar se há procedimentos na consulta
+    if (consulta.getProcedimentos().isEmpty()) {
+        JOptionPane.showMessageDialog(this,
+            "Não há procedimentos registrados nesta consulta.",
+            "Aviso",
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    // Se houver apenas um procedimento, usar ele diretamente
+    if (consulta.getProcedimentos().size() == 1) {
+        Procedimento procedimento = consulta.getProcedimentos().get(0);
+        DlgRelatorio dialog = new DlgRelatorio(null, true, consulta, procedimento);
+        dialog.setVisible(true);
+        if (dialog.isRelatorioSalvo()) {
+            alteracaoRealizada = true;
+            dispose();
+        }
+    } else {
+        // Se houver múltiplos procedimentos, permitir escolher
+        Procedimento procedimento = (Procedimento) JOptionPane.showInputDialog(
+            this,
+            "Selecione o procedimento:",
+            "Gerar Relatório",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            consulta.getProcedimentos().toArray(),
+            consulta.getProcedimentos().get(0)
+        );
+        
+        if (procedimento != null) {
+            DlgRelatorio dialog = new DlgRelatorio(null, true, consulta, procedimento);
+            dialog.setVisible(true);
+            if (dialog.isRelatorioSalvo()) {
+                alteracaoRealizada = true;
+                dispose();
+            }
+        }
+    }
     }
     
     public boolean isAlteracaoRealizada() {
