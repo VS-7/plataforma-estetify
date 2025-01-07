@@ -90,7 +90,7 @@ Ilustra o processo de geração de relatórios de desempenho da clínica e hist�
 
 ### Desenvolvimento
 - **Java**: Linguagem principal para o backend
-- **SQLite**: Banco de dados leve e eficiente
+- **MySQL**: Banco de dados leve e eficiente
 - **Hibernate**: Framework ORM para mapeamento objeto-relacional
 - **JavaMail**: Envio de notificações e e-mails automatizados
 - **iTextPDF**: Geração de relatórios e documentos em PDF
