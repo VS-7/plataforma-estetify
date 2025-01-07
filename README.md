@@ -9,8 +9,7 @@
     - [Diagrama Entidade-Relacionamento](#diagrama-entidade-relacionamento)
     - [Diagramas de Sequência](#diagramas-de-sequência)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
-4. [Instalação](#instalação)
-5. [Primeiro Login](#primeiro-login)
+5. [Admin Padrão](#primeiro-login)
 
 ---
 
@@ -28,7 +27,7 @@ Com o Estetify, é possível realizar o cadastro e gerenciamento de clientes, ag
 
 O desenvolvimento do Estetify segue a metodologia ágil **Scrum**, permitindo um gerenciamento eficiente do projeto através de sprints e priorização de tarefas. O quadro de tarefas está disponível no Trello, onde é possível visualizar o backlog, as sprints em andamento e as tarefas concluídas.
 
-Acesse o quadro Scrum [aqui](https://trello.com/invite/b/670e74754ad3442f24634e35/ATTIdc5159a42914a0ad99b494a518cd1b0bA314F45A/2024-12-13-tcc).
+Acesse o quadro Scrum [aqui](https://trello.com/invite/b/671fe8958ac0b1bdcec3f8c2/ATTIe0bde08e1966c5ac09cdfa85c1502dd517AFBA4D/sistema-de-gerenciamento-de-clinica-de-estetica).
 
 ---
 
@@ -40,7 +39,7 @@ O Diagrama de Casos de Uso do Estetify apresenta as principais interações entr
 - Gerenciamento de profissionais e agenda
 - Geração de relatórios
 
-![Diagrama de Casos de Uso](./docs/estetifyDiagramaUso.png)
+![Diagrama de Casos de Uso](./docs/estetifyDiagramaCasosUso.png)
 
 ---
 
@@ -69,21 +68,21 @@ Este diagrama é essencial para entender como os dados são estruturados no sist
 ### Diagramas de Sequência
 
 #### 1. Gerenciar Procedimentos
-Este diagrama mostra o fluxo para gerenciar procedimentos, desde a escolha do cliente até a confirmação do procedimento.
+Este diagrama mostra o fluxo para gerenciar procedimentos.
 
-![Diagrama de Sequência de Agendamento](./estetifyDiagramaSequenciaProcedimento.png)
+![Diagrama de Sequência de Agendamento](./docs/estetifyDiagramaSequenciaProcedimento.png)
 
 #### 2. Geração de Relatórios
 Ilustra o processo de geração de relatórios de desempenho da clínica e histórico de procedimentos.
 
-![Diagrama de Sequência de Relatórios](./docs/estetifyDiagramaSequenciaRelatorio.png)
+![Diagrama de Sequência de Relatórios](./estetifyDiagramaSequenciaRelatorio.png)
 
 ---
 
-#### 2. Geração de Relatórios
+#### 2. Geração de Feedbacks
 Ilustra o processo de geração de relatórios de desempenho da clínica e histórico de procedimentos.
 
-![Diagrama de Sequência de Relatórios](./docs/estetifyDiagramaSequenciaFeedback.png)
+![Diagrama de Sequência de Relatórios](./docs/estetifyDiagramaSequenciaFeedbackPaciente.png)
 
 ---
 
@@ -101,6 +100,7 @@ Ilustra o processo de geração de relatórios de desempenho da clínica e hist�
 - **Swing**: Desenvolvimento da interface desktop
 
 ### Ferramentas de Apoio
+- **Apache NetBeans**: Desenvolvimento do projeto
 - **Maven**: Gerenciamento de dependências
 - **Git/GitHub**: Controle de versão e colaboração
 - **StarUML**: Criação de diagramas UML
@@ -108,8 +108,9 @@ Ilustra o processo de geração de relatórios de desempenho da clínica e hist�
 
 ---
 
-## Instalação
+   
+## Admin Padrão
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/VS-7/plataforma-estetify.git
+1. Para realizar o primeiro login no sistema, utilize as seguintes credenciais
+- Email: plataformaestetify@gmail.com
+- Senha: 123456
