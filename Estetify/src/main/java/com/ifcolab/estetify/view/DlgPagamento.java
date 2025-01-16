@@ -2,17 +2,13 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.PagamentoController;
 import com.ifcolab.estetify.model.Consulta;
-import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.enums.MetodoPagamento;
-import com.ifcolab.estetify.model.enums.StatusPagamento;
-import com.ifcolab.estetify.model.exceptions.PagamentoException;
-import com.ifcolab.estetify.utils.NotificadorEmail;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,7 +21,6 @@ import javax.swing.text.NumberFormatter;
 
 public class DlgPagamento extends javax.swing.JDialog {
     
-    private final Consulta consulta;
     private final PagamentoController controller;
     private boolean pagamentoRealizado = false;
     
@@ -33,33 +28,35 @@ public class DlgPagamento extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        this.consulta = consulta;
-        this.controller = new PagamentoController();
+        this.controller = new PagamentoController(consulta);
         configurarComponentes();
         
         this.setLocationRelativeTo(null);
     }
     
     private void configurarComponentes() {
-        // Configurar o card de detalhes
         JPanel cardDetalhes = criarCardDetalhes();
         cardDetalhes.setSize(460, 150);
         cardDetalhes.setLocation(160, 80);
         pnlBackground.add(cardDetalhes);
 
-        // Configurar máscara para o campo de valor
+        configurarCampoValor();
+        configurarMetodosPagamento();
+    }
+    
+    private void configurarCampoValor() {
         DecimalFormat format = new DecimalFormat("#,##0.00");
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setValueClass(Double.class);
         formatter.setMinimum(0.0);
         formatter.setAllowsInvalid(false);
 
-        // Aplicar formatação ao campo de valor
         edtValorPagamento.setFormatterFactory(new DefaultFormatterFactory(formatter));
-        edtValorPagamento.setValue(consulta.getValorTotal());
-
-        // Preencher métodos de pagamento
-        for (MetodoPagamento metodo : MetodoPagamento.values()) {
+        edtValorPagamento.setValue(controller.getValorTotal());
+    }
+    
+    private void configurarMetodosPagamento() {
+        for (MetodoPagamento metodo : controller.getMetodosPagamento()) {
             cboMetodoPagamento.addItem(metodo);
         }
     }
@@ -73,22 +70,15 @@ public class DlgPagamento extends javax.swing.JDialog {
             BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
         
-        // Formatador de data
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        adicionarLabel(panel, "Paciente: " + controller.getNomePaciente());
+        adicionarLabel(panel, "Data: " + controller.getDataHoraFormatada());
+        adicionarLabel(panel, "Médico: " + controller.getNomeMedico());
+        adicionarLabel(panel, String.format("Valor Total: R$ %.2f", controller.getValorTotal()));
         
-        // Labels com informações
-        adicionarLabel(panel, "Paciente: " + consulta.getPaciente().getNome());
-        adicionarLabel(panel, "Data: " + consulta.getDataHora().format(formatter));
-        adicionarLabel(panel, "Médico: " + consulta.getMedico().getNome());
-        adicionarLabel(panel, "Valor Total: R$ " + String.format("%.2f", consulta.getValorTotal()));
-        
-        // Adicionar procedimentos
-        if (!consulta.getProcedimentos().isEmpty()) {
+        List<String> procedimentos = controller.getProcedimentosFormatados();
+        if (!procedimentos.isEmpty()) {
             adicionarLabel(panel, "Procedimentos:");
-            for (Procedimento proc : consulta.getProcedimentos()) {
-                adicionarLabel(panel, "• " + proc.getNome() + 
-                    " - R$ " + String.format("%.2f", proc.getValor()));
-            }
+            procedimentos.forEach(proc -> adicionarLabel(panel, proc));
         }
         
         return panel;
@@ -194,35 +184,33 @@ public class DlgPagamento extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             double valor = ((Number) edtValorPagamento.getValue()).doubleValue();
             MetodoPagamento metodoPagamento = (MetodoPagamento) cboMetodoPagamento.getSelectedItem();
             String detalhes = txtDetalhes.getText();
 
-            controller.cadastrar(
-                valor,
-                StatusPagamento.PAGO,
-                metodoPagamento,
-                detalhes,
-                consulta,
-                consulta.getMedico()
-            );
+            controller.realizarPagamento(valor, metodoPagamento, detalhes);
 
             pagamentoRealizado = true;
-            JOptionPane.showMessageDialog(this,
-                "Pagamento registrado com sucesso!\nUm email de confirmação foi enviado para o paciente.",
-                "Sucesso",
-                JOptionPane.INFORMATION_MESSAGE);
+            exibirSucesso("Pagamento registrado com sucesso!\nUm email de confirmação foi enviado para o paciente.");
             dispose();
-
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao registrar pagamento: " + e.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
+            exibirErro("Erro ao registrar pagamento", e);
         }
-    }//GEN-LAST:event_btnSalvarActionPerformed
+    }
+    
+    private void exibirSucesso(String mensagem) {
+        JOptionPane.showMessageDialog(this, mensagem, "Sucesso", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void exibirErro(String mensagem, Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            mensagem + ": " + e.getMessage(),
+            "Erro",
+            JOptionPane.ERROR_MESSAGE);
+    }
 
     public boolean isPagamentoRealizado() {
         return pagamentoRealizado;

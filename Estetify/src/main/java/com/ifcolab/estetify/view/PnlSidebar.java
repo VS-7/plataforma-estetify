@@ -36,6 +36,9 @@ public class PnlSidebar extends javax.swing.JPanel {
         btnGerenciarAdmins.setVisible(false);
         btnAgenda.setVisible(false);
         btnPerfil.setVisible(false);
+        btnGerenciarPagamentos.setVisible(false);
+        lblProcedimentos.setVisible(false);
+        
         
         // Mostra botões baseado no tipo de usuário
         if (authController.isAdmin()) {
@@ -47,9 +50,11 @@ public class PnlSidebar extends javax.swing.JPanel {
             btnGerenciarRecepcionistas.setVisible(true);
             btnGerenciarProcedimentos.setVisible(true);
             btnHistoricoProcedimento.setVisible(true);
+            btnGerenciarPagamentos.setVisible(true);
             btnGerenciarAdmins.setVisible(true);
             btnConfiguracoes.setVisible(true);
             btnFeedbacksAdmin.setVisible(true);
+            btnGerenciarPagamentos.setVisible(true);
         } 
         else if (authController.isPaciente()) {
             btnMinhasConsultas.setVisible(true);
@@ -60,7 +65,9 @@ public class PnlSidebar extends javax.swing.JPanel {
             btnAgenda.setVisible(true);
             btnPerfil.setVisible(true);
             btnFeedbacks.setVisible(true);
+            btnGerenciarProcedimentos.setVisible(true);
             btnHistoricoProcedimento.setVisible(true);
+            lblProcedimentos.setVisible(true);
         }
         else if (authController.isRecepcionista()) {
             btnAgenda.setVisible(true);
@@ -73,6 +80,7 @@ public class PnlSidebar extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         lblLogo = new javax.swing.JLabel();
         lblEstetify = new javax.swing.JLabel();
         btnAgenda = new com.ifcolab.estetify.components.CustomButton();
@@ -88,8 +96,10 @@ public class PnlSidebar extends javax.swing.JPanel {
         btnFeedbacksAdmin = new com.ifcolab.estetify.components.CustomButton();
         btnGerenciarProcedimentos = new com.ifcolab.estetify.components.CustomButton();
         btnGerenciarRecepcionistas = new com.ifcolab.estetify.components.CustomButton();
-        btnHistoricoProcedimento = new com.ifcolab.estetify.components.CustomButton();
+        btnGerenciarPagamentos = new com.ifcolab.estetify.components.CustomButton();
         btnGerenciarAdmins = new com.ifcolab.estetify.components.CustomButton();
+        btnHistoricoProcedimento = new com.ifcolab.estetify.components.CustomButton();
+        lblProcedimentos = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(null);
@@ -112,7 +122,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnAgenda);
-        btnAgenda.setBounds(10, 90, 230, 50);
+        btnAgenda.setBounds(10, 90, 230, 40);
 
         btnConfiguracoes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/config.png"))); // NOI18N
         btnConfiguracoes.setText("Configurações");
@@ -122,7 +132,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnConfiguracoes);
-        btnConfiguracoes.setBounds(10, 210, 230, 50);
+        btnConfiguracoes.setBounds(10, 190, 230, 40);
 
         btnGerenciarPacientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/coracao.png"))); // NOI18N
         btnGerenciarPacientes.setText("Gerenciar Pacientes");
@@ -132,7 +142,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnGerenciarPacientes);
-        btnGerenciarPacientes.setBounds(10, 270, 230, 50);
+        btnGerenciarPacientes.setBounds(10, 240, 230, 40);
 
         btnGerenciarMedicos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/estetoscopio.png"))); // NOI18N
         btnGerenciarMedicos.setText("Gerenciar Médicos");
@@ -142,7 +152,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnGerenciarMedicos);
-        btnGerenciarMedicos.setBounds(10, 390, 230, 50);
+        btnGerenciarMedicos.setBounds(10, 390, 230, 40);
 
         btnPerfil.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/perfil.png"))); // NOI18N
         btnPerfil.setText("Perfil");
@@ -152,7 +162,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnPerfil);
-        btnPerfil.setBounds(10, 150, 230, 50);
+        btnPerfil.setBounds(10, 140, 230, 40);
 
         btnGerenciarEnfermeiras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/seringa.png"))); // NOI18N
         btnGerenciarEnfermeiras.setText("Gerenciar Enfermeiras");
@@ -162,7 +172,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnGerenciarEnfermeiras);
-        btnGerenciarEnfermeiras.setBounds(10, 450, 230, 50);
+        btnGerenciarEnfermeiras.setBounds(10, 440, 230, 40);
 
         btnMinhasConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/calendar.png"))); // NOI18N
         btnMinhasConsultas.setText("Minhas Consultas");
@@ -172,7 +182,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnMinhasConsultas);
-        btnMinhasConsultas.setBounds(10, 90, 230, 50);
+        btnMinhasConsultas.setBounds(10, 90, 230, 40);
 
         btnFeedbacksPaciente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/feedbacks.png"))); // NOI18N
         btnFeedbacksPaciente.setText("Feedbacks");
@@ -182,7 +192,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnFeedbacksPaciente);
-        btnFeedbacksPaciente.setBounds(10, 210, 230, 50);
+        btnFeedbacksPaciente.setBounds(10, 190, 230, 40);
 
         btnFeedbacks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/feedbacks.png"))); // NOI18N
         btnFeedbacks.setText("Feedbacks");
@@ -192,7 +202,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnFeedbacks);
-        btnFeedbacks.setBounds(10, 210, 230, 50);
+        btnFeedbacks.setBounds(10, 190, 230, 40);
 
         btnSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/iconLogout.png"))); // NOI18N
         btnSair.setText(" Sair");
@@ -212,7 +222,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnFeedbacksAdmin);
-        btnFeedbacksAdmin.setBounds(10, 630, 230, 50);
+        btnFeedbacksAdmin.setBounds(10, 640, 230, 40);
 
         btnGerenciarProcedimentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/procedimentos.png"))); // NOI18N
         btnGerenciarProcedimentos.setText("Gerenciar Procedimentos");
@@ -222,7 +232,7 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnGerenciarProcedimentos);
-        btnGerenciarProcedimentos.setBounds(10, 330, 230, 50);
+        btnGerenciarProcedimentos.setBounds(10, 340, 230, 40);
 
         btnGerenciarRecepcionistas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/recepcionista.png"))); // NOI18N
         btnGerenciarRecepcionistas.setText("Gerenciar Recepcionistas");
@@ -232,17 +242,17 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnGerenciarRecepcionistas);
-        btnGerenciarRecepcionistas.setBounds(10, 510, 230, 50);
+        btnGerenciarRecepcionistas.setBounds(10, 490, 230, 40);
 
-        btnHistoricoProcedimento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/historico.png"))); // NOI18N
-        btnHistoricoProcedimento.setText("Historico de Procedimentos");
-        btnHistoricoProcedimento.addActionListener(new java.awt.event.ActionListener() {
+        btnGerenciarPagamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/historico.png"))); // NOI18N
+        btnGerenciarPagamentos.setText("Gerenciar Pagamentos");
+        btnGerenciarPagamentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHistoricoProcedimentoActionPerformed(evt);
+                btnGerenciarPagamentosActionPerformed(evt);
             }
         });
-        add(btnHistoricoProcedimento);
-        btnHistoricoProcedimento.setBounds(10, 690, 230, 50);
+        add(btnGerenciarPagamentos);
+        btnGerenciarPagamentos.setBounds(10, 590, 230, 40);
 
         btnGerenciarAdmins.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/admin.png"))); // NOI18N
         btnGerenciarAdmins.setText("Gerenciar Admins");
@@ -252,7 +262,21 @@ public class PnlSidebar extends javax.swing.JPanel {
             }
         });
         add(btnGerenciarAdmins);
-        btnGerenciarAdmins.setBounds(10, 570, 230, 50);
+        btnGerenciarAdmins.setBounds(10, 540, 230, 40);
+
+        btnHistoricoProcedimento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/historico.png"))); // NOI18N
+        btnHistoricoProcedimento.setText("Historico de Procedimentos");
+        btnHistoricoProcedimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistoricoProcedimentoActionPerformed(evt);
+            }
+        });
+        add(btnHistoricoProcedimento);
+        btnHistoricoProcedimento.setBounds(10, 290, 230, 40);
+
+        lblProcedimentos.setText("Procedimentos");
+        add(lblProcedimentos);
+        lblProcedimentos.setBounds(20, 237, 170, 40);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfiguracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiguracoesActionPerformed
@@ -322,11 +346,11 @@ public class PnlSidebar extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnGerenciarRecepcionistasActionPerformed
 
-    private void btnHistoricoProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoProcedimentoActionPerformed
-        DlgHistoricoProcedimento dialog = new DlgHistoricoProcedimento(null, true);
+    private void btnGerenciarPagamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarPagamentosActionPerformed
+        DlgGerenciaPagamento dialog = new DlgGerenciaPagamento(null, true);
         dialog.setLocationRelativeTo(parentFrame);
         dialog.setVisible(true);
-    }//GEN-LAST:event_btnHistoricoProcedimentoActionPerformed
+    }//GEN-LAST:event_btnGerenciarPagamentosActionPerformed
 
     private void btnGerenciarAdminsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarAdminsActionPerformed
         DlgGerenciaAdmin dialog = new DlgGerenciaAdmin(null, true);
@@ -355,6 +379,12 @@ public class PnlSidebar extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_btnFeedbacksPacienteActionPerformed
 
+    private void btnHistoricoProcedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoProcedimentoActionPerformed
+        DlgHistoricoProcedimento dialog = new DlgHistoricoProcedimento(null, true);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnHistoricoProcedimentoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.CustomButton btnAgenda;
@@ -366,13 +396,16 @@ public class PnlSidebar extends javax.swing.JPanel {
     private com.ifcolab.estetify.components.CustomButton btnGerenciarEnfermeiras;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarMedicos;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarPacientes;
+    private com.ifcolab.estetify.components.CustomButton btnGerenciarPagamentos;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarProcedimentos;
     private com.ifcolab.estetify.components.CustomButton btnGerenciarRecepcionistas;
     private com.ifcolab.estetify.components.CustomButton btnHistoricoProcedimento;
     private com.ifcolab.estetify.components.CustomButton btnMinhasConsultas;
     private com.ifcolab.estetify.components.CustomButton btnPerfil;
     private com.ifcolab.estetify.components.CustomButton btnSair;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLabel lblEstetify;
     private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblProcedimentos;
     // End of variables declaration//GEN-END:variables
 }

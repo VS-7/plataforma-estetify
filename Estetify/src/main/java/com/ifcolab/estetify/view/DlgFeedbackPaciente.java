@@ -60,6 +60,7 @@ public class DlgFeedbackPaciente extends javax.swing.JDialog {
         pnlEstrelas = new com.ifcolab.estetify.components.RatingStars();
         edtTitulo = new com.ifcolab.estetify.components.CustomTextField();
         btnEnviarFeedback = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        btnExcluirFeedback = new com.ifcolab.estetify.components.SecondaryCustomButton();
         lblLine = new javax.swing.JLabel();
         lblBackgrundFeedback = new javax.swing.JLabel();
         lblBackgrundFeedback1 = new javax.swing.JLabel();
@@ -156,6 +157,15 @@ public class DlgFeedbackPaciente extends javax.swing.JDialog {
         getContentPane().add(btnEnviarFeedback);
         btnEnviarFeedback.setBounds(160, 750, 230, 30);
 
+        btnExcluirFeedback.setText("Excluir Feedback");
+        btnExcluirFeedback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirFeedbackActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExcluirFeedback);
+        btnExcluirFeedback.setBounds(160, 790, 230, 30);
+
         lblLine.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Line.png"))); // NOI18N
         getContentPane().add(lblLine);
         lblLine.setBounds(90, 700, 390, 40);
@@ -179,6 +189,32 @@ public class DlgFeedbackPaciente extends javax.swing.JDialog {
     private void edtTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtTituloActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtTituloActionPerformed
+
+    private void btnExcluirFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirFeedbackActionPerformed
+        int selectedRow = grdFeedbacks.getSelectedRow();
+        if (selectedRow != -1) {
+            int opcao = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja excluir este feedback?",
+                "Confirmar Exclusão",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (opcao == JOptionPane.YES_OPTION) {
+                try {
+                    controller.excluirFeedbackSelecionado(grdFeedbacks, selectedRow);
+                    controller.atualizarTabelaTodosFeedbacks(grdFeedbacks);
+                    limparFormulario();
+                    idFeedbackEditando = -1;
+                } catch (Exception ex) {
+                    mostrarMensagemErro("Erro ao excluir feedback: " + ex.getMessage());
+                }
+            }
+        } else {
+            mostrarMensagemErro("Selecione um feedback para excluir");
+        }
+    }//GEN-LAST:event_btnExcluirFeedbackActionPerformed
 
     
     private void setupComponents() {
@@ -305,6 +341,7 @@ public class DlgFeedbackPaciente extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnEnviarFeedback;
+    private com.ifcolab.estetify.components.SecondaryCustomButton btnExcluirFeedback;
     private com.ifcolab.estetify.components.SecondaryCustomButton btnSeusFeedbacks;
     private com.ifcolab.estetify.components.PrimaryCustomButton btnTodosFeedbacks;
     private com.ifcolab.estetify.components.CustomComboBox cboSelecionarProcedimento;

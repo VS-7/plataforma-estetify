@@ -1,7 +1,6 @@
 package com.ifcolab.estetify.model;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ import com.ifcolab.estetify.model.enums.MetodoPagamento;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Pagamento implements Serializable {
+public class Pagamento {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

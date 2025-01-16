@@ -2,13 +2,10 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.components.PrimaryCustomButton;
 import com.ifcolab.estetify.components.SecondaryCustomButton;
-import com.ifcolab.estetify.controller.ConsultaController;
-import com.ifcolab.estetify.controller.PagamentoController;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Pagamento;
 import com.ifcolab.estetify.model.Procedimento;
 import com.ifcolab.estetify.model.enums.StatusConsulta;
-import com.ifcolab.estetify.utils.GeradorPdf;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,19 +23,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JFileChooser;
+import com.ifcolab.estetify.controller.OpcoesConsultaController;
 
 public class DlgOpcoesConsulta extends javax.swing.JDialog {
-    private final Consulta consulta;
-    private final ConsultaController controller;
+    private final OpcoesConsultaController controller;
     private boolean alteracaoRealizada = false;
     
     public DlgOpcoesConsulta(JFrame parent, Consulta consulta) {
         super(parent, "Opções da Consulta", true);
-        this.consulta = consulta;
-        this.controller = new ConsultaController();
+        this.controller = new OpcoesConsultaController(consulta);
         
         initComponents();
         configurarJanela();
@@ -73,39 +68,35 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     private JPanel criarPainelInformacoes() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(240, 247, 255));  // Fundo azul claro
+        panel.setBackground(new Color(240, 247, 255));
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(200, 220, 255), 1),
             BorderFactory.createEmptyBorder(20, 25, 20, 25)
         ));
         
-  
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        
-        JLabel lblStatus = new JLabel("Status: " + consulta.getStatus());
+        JLabel lblStatus = new JLabel("Status: " + controller.getStatusFormatado());
         lblStatus.setFont(new Font("Fira Sans", Font.BOLD, 14));
-        definirCorStatus(lblStatus, consulta.getStatus());
+        definirCorStatus(lblStatus, controller.getStatus());
         panel.add(lblStatus);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         
-        adicionarLabel(panel, "Data/Hora: " + consulta.getDataHora().format(formatter));
-        adicionarLabel(panel, "Paciente: " + consulta.getPaciente().getNome());
-        adicionarLabel(panel, "Médico: " + consulta.getMedico().getNome());
-        adicionarLabel(panel, "Enfermeira: " + consulta.getEnfermeira().getNome());
+        adicionarLabel(panel, "Data/Hora: " + controller.getDataHoraFormatada());
+        adicionarLabel(panel, "Paciente: " + controller.getNomePaciente());
+        adicionarLabel(panel, "Médico: " + controller.getNomeMedico());
+        adicionarLabel(panel, "Enfermeira: " + controller.getNomeEnfermeira());
         
-
-        if (!consulta.getProcedimentos().isEmpty()) {
+        List<String> procedimentos = controller.getProcedimentosFormatados();
+        if (!procedimentos.isEmpty()) {
             panel.add(Box.createRigidArea(new Dimension(0, 10)));
             JLabel lblProcedimentos = new JLabel("<html><b>Procedimentos:</b><br/>" + 
-                String.join("<br/>• ", consulta.getProcedimentos().stream()
-                    .map(p -> p.getNome() + " - R$ " + String.format("%.2f", p.getValor()))
-                    .toArray(String[]::new)) + "</html>");
+                String.join("<br/>• ", procedimentos) + "</html>");
             lblProcedimentos.setFont(new Font("Fira Sans", Font.PLAIN, 14));
             panel.add(lblProcedimentos);
         }
         
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
-        JLabel lblValorTotal = new JLabel("Valor Total: R$ " + String.format("%.2f", consulta.getValorTotal()));
+        JLabel lblValorTotal = new JLabel("Valor Total: R$ " + 
+            String.format("%.2f", controller.getValorTotal()));
         lblValorTotal.setFont(new Font("Fira Sans", Font.BOLD, 14));
         panel.add(lblValorTotal);
         
@@ -138,38 +129,42 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     
     private JPanel criarPainelBotoes() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridBagLayout()); 
+        panel.setLayout(new GridBagLayout());
         panel.setBackground(Color.WHITE);
         
         JPanel innerPanel = new JPanel();
         innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
         innerPanel.setBackground(Color.WHITE);
         
-        if (controller.podeConfirmarConsulta(consulta)) {
+        if (controller.podeConfirmarConsulta()) {
             adicionarBotao(innerPanel, new PrimaryCustomButton("Confirmar Consulta"), 
                           e -> confirmarConsulta());
             adicionarBotao(innerPanel, new SecondaryCustomButton("Cancelar Consulta"), 
                           e -> cancelarConsulta());
         }
         
-        if (controller.podeRealizarConsulta(consulta)) {
+        if (controller.podeRealizarConsulta()) {
             adicionarBotao(innerPanel, new PrimaryCustomButton("Realizar Consulta"), 
                           e -> realizarConsulta());
         }
         
-        if (consulta.isConcluida() && consulta.getPagamento() == null) {
-            adicionarBotao(innerPanel, new PrimaryCustomButton("Realizar Pagamento"), e -> realizarPagamento());
+        if (controller.podeFazerPagamento() && controller.podeGerenciarPagamentos()) {
+            adicionarBotao(innerPanel, new PrimaryCustomButton("Realizar Pagamento"), 
+                          e -> realizarPagamento());
         }
         
-        if (consulta.isConcluida()) {
-            adicionarBotao(innerPanel, new SecondaryCustomButton("Emitir Recibo"), e -> emitirRecibo());
+        if (controller.podeEmitirRecibo() && controller.podeGerenciarPagamentos()) {
+            adicionarBotao(innerPanel, new SecondaryCustomButton("Emitir Recibo"), 
+                          e -> emitirRecibo());
         }
         
-        if (consulta.isConcluida()) {
-            adicionarBotao(innerPanel, new SecondaryCustomButton("Relatorio"), e -> gerarRelatorio());
+        if (controller.podeVerRelatorios()) {
+            adicionarBotao(innerPanel, new SecondaryCustomButton("Relatório"), 
+                          e -> gerarRelatorio());
         }
         
-        adicionarBotao(innerPanel, new SecondaryCustomButton("Editar Consulta"), e -> editarConsulta());
+        adicionarBotao(innerPanel, new SecondaryCustomButton("Editar Consulta"), 
+                      e -> editarConsulta());
         
         panel.add(innerPanel);
         return panel;
@@ -199,7 +194,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         
         if (opcao == JOptionPane.YES_OPTION) {
             try {
-                controller.confirmarConsulta(consulta.getId());
+                controller.confirmarConsulta();
                 alteracaoRealizada = true;
                 JOptionPane.showMessageDialog(this,
                     "Consulta confirmada com sucesso!",
@@ -225,7 +220,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         
         if (opcao == JOptionPane.YES_OPTION) {
             try {
-                controller.cancelarConsulta(consulta.getId());
+                controller.cancelarConsulta();
                 alteracaoRealizada = true;
                 JOptionPane.showMessageDialog(this,
                     "Consulta cancelada com sucesso!",
@@ -250,7 +245,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         
         if (opcao == JOptionPane.YES_OPTION) {
             try {
-                controller.realizarConsulta(consulta.getId());
+                controller.realizarConsulta();
                 alteracaoRealizada = true;
                 JOptionPane.showMessageDialog(this,
                     "Consulta realizada com sucesso!\n" +
@@ -268,7 +263,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     }
     
     private void realizarPagamento() {
-       DlgPagamento dialog = new DlgPagamento(null, true, consulta);
+       DlgPagamento dialog = new DlgPagamento(null, true, controller.getConsulta());
         dialog.setVisible(true);
         if (dialog.isPagamentoRealizado()) {
             alteracaoRealizada = true;
@@ -278,8 +273,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     
     private void emitirRecibo() {
         try {
-            PagamentoController pagamentoController = new PagamentoController();
-            List<Pagamento> pagamentos = pagamentoController.buscarPorConsulta(consulta.getId());
+            List<Pagamento> pagamentos = controller.buscarPagamentosConsulta();
 
             if (pagamentos.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
@@ -290,34 +284,25 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             }
 
             Pagamento pagamento = pagamentos.get(0);
-
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Salvar Recibo");
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                String caminho = fileChooser.getSelectedFile().getAbsolutePath();
-
+            
+            try {
+                controller.gerarReciboPagamento(pagamento);
                 
-                GeradorPdf gerador = new GeradorPdf();
-                gerador.gerarReciboPagamento(caminho, consulta, pagamento);
-
-                
-                int opcao = JOptionPane.showConfirmDialog(this,
-                    "Recibo gerado com sucesso!\nDeseja abrir o arquivo agora?",
+                JOptionPane.showMessageDialog(this,
+                    "Recibo gerado com sucesso!",
                     "Sucesso",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-
-                if (opcao == JOptionPane.YES_OPTION) {
-                    File arquivo = new File(caminho + "/recibo_pagamento.pdf");
-                    Desktop.getDesktop().open(arquivo);
-                }
+                    JOptionPane.INFORMATION_MESSAGE);
+                    
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                    "Erro ao gerar recibo: " + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                "Erro ao gerar recibo: " + e.getMessage(),
+                "Erro ao buscar pagamentos: " + e.getMessage(),
                 "Erro",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -325,7 +310,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     
     private void editarConsulta() {
         DlgNovaConsulta dialog = new DlgNovaConsulta(null, true);
-        dialog.preencherFormulario(consulta);
+        dialog.preencherFormulario(controller.getConsulta());
         dialog.setVisible(true);
         if (dialog.isConsultaAlterada()) {
             alteracaoRealizada = true;
@@ -334,7 +319,7 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
     }
     
     private void gerarRelatorio() {
-    if (consulta.getProcedimentos().isEmpty()) {
+    if (controller.getConsulta().getProcedimentos().isEmpty()) {
         JOptionPane.showMessageDialog(this,
             "Não há procedimentos registrados nesta consulta.",
             "Aviso",
@@ -342,9 +327,9 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
         return;
     }
     
-    if (consulta.getProcedimentos().size() == 1) {
-        Procedimento procedimento = consulta.getProcedimentos().get(0);
-        DlgRelatorio dialog = new DlgRelatorio(null, true, consulta, procedimento);
+    if (controller.getConsulta().getProcedimentos().size() == 1) {
+        Procedimento procedimento = controller.getConsulta().getProcedimentos().get(0);
+        DlgRelatorio dialog = new DlgRelatorio(null, true, controller.getConsulta(), procedimento);
         dialog.setVisible(true);
         if (dialog.isRelatorioSalvo()) {
             alteracaoRealizada = true;
@@ -358,12 +343,12 @@ public class DlgOpcoesConsulta extends javax.swing.JDialog {
             "Gerar Relatório",
             JOptionPane.QUESTION_MESSAGE,
             null,
-            consulta.getProcedimentos().toArray(),
-            consulta.getProcedimentos().get(0)
+            controller.getConsulta().getProcedimentos().toArray(),
+            controller.getConsulta().getProcedimentos().get(0)
         );
         
         if (procedimento != null) {
-            DlgRelatorio dialog = new DlgRelatorio(null, true, consulta, procedimento);
+            DlgRelatorio dialog = new DlgRelatorio(null, true, controller.getConsulta(), procedimento);
             dialog.setVisible(true);
             if (dialog.isRelatorioSalvo()) {
                 alteracaoRealizada = true;

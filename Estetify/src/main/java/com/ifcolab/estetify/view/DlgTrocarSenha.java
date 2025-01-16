@@ -2,15 +2,12 @@ package com.ifcolab.estetify.view;
 
 import com.ifcolab.estetify.controller.AutenticacaoController;
 import com.ifcolab.estetify.model.Pessoa;
-import com.ifcolab.estetify.utils.GerenciadorCriptografia;
 import javax.swing.JOptionPane;
 
 public class DlgTrocarSenha extends javax.swing.JDialog {
 
     
-    private final GerenciadorCriptografia gerenciadorCriptografia;
-    private final AutenticacaoController autenticacaoController;
-    private final Pessoa usuario;
+    private final AutenticacaoController controller;
     
     public DlgTrocarSenha(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -18,9 +15,7 @@ public class DlgTrocarSenha extends javax.swing.JDialog {
         
         this.setLocationRelativeTo(null);
         this.setTitle("Trocar Senha");
-        gerenciadorCriptografia = new GerenciadorCriptografia();
-        autenticacaoController = new AutenticacaoController();
-        usuario = autenticacaoController.getUsuarioLogado();
+        controller = new AutenticacaoController();
     }
 
     @SuppressWarnings("unchecked")
@@ -110,41 +105,30 @@ public class DlgTrocarSenha extends javax.swing.JDialog {
 
     private void btnTrocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrocarSenhaActionPerformed
         try {
-            String senhaAtual = new String(edtSenhaAtual.getPassword());
-            String novaSenha = new String(edtNovaSenha.getPassword());
-            String confirmarSenha = new String(edtConfirmarSenha.getPassword());
-
-            // Validações
-            if (senhaAtual.isEmpty() || novaSenha.isEmpty() || confirmarSenha.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos os campos são obrigatórios!");
-                return;
-            }
-
-            if (!novaSenha.equals(confirmarSenha)) {
-                JOptionPane.showMessageDialog(this, "A nova senha e a confirmação não coincidem!");
-                return;
-            }
-
-            // Verifica se a senha atual está correta usando o método compararSenha
-            if (!gerenciadorCriptografia.compararSenha(senhaAtual, usuario.getSenha())) {
-                JOptionPane.showMessageDialog(this, "Senha atual incorreta!");
-                return;
-            }
-
-            // Criptografa e atualiza a nova senha
-            String novaSenhaHash = gerenciadorCriptografia.criptografarSenha(novaSenha);
-
-            // Atualiza no banco de dados
-            autenticacaoController.atualizarSenhaUsuario(usuario.getId(), novaSenhaHash);
-
+            validarTrocaSenha();
             JOptionPane.showMessageDialog(this, "Senha alterada com sucesso!");
             this.dispose();
-
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao alterar senha: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnTrocarSenhaActionPerformed
 
+    private void validarTrocaSenha() throws Exception {
+        String senhaAtual = new String(edtSenhaAtual.getPassword());
+        String novaSenha = new String(edtNovaSenha.getPassword());
+        String confirmarSenha = new String(edtConfirmarSenha.getPassword());
+
+        if (senhaAtual.isEmpty() || novaSenha.isEmpty() || confirmarSenha.isEmpty()) {
+            throw new Exception("Todos os campos são obrigatórios!");
+        }
+
+        if (!novaSenha.equals(confirmarSenha)) {
+            throw new Exception("A nova senha e a confirmação não coincidem!");
+        }
+        
+        Pessoa usuario = controller.getUsuarioLogado();
+        controller.atualizarSenhaUsuario(usuario.getId(), novaSenha);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.SecondaryCustomButton btnCancelar;

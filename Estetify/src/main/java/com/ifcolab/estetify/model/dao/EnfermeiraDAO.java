@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model.dao;
 
 import com.ifcolab.estetify.factory.DatabaseJPA;
 import com.ifcolab.estetify.model.Enfermeira;
-import com.ifcolab.estetify.model.exceptions.EnfermeiraException;
 import java.util.List;
 
 public class EnfermeiraDAO extends Dao<Enfermeira> {

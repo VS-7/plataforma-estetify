@@ -1,6 +1,5 @@
 package com.ifcolab.estetify.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import com.ifcolab.estetify.model.enums.TipoUsuario;
@@ -12,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Recepcionista extends Pessoa implements Serializable {
+public class Recepcionista extends Pessoa {
     
     private LocalDate dataContratacao;
     

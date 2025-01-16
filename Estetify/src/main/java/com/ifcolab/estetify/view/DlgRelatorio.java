@@ -11,8 +11,6 @@ import javax.swing.JOptionPane;
 public class DlgRelatorio extends javax.swing.JDialog {
 
     private final RelatorioController controller;
-    private final Consulta consulta;
-    private final Procedimento procedimento;
     private boolean relatorioSalvo = false;
     
     
@@ -20,49 +18,100 @@ public class DlgRelatorio extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        this.consulta = consulta;
-        this.procedimento = procedimento;
-        this.controller = new RelatorioController();
-        configurarComponentes();
+        
+        this.controller = new RelatorioController(consulta, procedimento);
+        
+        configurarInterface();
+        carregarRelatorioExistente();
     }
     
-    private void configurarComponentes() {
-        // Preencher informações do procedimento
-        lblProcedimento.setText("Procedimento: " + procedimento.getTipo());
-        lblPaciente.setText("Paciente: " + consulta.getPaciente().getNome());
-        lblMedico.setText("Médico: Dr(a). " + consulta.getMedico().getNome());
-        lblData.setText("Data: " + consulta.getDataHora().format(
-            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-            
+    private void configurarInterface() {
+        configurarCamposTexto();
+        preencherInformacoesProcedimento();
+    }
+    
+    private void configurarCamposTexto() {
         txtResultado.setLineWrap(true);
         txtResultado.setWrapStyleWord(true);
         txtObservacoes.setLineWrap(true);
         txtObservacoes.setWrapStyleWord(true);
-        
+    }
+    
+    private void preencherInformacoesProcedimento() {
+        lblProcedimento.setText("Procedimento: " + controller.getTipoProcedimento());
+        lblPaciente.setText("Paciente: " + controller.getNomePaciente());
+        lblMedico.setText("Médico: Dr(a). " + controller.getNomeMedico());
+        lblData.setText("Data: " + controller.getDataHoraFormatada());
+    }
+    
+    private void carregarRelatorioExistente() {
         try {
-            List<Relatorio> relatorios = controller.buscarTodos();
-            Relatorio relatorioAtual = relatorios.stream()
-                .filter(r -> r.getConsulta().getId() == consulta.getId())
-                .findFirst()
-                .orElse(null);
-
+            Relatorio relatorioAtual = controller.buscarRelatorioDaConsulta();
             if (relatorioAtual != null) {
-                txtResultado.setText(relatorioAtual.getResultado());
-                txtObservacoes.setText(relatorioAtual.getObservacoes());
-                lblTitleGerenciaMedicos.setText("Editar Relatório"); 
+                preencherFormulario(relatorioAtual);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao carregar relatório existente: " + e.getMessage(), 
-                "Erro", 
-                JOptionPane.ERROR_MESSAGE);
+            exibirErro("Erro ao carregar relatório existente", e);
         }
     }
     
+    private void preencherFormulario(Relatorio relatorio) {
+        txtResultado.setText(relatorio.getResultado());
+        txtObservacoes.setText(relatorio.getObservacoes());
+        lblTitleGerenciaMedicos.setText("Editar Relatório");
+    }
+    
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            String resultado = txtResultado.getText().trim();
+            String observacoes = txtObservacoes.getText().trim();
+            
+            controller.validarESalvarRelatorio(resultado, observacoes);
+            
+            relatorioSalvo = true;
+            exibirSucesso("Relatório salvo com sucesso!");
+            dispose();
+        } catch (Exception e) {
+            exibirErro("Erro ao salvar relatório", e);
+            if (e.getMessage().contains("Resultado")) {
+                txtResultado.requestFocus();
+            }
+        }
+    }
+    
+    private void btnAbrirRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            Relatorio relatorioAtual = controller.buscarRelatorioDaConsulta();
+            if (relatorioAtual == null) {
+                JOptionPane.showMessageDialog(this, 
+                    "Não há relatório salvo para esta consulta.", 
+                    "Aviso", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-
-
-
+            controller.abrirPdf(relatorioAtual);
+        } catch (Exception e) {
+            exibirErro("Erro ao abrir relatório", e);
+        }
+    }
+    
+    private void exibirSucesso(String mensagem) {
+        JOptionPane.showMessageDialog(this, mensagem, "Sucesso", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void exibirErro(String mensagem, Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            mensagem + ": " + e.getMessage(), 
+            "Erro", 
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public boolean isRelatorioSalvo() {
+        return relatorioSalvo;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -197,52 +246,6 @@ public class DlgRelatorio extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnAbrirRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirRelatorioActionPerformed
-        try {
-            List<Relatorio> relatorios = controller.buscarTodos();
-            Relatorio relatorioAtual = relatorios.stream()
-                .filter(r -> r.getConsulta().getId() == consulta.getId())
-                .findFirst()
-                .orElse(null);
-
-            if (relatorioAtual == null) {
-                JOptionPane.showMessageDialog(this, 
-                    "Não há relatório salvo para esta consulta.", 
-                    "Aviso", 
-                    JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            controller.abrirPdf(relatorioAtual);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao abrir relatório: " + e.getMessage(), 
-                "Erro", 
-                JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnAbrirRelatorioActionPerformed
-
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
-        String resultado = txtResultado.getText().trim();
-        String observacoes = txtObservacoes.getText().trim();
-        
-        try {
-            controller.validarESalvarRelatorio(resultado, observacoes, consulta, procedimento);
-            relatorioSalvo = true;
-            JOptionPane.showMessageDialog(this, "Relatório salvo com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            if (e.getMessage().contains("Resultado")) {
-                txtResultado.requestFocus();
-            }
-        }
-    }
-
-    public boolean isRelatorioSalvo() {
-        return relatorioSalvo;
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.SecondaryCustomButton btnAbrirRelatorio;

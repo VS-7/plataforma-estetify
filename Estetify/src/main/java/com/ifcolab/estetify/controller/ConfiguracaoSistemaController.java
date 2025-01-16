@@ -5,6 +5,9 @@ import com.ifcolab.estetify.model.dao.ConfiguracaoSistemaDAO;
 import com.ifcolab.estetify.model.exceptions.ConfiguracaoException;
 import com.ifcolab.estetify.model.valid.ValidateConfiguracao;
 import java.time.LocalTime;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.text.MaskFormatter;
+import java.text.ParseException;
 
 public class ConfiguracaoSistemaController {
     
@@ -29,5 +32,23 @@ public class ConfiguracaoSistemaController {
             throw new ConfiguracaoException("Erro ao carregar configurações do sistema");
         }
         return config;
+    }
+    
+    public SpinnerNumberModel getIntervaloConsultaModel() {
+        return new SpinnerNumberModel(30, 15, 120, 15);
+    }
+    
+    public SpinnerNumberModel getTempoAntecedenciaModel() {
+        return new SpinnerNumberModel(60, 0, 1440, 30);
+    }
+    
+    public SpinnerNumberModel getTempoMaxAgendamentoModel() {
+        return new SpinnerNumberModel(60, 1, 365, 1);
+    }
+    
+    public MaskFormatter getHoraMaskFormatter() throws ParseException {
+        MaskFormatter maskHora = new MaskFormatter("##:##");
+        maskHora.setPlaceholderCharacter('_');
+        return maskHora;
     }
 } 

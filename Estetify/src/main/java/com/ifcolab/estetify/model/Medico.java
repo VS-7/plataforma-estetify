@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -18,7 +17,7 @@ import com.ifcolab.estetify.model.enums.EspecializacaoMedico;
 @Getter
 @Setter
 @Entity
-public class Medico extends Pessoa implements Serializable {
+public class Medico extends Pessoa {
     
     @Column(unique = true)
     private String crm;

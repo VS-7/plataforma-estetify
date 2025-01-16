@@ -1,6 +1,6 @@
 package com.ifcolab.estetify.view;
 
-import com.ifcolab.estetify.controller.AutenticacaoController;
+import com.ifcolab.estetify.controller.PerfilController;
 import com.ifcolab.estetify.model.Pessoa;
 import com.ifcolab.estetify.model.enums.TipoSexo;
 import java.awt.Image;
@@ -14,56 +14,33 @@ import javax.swing.SwingUtilities;
 
 public class pnlPerfil extends javax.swing.JPanel {
 
-    private final AutenticacaoController autenticacaoController;
-    private Pessoa usuario;
+    private final PerfilController controller;
 
-     
     public pnlPerfil() {
         initComponents();
+        controller = new PerfilController();
         
-        
-        autenticacaoController = new AutenticacaoController();
-        configurarComboBoxes();
-        configurarComboBoxAvatar();
-        adicionarMascaraNosCampos();
+        configurarInterface();
         carregarDadosUsuario();
     }
     
-    private void configurarComboBoxAvatar() {
-        cboAvatar.removeAllItems();
-        for (int i = 1; i <= 10; i++) {
-            cboAvatar.addItem(i);
-        }
-    }
-
-    private void atualizarPreviewAvatar(int avatarId) {
-        try {
-            String avatarPath = "/avatars/avatar_" + avatarId + ".png";
-            java.net.URL imageUrl = getClass().getResource(avatarPath);
-
-            if (imageUrl != null) {
-                ImageIcon avatarIcon = new ImageIcon(imageUrl);
-                Image img = avatarIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-                lblAvatar.setIcon(new ImageIcon(img));
-
-                lblAvatar.setPreferredSize(new Dimension(120, 120));
-                lblAvatar.setSize(120, 120);
-
-                lblAvatar.revalidate();
-                lblAvatar.repaint();
-            } else {
-                System.err.println("Avatar não encontrado: " + avatarPath);
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao carregar avatar: " + e.getMessage());
-            e.printStackTrace();
-        }
+    private void configurarInterface() {
+        configurarComboBoxes();
+        adicionarMascaraNosCampos();
+        
+        fEdtCPF.setEnabled(false);
+        cboSexo.setEnabled(false);
     }
     
     private void configurarComboBoxes() {
         cboSexo.removeAllItems();
         for (TipoSexo s : TipoSexo.values()) {
             cboSexo.addItem(s);
+        }
+        
+        cboAvatar.removeAllItems();
+        for (int i = 1; i <= 10; i++) {
+            cboAvatar.addItem(i);
         }
     }
     
@@ -86,29 +63,78 @@ public class pnlPerfil extends javax.swing.JPanel {
     }
     
     private void carregarDadosUsuario() {
-        usuario = autenticacaoController.getUsuarioLogado();
+        Pessoa usuario = controller.getUsuarioLogado();
         if (usuario != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            
-            edtNome.setText(usuario.getNome());
-            edtEmail.setText(usuario.getEmail());
-            fEdtCPF.setText(usuario.getCpf());
-            cboSexo.setSelectedItem(usuario.getSexo());
-            fEdtDataNascimento.setText(usuario.getDataNascimento().format(formatter));
-            fEdtTelefone.setText(usuario.getTelefone());
-            edtEndereco.setText(usuario.getEndereco());
-            
-            // Desabilitar campos que não devem ser editados
-            fEdtCPF.setEnabled(false);
-            fEdtDataNascimento.setEnabled(false);
-            cboSexo.setEnabled(false);
-            
-            cboAvatar.setSelectedItem(usuario.getAvatar());
-            atualizarPreviewAvatar(usuario.getAvatar());
+            preencherFormulario(usuario);
         }
     }
     
+    private void preencherFormulario(Pessoa usuario) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        edtNome.setText(usuario.getNome());
+        edtEmail.setText(usuario.getEmail());
+        fEdtCPF.setText(usuario.getCpf());
+        cboSexo.setSelectedItem(usuario.getSexo());
+        fEdtDataNascimento.setText(usuario.getDataNascimento().format(formatter));
+        fEdtTelefone.setText(usuario.getTelefone());
+        edtEndereco.setText(usuario.getEndereco());
+        
+        cboAvatar.setSelectedItem(usuario.getAvatar());
+        atualizarPreviewAvatar(usuario.getAvatar());
+    }
+    
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            controller.atualizarPerfil(
+                edtNome.getText(),
+                edtEmail.getText(),
+                fEdtTelefone.getText(),
+                edtEndereco.getText(),
+                (int) cboAvatar.getSelectedItem()
+            );
+            
+            if (SwingUtilities.getWindowAncestor(this) instanceof FrMenu) {
+                ((FrMenu) SwingUtilities.getWindowAncestor(this)).atualizarAppBar();
+            }
+            
+            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso!");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar dados: " + ex.getMessage());
+        }
+    }
+    
+    private void cboAvatarActionPerformed(java.awt.event.ActionEvent evt) {
+        int selectedAvatar = (int) cboAvatar.getSelectedItem();
+        atualizarPreviewAvatar(selectedAvatar);
+    }
+    
+    private void btnTrocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {
+        DlgTrocarSenha dialog = new DlgTrocarSenha(null, true);
+        dialog.setVisible(true);
+    }
+    
+    private void atualizarPreviewAvatar(int avatarId) {
+        try {
+            String avatarPath = "/avatars/avatar_" + avatarId + ".png";
+            java.net.URL imageUrl = getClass().getResource(avatarPath);
 
+            if (imageUrl != null) {
+                ImageIcon avatarIcon = new ImageIcon(imageUrl);
+                Image img = avatarIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+                lblAvatar.setIcon(new ImageIcon(img));
+                lblAvatar.setPreferredSize(new Dimension(120, 120));
+                lblAvatar.setSize(120, 120);
+                lblAvatar.revalidate();
+                lblAvatar.repaint();
+            } else {
+                System.err.println("Avatar não encontrado: " + avatarPath);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar avatar: " + e.getMessage());
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -279,41 +305,6 @@ public class pnlPerfil extends javax.swing.JPanel {
     private void edtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtEnderecoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_edtEnderecoActionPerformed
-
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            usuario.setNome(edtNome.getText());
-            usuario.setEmail(edtEmail.getText());
-            usuario.setTelefone(fEdtTelefone.getText());
-            usuario.setEndereco(edtEndereco.getText());
-            
-            int novoAvatar = (int) cboAvatar.getSelectedItem();
-            
-            autenticacaoController.atualizarDadosUsuario(usuario, novoAvatar);
-            
-            atualizarPreviewAvatar(novoAvatar);
-            
-            if (SwingUtilities.getWindowAncestor(this) instanceof FrMenu) {
-                FrMenu frMenu = (FrMenu) SwingUtilities.getWindowAncestor(this);
-                frMenu.atualizarAppBar();
-            }
-            
-            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso!");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar dados: " + ex.getMessage());
-        }
-    }
-
-    private void cboAvatarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAvatarActionPerformed
-        int selectedAvatar = (int) cboAvatar.getSelectedItem();
-        atualizarPreviewAvatar(selectedAvatar);
-    }//GEN-LAST:event_cboAvatarActionPerformed
-
-    private void btnTrocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTrocarSenhaActionPerformed
-        DlgTrocarSenha dialog = new DlgTrocarSenha(null, true);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_btnTrocarSenhaActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnAdicionar;

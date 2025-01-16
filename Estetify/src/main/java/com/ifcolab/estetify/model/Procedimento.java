@@ -17,7 +17,7 @@ import com.ifcolab.estetify.model.enums.TipoProcedimento;
 @Getter
 @Setter
 @Entity
-public class Procedimento implements Serializable {
+public class Procedimento {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

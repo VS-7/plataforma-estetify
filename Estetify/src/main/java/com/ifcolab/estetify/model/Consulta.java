@@ -1,6 +1,5 @@
 package com.ifcolab.estetify.model;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
@@ -12,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Column;
 import javax.persistence.ManyToMany;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -27,7 +25,7 @@ import javax.persistence.FetchType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Consulta implements Serializable {
+public class Consulta {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

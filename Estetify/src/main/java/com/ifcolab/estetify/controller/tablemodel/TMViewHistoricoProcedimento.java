@@ -75,6 +75,13 @@ public class TMViewHistoricoProcedimento extends AbstractTableModel {
         }
     }
     
+    public Consulta getConsulta(int rowIndex) {
+        if (rowIndex >= 0 && rowIndex < lista.size()) {
+            return lista.get(rowIndex);
+        }
+        return null;
+    }
+    
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;

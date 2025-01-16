@@ -1,7 +1,6 @@
 package com.ifcolab.estetify.model;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,7 @@ import javax.persistence.JoinColumn;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Relatorio implements Serializable {
+public class Relatorio {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

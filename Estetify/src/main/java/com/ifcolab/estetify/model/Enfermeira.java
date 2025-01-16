@@ -2,7 +2,6 @@ package com.ifcolab.estetify.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.persistence.Column;
@@ -13,7 +12,7 @@ import com.ifcolab.estetify.model.enums.TipoSexo;
 @Getter
 @Setter
 @Entity
-public class Enfermeira extends Pessoa implements Serializable {
+public class Enfermeira extends Pessoa {
     
     @Column(unique = true)
     private String coren;

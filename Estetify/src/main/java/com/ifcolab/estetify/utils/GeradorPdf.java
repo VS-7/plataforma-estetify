@@ -30,7 +30,8 @@ public class GeradorPdf implements IGeradorDocumento {
     public void gerarDocumento(String caminho, String... conteudo) {
         Document documento = new Document();
         try {
-            String caminhoArquivo = caminho + "/recibo.pdf";
+            String caminhoArquivo = caminho + File.separator + "recibo.pdf";
+            new File(caminhoArquivo).getParentFile().mkdirs();
             PdfWriter.getInstance(documento, new FileOutputStream(caminhoArquivo));
             documento.open();
 
@@ -75,7 +76,8 @@ public class GeradorPdf implements IGeradorDocumento {
     public void gerarReciboPagamento(String caminho, Consulta consulta, Pagamento pagamento) {
         Document documento = new Document();
         try {
-            String caminhoArquivo = caminho + "/recibo_pagamento.pdf";
+            String caminhoArquivo = caminho + File.separator + "recibo_pagamento.pdf";
+            new File(caminhoArquivo).getParentFile().mkdirs();
             PdfWriter.getInstance(documento, new FileOutputStream(caminhoArquivo));
             documento.open();
             
@@ -161,7 +163,8 @@ public class GeradorPdf implements IGeradorDocumento {
     public void gerarRelatorioProcedimento(String caminho, Consulta consulta, Procedimento procedimento, String resultado, String observacoes) {
         Document documento = new Document();
         try {
-            String caminhoArquivo = caminho + "/relatorio_procedimento.pdf";
+            String caminhoArquivo = caminho + File.separator + "relatorio_procedimento.pdf";
+            new File(caminhoArquivo).getParentFile().mkdirs();
             PdfWriter.getInstance(documento, new FileOutputStream(caminhoArquivo));
             documento.open();
             

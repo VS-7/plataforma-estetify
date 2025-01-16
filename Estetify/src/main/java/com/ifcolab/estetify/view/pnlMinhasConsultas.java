@@ -9,7 +9,6 @@ public class pnlMinhasConsultas extends javax.swing.JPanel {
 
     private final AutenticacaoController autenticacaoController;
     private final ConsultaController consultaController;
-    private Pessoa usuario;
      
     public pnlMinhasConsultas() {
         initComponents();
@@ -17,13 +16,8 @@ public class pnlMinhasConsultas extends javax.swing.JPanel {
         autenticacaoController = new AutenticacaoController();
         consultaController = new ConsultaController();
         
-        usuario = autenticacaoController.getUsuarioLogado();
-        
         configurarComponentes();
-        
-        if (usuario instanceof Paciente) {
-            carregarConsultas();
-        }
+        carregarConsultas();
     }
     
     private void configurarComponentes() {
@@ -38,8 +32,9 @@ public class pnlMinhasConsultas extends javax.swing.JPanel {
 
     
     private void carregarConsultas() {
-        if (usuario instanceof Paciente) {
-            Paciente paciente = (Paciente) usuario;
+        Pessoa usuarioLogado = autenticacaoController.getUsuarioLogado();
+        if (usuarioLogado instanceof Paciente) {
+            Paciente paciente = (Paciente) usuarioLogado;
             consultaController.atualizarTabelaMinhasConsultas(grdMinhasConsultas, paciente.getId());
         }
     }

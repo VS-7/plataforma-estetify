@@ -6,58 +6,58 @@ import java.text.ParseException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.text.MaskFormatter;
 
 
 public class pnlConfiguracaoSistema extends javax.swing.JPanel {
 
     private final ConfiguracaoSistemaController controller;
-    private ConfiguracaoSistema config;
     private FrMenu parentFrame;
     
     public pnlConfiguracaoSistema() {
         initComponents();
-        
         controller = new ConfiguracaoSistemaController();
-        this.configurarComponentes();
-        this.carregarConfiguracao();
+        
+        configurarInterface();
+        carregarConfiguracao();
     }
 
-    public void setParentFrame(FrMenu parent) {
-        this.parentFrame = parent;
+    private void configurarInterface() {
+        configurarMascaras();
+        configurarSpinners();
     }
-
-    private void configurarComponentes() {
+    
+    private void configurarMascaras() {
         try {
-            // Configurar máscaras para horários
-            MaskFormatter maskHora = new MaskFormatter("##:##");
-            maskHora.setPlaceholderCharacter('_');
+            MaskFormatter maskHora = controller.getHoraMaskFormatter();
             maskHora.install(fEdtHorarioAbertura);
             maskHora.install(fEdtHorarioFechamento);
-            
-            // Configurar spinners
-            spnIntervaloConsulta.setModel(new SpinnerNumberModel(30, 15, 120, 15));
-            spnTempoAntecedencia.setModel(new SpinnerNumberModel(60, 0, 1440, 30));
-            spnTempoMaxAgendamento.setModel(new SpinnerNumberModel(60, 1, 365, 1));
-            
         } catch (ParseException ex) {
-            System.err.println("Erro ao configurar máscaras: " + ex.getMessage());
+            exibirErro("Erro ao configurar máscaras", ex);
         }
+    }
+    
+    private void configurarSpinners() {
+        spnIntervaloConsulta.setModel(controller.getIntervaloConsultaModel());
+        spnTempoAntecedencia.setModel(controller.getTempoAntecedenciaModel());
+        spnTempoMaxAgendamento.setModel(controller.getTempoMaxAgendamentoModel());
     }
 
     private void carregarConfiguracao() {
-        config = controller.getConfiguracao();
-        
-        // Carregar horários
+        try {
+            ConfiguracaoSistema config = controller.getConfiguracao();
+            preencherFormulario(config);
+        } catch (Exception ex) {
+            exibirErro("Erro ao carregar configurações", ex);
+        }
+    }
+    
+    private void preencherFormulario(ConfiguracaoSistema config) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         fEdtHorarioAbertura.setText(config.getHorarioAbertura().format(formatter));
         fEdtHorarioFechamento.setText(config.getHorarioFechamento().format(formatter));
-        
-        // Carregar intervalo
         spnIntervaloConsulta.setValue(config.getIntervaloConsultaMinutos());
         
-        // Carregar dias de funcionamento
         chkSegunda.setSelected(config.isFuncionaSegunda());
         chkTerca.setSelected(config.isFuncionaTerca());
         chkQuarta.setSelected(config.isFuncionaQuarta());
@@ -66,10 +66,61 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         chkSabado.setSelected(config.isFuncionaSabado());
         chkDomingo.setSelected(config.isFuncionaDomingo());
         
-        // Carregar outras configurações
         spnTempoAntecedencia.setValue(config.getTempoMinimoAntecedenciaMinutos());
         spnTempoMaxAgendamento.setValue(config.getTempoMaximoAgendamentoDias());
     }
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            salvarConfiguracoes();
+            exibirSucesso("Configurações salvas com sucesso!");
+            atualizarInterface();
+        } catch (Exception ex) {
+            exibirErro("Erro ao salvar configurações", ex);
+        }
+    }
+    
+    private void salvarConfiguracoes() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        controller.atualizar(
+            LocalTime.parse(fEdtHorarioAbertura.getText(), formatter),
+            LocalTime.parse(fEdtHorarioFechamento.getText(), formatter),
+            (int) spnIntervaloConsulta.getValue(),
+            chkSegunda.isSelected(),
+            chkTerca.isSelected(),
+            chkQuarta.isSelected(),
+            chkQuinta.isSelected(),
+            chkSexta.isSelected(),
+            chkSabado.isSelected(),
+            chkDomingo.isSelected(),
+            (int) spnTempoAntecedencia.getValue(),
+            (int) spnTempoMaxAgendamento.getValue()
+        );
+    }
+    
+    private void atualizarInterface() {
+        if (parentFrame != null) {
+            parentFrame.atualizarAgenda();
+            parentFrame.mostrarAgenda();
+        }
+    }
+    
+    private void exibirSucesso(String mensagem) {
+        JOptionPane.showMessageDialog(this, mensagem, "Sucesso", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void exibirErro(String mensagem, Exception ex) {
+        JOptionPane.showMessageDialog(this, 
+            mensagem + ": " + ex.getMessage(),
+            "Erro",
+            JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void setParentFrame(FrMenu parent) {
+        this.parentFrame = parent;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -225,45 +276,6 @@ public class pnlConfiguracaoSistema extends javax.swing.JPanel {
         add(btnSalvar);
         btnSalvar.setBounds(760, 650, 200, 30);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-
-            controller.atualizar(
-                LocalTime.parse(fEdtHorarioAbertura.getText(), formatter),
-                LocalTime.parse(fEdtHorarioFechamento.getText(), formatter),
-                (int) spnIntervaloConsulta.getValue(),
-                chkSegunda.isSelected(),
-                chkTerca.isSelected(),
-                chkQuarta.isSelected(),
-                chkQuinta.isSelected(),
-                chkSexta.isSelected(),
-                chkSabado.isSelected(),
-                chkDomingo.isSelected(),
-                (int) spnTempoAntecedencia.getValue(),
-                (int) spnTempoMaxAgendamento.getValue()
-            );
-
-            JOptionPane.showMessageDialog(this,
-                "Configurações salvas com sucesso!",
-                "Sucesso",
-                JOptionPane.INFORMATION_MESSAGE);
-                
-            if (parentFrame != null) {
-                parentFrame.atualizarAgenda();
-                // Forçar a exibição da agenda atualizada
-                parentFrame.mostrarAgenda();
-            }
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao salvar configurações: " + ex.getMessage(),
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnSalvar;

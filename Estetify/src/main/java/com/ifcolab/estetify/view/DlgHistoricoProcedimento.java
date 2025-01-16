@@ -5,26 +5,33 @@ import com.ifcolab.estetify.controller.PacienteController;
 import com.ifcolab.estetify.controller.tablemodel.TMViewHistoricoProcedimento;
 import com.ifcolab.estetify.model.Consulta;
 import com.ifcolab.estetify.model.Paciente;
+import com.ifcolab.estetify.model.Procedimento;
 import javax.swing.DefaultComboBoxModel;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author vitorsrgio
  */
 public class DlgHistoricoProcedimento extends javax.swing.JDialog {
-    private ConsultaController consultaController;
-    private PacienteController pacienteController;
+    private final ConsultaController consultaController;
+    private final PacienteController pacienteController;
 
     public DlgHistoricoProcedimento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
-        consultaController = new ConsultaController();
-        pacienteController = new PacienteController();
+        this.consultaController = new ConsultaController();
+        this.pacienteController = new PacienteController();
         
-        configurarComboBoxPacientes();
+        configurarComponentes();
         configurarEventos();
+    }
+    
+    private void configurarComponentes() {
+        configurarComboBoxPacientes();
+        configurarTabela();
     }
     
     private void configurarComboBoxPacientes() {
@@ -38,6 +45,12 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
         cboPacientes.setModel(model);
     }
     
+    private void configurarTabela() {
+        grdHistorico.getSelectionModel().addListSelectionListener((e) -> {
+            btnVisualizarRelatorio.setEnabled(grdHistorico.getSelectedRow() != -1);
+        });
+    }
+    
     private void configurarEventos() {
         cboPacientes.addActionListener((evt) -> {
             atualizarHistorico();
@@ -45,6 +58,10 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
         
         btnBuscarPaciente.addActionListener((evt) -> {
             atualizarHistorico();
+        });
+        
+        btnVisualizarRelatorio.addActionListener((evt) -> {
+            visualizarRelatorio();
         });
     }
     
@@ -61,6 +78,69 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
         }
     }
     
+    private void visualizarRelatorio() {
+        try {
+            int linhaSelecionada = grdHistorico.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                exibirAviso("Selecione uma consulta para visualizar o relatório.");
+                return;
+            }
+
+            TMViewHistoricoProcedimento modelo = (TMViewHistoricoProcedimento) grdHistorico.getModel();
+            Consulta consulta = modelo.getConsulta(linhaSelecionada);
+            
+            if (consulta.getProcedimentos().isEmpty()) {
+                exibirAviso("Não há procedimentos registrados nesta consulta.");
+                return;
+            }
+
+            if (consulta.getProcedimentos().size() == 1) {
+                abrirTelaRelatorio(consulta, consulta.getProcedimentos().get(0));
+            } else {
+                selecionarProcedimentoEAbrirRelatorio(consulta);
+            }
+            
+        } catch (Exception e) {
+            exibirErro("Erro ao visualizar relatório", e);
+        }
+    }
+    
+    private void selecionarProcedimentoEAbrirRelatorio(Consulta consulta) {
+        Procedimento procedimento = (Procedimento) JOptionPane.showInputDialog(
+            this,
+            "Selecione o procedimento:",
+            "Gerar Relatório",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            consulta.getProcedimentos().toArray(),
+            consulta.getProcedimentos().get(0)
+        );
+        
+        if (procedimento != null) {
+            abrirTelaRelatorio(consulta, procedimento);
+        }
+    }
+    
+    private void abrirTelaRelatorio(Consulta consulta, Procedimento procedimento) {
+        DlgRelatorio dialog = new DlgRelatorio(null, true, consulta, procedimento);
+        dialog.setVisible(true);
+        if (dialog.isRelatorioSalvo()) {
+            atualizarHistorico();
+        }
+    }
+    
+    private void exibirAviso(String mensagem) {
+        JOptionPane.showMessageDialog(this, mensagem, "Aviso", 
+            JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private void exibirErro(String mensagem, Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            mensagem + ": " + e.getMessage(),
+            "Erro",
+            JOptionPane.ERROR_MESSAGE);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,9 +153,10 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
         lblNome = new javax.swing.JLabel();
         cboPacientes = new com.ifcolab.estetify.components.CustomComboBox();
         btnBuscarPaciente = new com.ifcolab.estetify.components.PrimaryCustomButton();
+        btnVisualizarRelatorio = new com.ifcolab.estetify.components.SecondaryCustomButton();
         tmRecepcionistas = new javax.swing.JScrollPane();
         grdHistorico = new com.ifcolab.estetify.components.CustomTable();
-        jPanel1 = new javax.swing.JPanel();
+        pnlHistoricos = new javax.swing.JPanel();
         lblSubtituloGerenciaMedicos = new javax.swing.JLabel();
         lblTitleGerenciaMedicos = new javax.swing.JLabel();
         lblBackgroundCadastro = new javax.swing.JLabel();
@@ -96,6 +177,10 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
         getContentPane().add(btnBuscarPaciente);
         btnBuscarPaciente.setBounds(50, 70, 190, 30);
 
+        btnVisualizarRelatorio.setText("Visualizar Relatorio");
+        getContentPane().add(btnVisualizarRelatorio);
+        btnVisualizarRelatorio.setBounds(260, 70, 230, 30);
+
         grdHistorico.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -112,9 +197,9 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
         getContentPane().add(tmRecepcionistas);
         tmRecepcionistas.setBounds(40, 236, 1260, 570);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(jPanel1);
-        jPanel1.setBounds(30, 220, 1280, 600);
+        pnlHistoricos.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(pnlHistoricos);
+        pnlHistoricos.setBounds(30, 220, 1280, 600);
 
         lblSubtituloGerenciaMedicos.setFont(new java.awt.Font("Fira Sans Medium", 0, 13)); // NOI18N
         lblSubtituloGerenciaMedicos.setForeground(new java.awt.Color(102, 102, 102));
@@ -143,14 +228,15 @@ public class DlgHistoricoProcedimento extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ifcolab.estetify.components.PrimaryCustomButton btnBuscarPaciente;
+    private com.ifcolab.estetify.components.SecondaryCustomButton btnVisualizarRelatorio;
     private com.ifcolab.estetify.components.CustomComboBox cboPacientes;
     private com.ifcolab.estetify.components.CustomTable grdHistorico;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblBackground;
     private javax.swing.JLabel lblBackgroundCadastro;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSubtituloGerenciaMedicos;
     private javax.swing.JLabel lblTitleGerenciaMedicos;
+    private javax.swing.JPanel pnlHistoricos;
     private javax.swing.JScrollPane tmRecepcionistas;
     // End of variables declaration//GEN-END:variables
 }

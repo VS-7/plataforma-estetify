@@ -1,6 +1,5 @@
 package com.ifcolab.estetify.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -24,7 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Pessoa implements Serializable {
+public abstract class Pessoa {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
